@@ -27,7 +27,7 @@
 ## 🔐 Auth & Verification Model (Simplified Passwordless)
 | Role | Auth Identifier | Capabilities & Flow |
 |---|---|---|
-| **Admin** | Phone: `9898989800` (Phone alone) | Unlocks Admin Dashboard (photo thumbnails, 1-click "Approve & Verify" with auto-verified seal, inquiries log) |
+| **Admin** | Supabase email/password plus server-controlled `app_metadata.role = "admin"` | Unlocks Admin Dashboard (photo thumbnails, 1-click "Approve & Verify" with auto-verified seal, inquiries log) |
 | **Vendor / Business** | Phone alone (`localStorage`) + Email (Contact info) | Passwordless login by phone. Accesses Vendor Portal: "My Inquiries" (filtered requests), "My Listings", and "+ Submit New Listing" (with photo upload) |
 | **Traveler (Optional)** | Name + Phone (Zero password) | Local profile auto-filling booking forms. Full browsing and bookings remain 100% zero-login |
 
@@ -72,5 +72,4 @@
 - **`netlify/functions/chat.js`** — Serverless proxy calling Groq API (`groq/compound`) using server-side env vars.
 - **`brain.md`** — This file (fast context sheet for future AI agent sessions).
 - **`.gsd/`** — Project specification and planning files (`SPEC.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `TODO.md`, `DECISIONS.md`, `STATE.md`).
-
 

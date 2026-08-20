@@ -2109,8 +2109,12 @@
           </p>
           <form id="admin-login-form" onsubmit="handleAdminAuthSubmit(event)">
             <div class="form-group">
-              <label for="admin-login-phone">Admin Phone Number *</label>
-              <input type="tel" id="admin-login-phone" placeholder="Enter admin phone (e.g. 9898989800)" required maxlength="12">
+              <label for="admin-login-email">Admin Email *</label>
+              <input type="email" id="admin-login-email" placeholder="Enter admin email" required autocomplete="username">
+            </div>
+            <div class="form-group">
+              <label for="admin-login-password">Admin Password *</label>
+              <input type="password" id="admin-login-password" placeholder="Enter admin password" required minlength="6" autocomplete="current-password">
             </div>
             <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
               <label for="admin-login-captcha" id="admin-login-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
@@ -2121,7 +2125,7 @@
             <div id="admin-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
 
             <div class="form-actions" style="justify-content: flex-end; margin-top: 14px;">
-              <button type="submit" class="btn btn-primary">Unlock Admin Panel</button>
+              <button type="submit" id="admin-login-submit-btn" class="btn btn-primary">Unlock Admin Panel</button>
             </div>
           </form>
         </div>
@@ -2501,8 +2505,6 @@
     getSupabaseClient();
 
     // --- 1. CONSTANTS & METADATA ---
-    const ADMIN_PHONE = "9898989800";
-
     const CATEGORY_SUGGESTIONS = {
       "guide": [
         "Historical & Archaeological Lore",
@@ -2960,12 +2962,6 @@
         }
       }
 
-      // Check admin session
-      const savedAdmin = localStorage.getItem("ghoomobihar_admin_active");
-      if (savedAdmin === "true") {
-        isAdminActive = true;
-      }
-
       initSupabaseAuth();
 
       // Build landing gallery & update UI
@@ -3276,58 +3272,71 @@
     let currentLoginCaptchaAns = 7;
     let currentSignupCaptchaAns = 7;
 
+    function isSupabaseAdmin(user) {
+      return Boolean(user && user.app_metadata && user.app_metadata.role === "admin");
+    }
+
+    function applyAuthenticatedUser(user) {
+      if (!user || (!user.email_confirmed_at && !user.confirmed_at)) {
+        currentVendor = null;
+        isAdminActive = false;
+        localStorage.removeItem("ghoomobihar_current_vendor");
+        updateAuthHeaderUI();
+        return;
+      }
+
+      if (isSupabaseAdmin(user)) {
+        currentVendor = null;
+        isAdminActive = true;
+        localStorage.removeItem("ghoomobihar_current_vendor");
+        updateAuthHeaderUI();
+        renderAdminTables();
+        return;
+      }
+
+      const meta = user.user_metadata || {};
+      currentVendor = {
+        id: user.id,
+        name: meta.name || (user.email ? user.email.split("@")[0] : "Vendor"),
+        phone: meta.phone || "",
+        email: user.email
+      };
+      isAdminActive = false;
+      localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
+      updateAuthHeaderUI();
+      renderVendorDashboard();
+    }
+
     async function initSupabaseAuth() {
       const sb = getSupabaseClient();
       if (!sb) return;
       try {
         sb.auth.onAuthStateChange((event, session) => {
           if (event === "SIGNED_IN" && session && session.user) {
-            const user = session.user;
-            if (user.email_confirmed_at || user.confirmed_at) {
-              const meta = user.user_metadata || {};
-              currentVendor = {
-                id: user.id,
-                name: meta.name || (user.email ? user.email.split("@")[0] : "Vendor"),
-                phone: meta.phone || "",
-                email: user.email
-              };
-              isAdminActive = false;
-              localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
-              localStorage.removeItem("ghoomobihar_admin_active");
-              updateAuthHeaderUI();
-              renderVendorDashboard();
-            } else {
-              currentVendor = null;
-              localStorage.removeItem("ghoomobihar_current_vendor");
-              updateAuthHeaderUI();
-            }
+            applyAuthenticatedUser(session.user);
           } else if (event === "SIGNED_OUT") {
             currentVendor = null;
+            isAdminActive = false;
             localStorage.removeItem("ghoomobihar_current_vendor");
+            document.getElementById("vendor-dashboard").classList.remove("active");
+            document.getElementById("admin-panel").classList.remove("active");
             updateAuthHeaderUI();
           }
         });
 
         const { data: { session } } = await sb.auth.getSession();
-        if (session && session.user && (session.user.email_confirmed_at || session.user.confirmed_at)) {
-          const meta = session.user.user_metadata || {};
-          currentVendor = {
-            id: session.user.id,
-            name: meta.name || (session.user.email ? session.user.email.split("@")[0] : "Vendor"),
-            phone: meta.phone || "",
-            email: session.user.email
-          };
-          localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
-          updateAuthHeaderUI();
-          renderVendorDashboard();
+        if (session && session.user) {
+          applyAuthenticatedUser(session.user);
         } else {
           currentVendor = null;
+          isAdminActive = false;
           localStorage.removeItem("ghoomobihar_current_vendor");
           updateAuthHeaderUI();
         }
       } catch (err) {
         console.warn("Supabase auth check notice:", err.message);
         currentVendor = null;
+        isAdminActive = false;
         localStorage.removeItem("ghoomobihar_current_vendor");
         updateAuthHeaderUI();
       }
@@ -3466,7 +3475,6 @@
         };
         isAdminActive = false;
         localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
-        localStorage.removeItem("ghoomobihar_admin_active");
 
         updateAuthHeaderUI();
         closeUnifiedAuthModal();
@@ -3485,11 +3493,13 @@
     }
 
     // Platform Admin Mode Authentication
-    function handleAdminAuthSubmit(e) {
+    async function handleAdminAuthSubmit(e) {
       e.preventDefault();
-      const phone = sanitizeHTML((document.getElementById("admin-login-phone").value || "").trim());
+      const email = (document.getElementById("admin-login-email").value || "").trim();
+      const password = document.getElementById("admin-login-password").value || "";
       const enteredCaptcha = parseInt((document.getElementById("admin-login-captcha").value || "").trim());
       const msgDiv = document.getElementById("admin-login-msg");
+      const submitBtn = document.getElementById("admin-login-submit-btn");
 
       if (enteredCaptcha !== currentLoginCaptchaAns) {
         msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Please solve the simple math problem to continue.</span>`;
@@ -3498,10 +3508,42 @@
         return;
       }
 
-      if (phone === ADMIN_PHONE) {
+      const sb = getSupabaseClient();
+      if (!sb) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Authentication service unavailable.</span>`;
+        msgDiv.style.display = "block";
+        return;
+      }
+
+      msgDiv.style.display = "none";
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Checking access..."; }
+
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        if (error || !data.user) {
+          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Invalid admin credentials.</span>`;
+          msgDiv.style.display = "block";
+          generateMathCaptcha();
+          return;
+        }
+
+        if (!data.user.email_confirmed_at && !data.user.confirmed_at) {
+          await sb.auth.signOut();
+          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Verify the admin email before signing in.</span>`;
+          msgDiv.style.display = "block";
+          return;
+        }
+
+        if (!isSupabaseAdmin(data.user)) {
+          await sb.auth.signOut();
+          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">This account does not have administrator access.</span>`;
+          msgDiv.style.display = "block";
+          generateMathCaptcha();
+          return;
+        }
+
         isAdminActive = true;
         currentVendor = null;
-        localStorage.setItem("ghoomobihar_admin_active", "true");
         localStorage.removeItem("ghoomobihar_current_vendor");
 
         updateAuthHeaderUI();
@@ -3512,10 +3554,14 @@
         document.getElementById("vendor-dashboard").classList.remove("active");
         renderAdminTables();
         document.getElementById("admin-panel").scrollIntoView({ behavior: 'smooth' });
-      } else {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Invalid admin phone number.</span>`;
+      } catch (err) {
+        console.warn("Admin sign-in notice:", err.message);
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Unable to sign in. Please try again.</span>`;
         msgDiv.style.display = "block";
         generateMathCaptcha();
+      } finally {
+        document.getElementById("admin-login-password").value = "";
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Unlock Admin Panel"; }
       }
     }
 
@@ -3643,7 +3689,6 @@
       currentVendor = null;
       isAdminActive = false;
       localStorage.removeItem("ghoomobihar_current_vendor");
-      localStorage.removeItem("ghoomobihar_admin_active");
 
       document.getElementById("vendor-dashboard").classList.remove("active");
       document.getElementById("admin-panel").classList.remove("active");
@@ -3690,13 +3735,37 @@
       }
     }
 
-    function toggleAdminPanelDirectly() {
-      const panel = document.getElementById("admin-panel");
-      panel.classList.toggle("active");
-      if (panel.classList.contains("active")) {
-        panel.scrollIntoView({ behavior: 'smooth' });
-        renderAdminTables();
+    async function hasCurrentAdminSession() {
+      const sb = getSupabaseClient();
+      if (!sb) return false;
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        return Boolean(session && isSupabaseAdmin(session.user));
+      } catch (err) {
+        console.warn("Admin session check notice:", err.message);
+        return false;
       }
+    }
+
+    async function requireAdminSession() {
+      if (isAdminActive && await hasCurrentAdminSession()) return true;
+      isAdminActive = false;
+      document.getElementById("admin-panel").classList.remove("active");
+      updateAuthHeaderUI();
+      showToast("Admin session expired. Please sign in again.");
+      return false;
+    }
+
+    async function toggleAdminPanelDirectly() {
+      const panel = document.getElementById("admin-panel");
+      if (panel.classList.contains("active")) {
+        panel.classList.remove("active");
+        return;
+      }
+      if (!await requireAdminSession()) return;
+      panel.classList.add("active");
+      panel.scrollIntoView({ behavior: 'smooth' });
+      renderAdminTables();
     }
 
     function toggleVendorDashboardDirectly() {
@@ -4102,6 +4171,8 @@
     }
 
     function renderAdminTables() {
+      if (!isAdminActive) return;
+
       // 1. New Submissions Needing Review Table (reviewedByAdmin === false)
       const pendingTbody = document.getElementById("admin-pending-tbody");
       const needsReviewListings = listings.filter(l => l.reviewedByAdmin === false);
@@ -4172,7 +4243,8 @@
       }
     }
 
-    function adminMarkReviewed(id) {
+    async function adminMarkReviewed(id) {
+      if (!await requireAdminSession()) return;
       const item = listings.find(l => l.id === id);
       if (item) {
         item.reviewedByAdmin = true;
@@ -4183,7 +4255,8 @@
       }
     }
 
-    function adminApproveListing(id) {
+    async function adminApproveListing(id) {
+      if (!await requireAdminSession()) return;
       const item = listings.find(l => l.id === id);
       if (item) {
         item.status = "approved";
@@ -4197,7 +4270,8 @@
       }
     }
 
-    function adminRemoveListing(id) {
+    async function adminRemoveListing(id) {
+      if (!await requireAdminSession()) return;
       const item = listings.find(l => l.id === id);
       const title = item ? item.title : "Listing";
       if (confirm(`Permanently remove "${title}" from GhoomoBihar? This deletes it completely from localStorage.`)) {
