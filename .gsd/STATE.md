@@ -1,5 +1,5 @@
 ---
-updated: 2026-08-20T09:07:30+05:30
+updated: 2026-08-20T13:07:00+05:30
 ---
 
 # Project State
@@ -7,19 +7,21 @@ updated: 2026-08-20T09:07:30+05:30
 ## Current Position
 
 **Milestone:** v1.0 (TEJAS India Hackathon 2026 - Bihar Tourism Track)
-**Phase:** 1 - Core Foundation & P0 Essentials
-**Status:** planning
-**Plan:** Not started (Ready for Phase 1 planning / execution)
+**Phase:** 4 - Hackathon Demo Verification & Plain-English Team Guide
+**Status:** ready-to-verify
+**Plan:** Phase 3 Complete (AI Tourism Concierge & Groq Serverless Gateway)
 
 ## Last Action
 
-Initialized GSD project repository with finalized `SPEC.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `DECISIONS.md`, and `TODO.md`.
+Implemented and delivered **Phase 3 (AI Tourism Concierge & Groq Serverless Gateway)**:
+- **Netlify Serverless Function (`netlify/functions/chat.js`)**: Secure proxy reading `GROQ_API_KEY` and calling Groq API using `groq/compound` model with built-in real-time web search.
+- **Embedded Chat UI Widget in `index.html`**: Floating Action Button (`✨ Ask Bihar AI Concierge`), expandable drawer, 5 quick-ask suggestion chips, Markdown message bubbles, typing animation, and embedded listing recommendation cards with direct WhatsApp triggers.
+- **Zero-Fail Local Knowledge Engine (`queryLocalKnowledgeEngine`)**: Instant, high-quality responses for Jamui (Host), Bodh Gaya, Nalanda, Sonepur, Chhath Ghat, and transit logistics when offline or running via `file:///`.
+- **Created `netlify.toml` and `.env.example`**.
 
 ## Next Steps
 
-1. Run `/plan 1` or `/discuss-phase 1` to define and break down Phase 1 (P0 Core Essentials).
-2. Implement Phase 1: data store, site selector, category filter, listing cards, WhatsApp links, entrepreneur onboarding modal, admin approval view, and localStorage sync.
-3. Verify Phase 1 core functionality.
+1. Execute **Phase 4: Hackathon Demo Verification & Plain-English Team Guide** (Demo script cheat-sheet, verification walkthrough, and presentation guide for non-coders).
 
 ## Active Decisions
 
@@ -28,18 +30,14 @@ Decisions made that affect current work:
 | Decision | Choice | Made | Affects |
 |----------|--------|------|---------|
 | DECISION-001 | Single-file pure HTML/CSS/JS (`index.html`) | 2026-08-20 | Frontend architecture |
-| DECISION-002 | Header toggle button for Admin Mode | 2026-08-20 | Admin UI / Demo Flow |
-| DECISION-003 | Netlify Serverless function for P2 AI Gateway | 2026-08-20 | Phase 3 (P2) |
+| DECISION-002 | Header toggle button for Admin Mode with auto-verification | 2026-08-20 | Admin UI / Verification flow |
+| DECISION-003 | Netlify Serverless function for Groq `groq/compound` API | 2026-08-20 | Phase 3 (P2) |
 | DECISION-004 | Browser `localStorage` for complete persistence | 2026-08-20 | Phase 1 & Data Layer |
+| DECISION-005 | Jamui as default-selected site on page load | 2026-08-20 | Phase 1 & Site Selector |
+| DECISION-006 | Demo vendor auth & Zero-auth package request form | 2026-08-20 | Phase 1 & Tourist/Vendor UX |
 
 ## Blockers
 
-*None currently.*
+*None.*
 
-## Concerns
 
-- Team has zero prior coding experience; code must be written with clean comments, straightforward abstractions, and fail-safe fallbacks.
-
-## Session Context
-
-Project initialized cleanly from user brief for TEJAS India Hackathon 2026. Prioritization: P0 core $\rightarrow$ P1 visual polish $\rightarrow$ P2 Gemini AI concierge stretch.

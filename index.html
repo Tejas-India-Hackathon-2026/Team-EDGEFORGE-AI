@@ -1,0 +1,3881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GhoomoBihar — Instant Bihar Tourism Discovery</title>
+  <meta name="description" content="Discover verified local guides, homestays, food, and crafts across Bihar's iconic heritage sites with instant WhatsApp connect and zero-barrier package requests.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600;1,700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       GhoomoBihar Design System & Madhubani Folk Palette
+       ========================================================================== */
+    :root {
+      --color-terracotta: #C85A32;
+      --color-terracotta-dark: #A43E1B;
+      --color-terracotta-light: #FFF5F0;
+      --color-teal: #1A535C;
+      --color-teal-dark: #0B3C49;
+      --color-teal-light: #F0F7F7;
+      --color-gold: #E9B44C;
+      --color-gold-light: #FDF4E3;
+      --color-sand: #FDFBF7;
+      --color-sand-dark: #F5EBE1;
+      --color-charcoal: #262626;
+      --color-muted: #666666;
+      --color-border: #E8DFD8;
+      --color-border-dark: #D4C5B9;
+      --color-card-bg: #FFFFFF;
+      --color-whatsapp: #25D366;
+      --color-whatsapp-dark: #1EBE5D;
+      --color-badge-verified: #0B7A75;
+      --color-danger: #D9381E;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      --shadow-sm: 0 2px 10px rgba(38, 38, 38, 0.05);
+      --shadow-md: 0 8px 24px rgba(38, 38, 38, 0.09);
+      --shadow-lg: 0 16px 40px rgba(38, 38, 38, 0.14);
+      --shadow-terracotta: 0 6px 20px rgba(200, 90, 50, 0.25);
+      --shadow-teal: 0 6px 20px rgba(26, 83, 92, 0.22);
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--color-sand);
+      color: var(--color-charcoal);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Madhubani Top Border Ribbon */
+    .top-decorative-ribbon {
+      height: 7px;
+      background: repeating-linear-gradient(
+        45deg,
+        var(--color-terracotta),
+        var(--color-terracotta) 14px,
+        var(--color-gold) 14px,
+        var(--color-gold) 28px,
+        var(--color-teal) 28px,
+        var(--color-teal) 42px
+      );
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       Header & Navigation Bar
+       ========================================================================== */
+    header {
+      background-color: var(--color-card-bg);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .nav-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+    }
+
+    .brand:hover {
+      transform: translateY(-1px);
+    }
+
+    .brand-icon {
+      font-size: 32px;
+      line-height: 1;
+      filter: drop-shadow(0 2px 6px rgba(200, 90, 50, 0.25));
+    }
+
+    .brand-text h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--color-terracotta);
+      letter-spacing: -0.5px;
+      line-height: 1.1;
+    }
+
+    .brand-text p {
+      font-size: 11px;
+      color: var(--color-teal);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .nav-links-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-btn-link {
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--color-charcoal);
+      text-decoration: none;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      background: transparent;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn-link:hover, .nav-btn-link.active {
+      background: var(--color-sand-dark);
+      color: var(--color-terracotta);
+      border-color: var(--color-border);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-login {
+      background: var(--color-teal);
+      color: #FFFFFF;
+      box-shadow: var(--shadow-teal);
+      border-color: var(--color-teal-dark);
+    }
+
+    .btn-login:hover {
+      background: var(--color-teal-dark);
+      box-shadow: 0 8px 24px rgba(26, 83, 92, 0.35);
+    }
+
+    .btn-user-badge {
+      background: var(--color-gold-light);
+      color: #593D04;
+      border-color: rgba(233, 180, 76, 0.5);
+      font-weight: 700;
+    }
+
+    .btn-user-badge:hover {
+      background: var(--color-gold);
+      color: #2D1E01;
+    }
+
+    .badge-count {
+      background-color: var(--color-terracotta);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      margin-left: 4px;
+    }
+
+    /* ==========================================================================
+       VIEW 1: DISCOVER BIHAR LANDING (DEFAULT HOME VIEW)
+       ========================================================================== */
+    .landing-home-container {
+      display: block;
+      animation: fadeInView 0.35s ease;
+    }
+
+    @keyframes fadeInView {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .landing-hero {
+      background: linear-gradient(135deg, rgba(26, 83, 92, 0.95), rgba(11, 60, 73, 0.92)), url('assets/jamui.jpeg') center/cover no-repeat;
+      color: #FFFFFF;
+      padding: 60px 24px;
+      text-align: center;
+      position: relative;
+      border-bottom: 2px solid var(--color-gold);
+    }
+
+    .landing-hero-content {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .landing-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(233, 180, 76, 0.22);
+      color: var(--color-gold);
+      border: 1px solid rgba(233, 180, 76, 0.4);
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 5px 16px;
+      border-radius: var(--radius-full);
+      margin-bottom: 16px;
+    }
+
+    .landing-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+
+    .landing-subtitle {
+      font-size: 16px;
+      color: #E2E8F0;
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    .destinations-grid-section {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 40px 24px 70px;
+    }
+
+    .section-heading-center {
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .section-heading-center h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--color-teal-dark);
+      margin-bottom: 8px;
+    }
+
+    .section-heading-center p {
+      font-size: 15px;
+      color: var(--color-muted);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .destinations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 28px;
+    }
+
+    .dest-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--color-border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+    }
+
+    .dest-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg), 0 10px 30px rgba(200, 90, 50, 0.15);
+      border-color: var(--color-terracotta);
+    }
+
+    .dest-card-img-wrap {
+      height: 220px;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dest-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .dest-card:hover .dest-card-img {
+      transform: scale(1.04);
+    }
+
+    .dest-badge-overlay {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(38, 38, 38, 0.85);
+      backdrop-filter: blur(4px);
+      color: #FFFFFF;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .dest-host-badge {
+      background: var(--color-terracotta);
+      border-color: var(--color-gold);
+    }
+
+    .dest-card-body {
+      padding: 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .dest-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--color-charcoal);
+      margin-bottom: 8px;
+    }
+
+    .dest-card-desc {
+      font-size: 14px;
+      color: var(--color-muted);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .dest-highlights-box {
+      background: var(--color-sand);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 12.5px;
+      color: var(--color-charcoal);
+      margin-bottom: 18px;
+    }
+
+    /* ==========================================================================
+       VIEW 2: DESTINATION DETAIL VIEW (HERO BG + INFO BLOCKS + LISTINGS)
+       ========================================================================== */
+    .dest-detail-container {
+      display: none;
+      animation: fadeInView 0.35s ease;
+    }
+
+    /* Full-Image Background Hero with Dark Gradient Overlay */
+    .dest-hero-bg {
+      position: relative;
+      min-height: 380px;
+      background-size: cover;
+      background-position: center;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      padding: 50px 24px;
+      border-bottom: 3px solid var(--color-gold);
+    }
+
+    .dest-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(11, 60, 73, 0.82) 0%, rgba(38, 38, 38, 0.92) 100%);
+      z-index: 1;
+    }
+
+    .dest-hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1240px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .btn-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-gold);
+      font-size: 13.5px;
+      font-weight: 700;
+      text-decoration: none;
+      margin-bottom: 16px;
+      cursor: pointer;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(233, 180, 76, 0.3);
+      transition: var(--transition);
+    }
+
+    .btn-back-link:hover {
+      background: rgba(0, 0, 0, 0.5);
+      transform: translateX(-3px);
+    }
+
+    .dest-hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .dest-hero-subtitle {
+      font-size: 16px;
+      color: #E2E8F0;
+      max-width: 780px;
+      line-height: 1.55;
+      margin-bottom: 22px;
+    }
+
+    /* Destination Info Grid (Why Visit, Getting There, Tips) */
+    .dest-info-strip {
+      max-width: 1240px;
+      margin: -30px auto 30px;
+      padding: 0 24px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .dest-info-cards-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1.2fr 1fr;
+      gap: 18px;
+    }
+
+    .info-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--color-border);
+      padding: 20px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .info-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--color-teal-dark);
+      margin-bottom: 10px;
+      border-bottom: 1px dashed var(--color-border);
+      padding-bottom: 8px;
+    }
+
+    .info-card p {
+      font-size: 13.5px;
+      color: var(--color-muted);
+      line-height: 1.5;
+    }
+
+    .info-metric-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+    }
+
+    .info-metric-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dotted var(--color-border);
+      padding-bottom: 4px;
+    }
+
+    .info-metric-item strong {
+      color: var(--color-charcoal);
+    }
+
+    /* Category Filter Section */
+    .site-listings-section {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 24px 60px;
+    }
+
+    .filter-bar-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding: 16px 0 24px;
+      border-bottom: 1px dashed var(--color-border-dark);
+      margin-bottom: 24px;
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .category-pill-btn {
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      background: var(--color-card-bg);
+      border: 1.5px solid var(--color-border);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--color-charcoal);
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .category-pill-btn:hover {
+      border-color: var(--color-teal);
+      background: var(--color-teal-light);
+      transform: translateY(-1px);
+    }
+
+    .category-pill-btn.active {
+      background: var(--color-teal);
+      color: #FFFFFF;
+      border-color: var(--color-teal-dark);
+      box-shadow: var(--shadow-teal);
+      transform: translateY(-1px);
+    }
+
+    /* Listings Grid */
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 26px;
+    }
+
+    .listing-card {
+      background: var(--color-card-bg);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--color-border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      animation: cardFadeIn 0.35s ease backwards;
+    }
+
+    .listing-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md), 0 8px 24px rgba(200, 90, 50, 0.12);
+      border-color: #D6C8BE;
+    }
+
+    .listing-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .listing-card-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+
+    .category-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--color-teal);
+      background: var(--color-teal-light);
+      padding: 3.5px 10px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(26, 83, 92, 0.15);
+    }
+
+    .badges-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    /* Live Dynamic Open/Closed Status Badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .status-badge.status-open {
+      background: #E6F4EA;
+      color: #137333;
+      border: 1px solid rgba(19, 115, 51, 0.3);
+    }
+
+    .status-badge.status-closed {
+      background: #FCE8E6;
+      color: #C5221F;
+      border: 1px solid rgba(197, 34, 31, 0.3);
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .status-open .status-dot {
+      background-color: #1EBE5D;
+      box-shadow: 0 0 0 2px rgba(30, 190, 93, 0.25);
+      animation: pulseDot 2s infinite;
+    }
+
+    .status-closed .status-dot {
+      background-color: #D9381E;
+    }
+
+    @keyframes pulseDot {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(30, 190, 93, 0.6); }
+      70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(30, 190, 93, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(30, 190, 93, 0); }
+    }
+
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(11, 122, 117, 0.12);
+      color: var(--color-badge-verified);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(11, 122, 117, 0.3);
+    }
+
+    .rating-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: var(--color-gold-light);
+      color: #735003;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2.5px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(233, 180, 76, 0.4);
+    }
+
+    .card-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 19.5px;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      margin-bottom: 8px;
+      line-height: 1.25;
+    }
+
+    .card-specialty {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-terracotta);
+      background: var(--color-terracotta-light);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      border: 1px solid rgba(200, 90, 50, 0.2);
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--color-muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    .card-contact-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-sand);
+      padding: 7px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 12px;
+      font-size: 12.5px;
+      color: var(--color-charcoal);
+      border: 1px solid var(--color-border);
+    }
+
+    .card-contact-row a {
+      color: var(--color-teal);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .card-info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px dashed var(--color-border);
+      border-bottom: 1px dashed var(--color-border);
+      margin-bottom: 16px;
+      font-size: 12.5px;
+    }
+
+    .card-price {
+      font-weight: 800;
+      font-size: 15px;
+      color: var(--color-teal-dark);
+    }
+
+    .card-hours {
+      color: var(--color-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-weight: 500;
+    }
+
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-whatsapp {
+      background-color: var(--color-whatsapp);
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 9.5px 12px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .btn-whatsapp:hover {
+      background-color: var(--color-whatsapp-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-package {
+      background-color: var(--color-teal);
+      color: #FFFFFF;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 9.5px 12px;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: var(--transition);
+    }
+
+    .btn-package:hover {
+      background-color: var(--color-teal-dark);
+      transform: translateY(-1px);
+    }
+
+    /* ==========================================================================
+       DASHBOARDS: VENDOR & ADMIN
+       ========================================================================== */
+    .dashboard-container {
+      display: none;
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin: 24px auto;
+      max-width: 1240px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .dashboard-container.active {
+      display: block;
+    }
+
+    .admin-dashboard-box {
+      border: 2px solid var(--color-teal);
+    }
+
+    .vendor-dashboard-box {
+      border: 2px solid var(--color-terracotta);
+    }
+
+    .admin-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .admin-sub-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .admin-tab-btn {
+      padding: 7px 16px;
+      background: var(--color-sand-dark);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .admin-tab-btn.active {
+      background: var(--color-teal);
+      color: #fff;
+      border-color: var(--color-teal);
+    }
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+
+    .admin-table th, .admin-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+    }
+
+    .admin-table th {
+      background: var(--color-sand);
+      color: var(--color-charcoal);
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    .table-thumbnail {
+      width: 50px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      display: block;
+      border: 1px solid var(--color-border);
+    }
+
+    .btn-action-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: var(--radius-sm);
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-approve {
+      background: #E6F4EA;
+      color: #137333;
+      margin-right: 4px;
+    }
+
+    .btn-approve:hover {
+      background: #137333;
+      color: #fff;
+    }
+
+    .btn-reject {
+      background: #FCE8E6;
+      color: #C5221F;
+    }
+
+    .btn-reject:hover {
+      background: #C5221F;
+      color: #fff;
+    }
+
+    /* ==========================================================================
+       MODALS
+       ========================================================================== */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(38, 38, 38, 0.65);
+      backdrop-filter: blur(5px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      max-width: 540px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    @keyframes modalSlideUp {
+      from { transform: translateY(24px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+      background: var(--color-sand-dark);
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .modal-header h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 19px;
+      font-weight: 700;
+      color: var(--color-charcoal);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close-modal {
+      background: transparent;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: var(--color-muted);
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--color-border);
+      background: var(--color-sand);
+    }
+
+    .modal-tab-btn {
+      flex: 1;
+      padding: 13px;
+      text-align: center;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 13.5px;
+      color: var(--color-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: var(--transition);
+    }
+
+    .modal-tab-btn.active {
+      color: var(--color-terracotta);
+      border-bottom-color: var(--color-terracotta);
+      background: #FFFFFF;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--color-charcoal);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--color-border);
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--color-charcoal);
+      transition: var(--transition);
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--color-teal);
+      box-shadow: 0 0 0 3.5px rgba(26, 83, 92, 0.12);
+    }
+
+    .form-hint {
+      font-size: 11.5px;
+      color: var(--color-muted);
+      margin-top: 5px;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn-primary {
+      background-color: var(--color-terracotta);
+      color: #fff;
+      box-shadow: var(--shadow-terracotta);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--color-terracotta-dark);
+    }
+
+    /* Receipt Card */
+    .receipt-card {
+      background: var(--color-sand);
+      border: 1px dashed var(--color-border-dark);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin: 16px 0;
+    }
+
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 13px;
+      border-bottom: 1px dotted var(--color-border);
+    }
+
+    .receipt-row:last-child {
+      border-bottom: none;
+      font-weight: 700;
+    }
+
+    .receipt-label {
+      color: var(--color-muted);
+    }
+
+    .receipt-value {
+      font-weight: 600;
+      color: var(--color-charcoal);
+      text-align: right;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--color-charcoal);
+      color: #FFFFFF;
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      font-weight: 500;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
+      max-width: 380px;
+      border-left: 4px solid var(--color-gold);
+    }
+
+    @keyframes toastIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    footer {
+      background: var(--color-sand-dark);
+      border-top: 1px solid var(--color-border);
+      padding: 28px 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--color-muted);
+      margin-top: auto;
+    }
+
+    .footer-host-tag {
+      color: var(--color-terracotta);
+      font-weight: 800;
+    }
+
+    /* ==========================================================================
+       AI TOURISM CONCIERGE (P2 - GROQ COMPOUND AI & LOCAL ENGINE)
+       ========================================================================== */
+    .ai-chat-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 990;
+      background: linear-gradient(135deg, var(--color-terracotta), var(--color-terracotta-dark));
+      color: #FFFFFF;
+      padding: 11px 20px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 8px 28px rgba(200, 90, 50, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      border: 1.5px solid rgba(233, 180, 76, 0.6);
+      transition: var(--transition);
+      font-weight: 700;
+      font-size: 13.5px;
+      user-select: none;
+    }
+
+    .ai-chat-fab:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 34px rgba(200, 90, 50, 0.5);
+      border-color: var(--color-gold);
+    }
+
+    .ai-fab-icon {
+      font-size: 18px;
+      animation: sparkleRotate 3s infinite ease-in-out;
+    }
+
+    @keyframes sparkleRotate {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.2) rotate(15deg); }
+    }
+
+    .ai-fab-badge {
+      background: rgba(233, 180, 76, 0.25);
+      color: var(--color-gold);
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: var(--radius-full);
+      border: 1px solid rgba(233, 180, 76, 0.4);
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    .ai-chat-drawer {
+      position: fixed;
+      bottom: 84px;
+      right: 24px;
+      width: 410px;
+      max-width: calc(100vw - 32px);
+      height: 570px;
+      max-height: calc(100vh - 110px);
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 50px rgba(38, 38, 38, 0.22), 0 0 0 1px var(--color-border);
+      display: none;
+      flex-direction: column;
+      z-index: 1000;
+      overflow: hidden;
+      animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .ai-chat-drawer.active {
+      display: flex;
+    }
+
+    .ai-chat-header {
+      background: linear-gradient(135deg, var(--color-teal-dark), var(--color-teal));
+      color: #FFFFFF;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--color-gold);
+    }
+
+    .ai-header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ai-avatar {
+      font-size: 24px;
+      background: rgba(255, 255, 255, 0.15);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(233, 180, 76, 0.4);
+    }
+
+    .ai-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .ai-subtitle {
+      font-size: 11px;
+      color: #D1E7DD;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ai-header-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .ai-ctrl-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      color: #FFFFFF;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .ai-ctrl-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Quick Prompts Bar */
+    .ai-quick-prompts-bar {
+      background: var(--color-sand);
+      padding: 8px 14px;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quick-prompt-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-muted);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .quick-prompts-scroll {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .quick-chip {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      padding: 4px 10px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--color-teal);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .quick-chip:hover {
+      background: var(--color-teal-light);
+      border-color: var(--color-teal);
+      transform: translateY(-1px);
+    }
+
+    /* Messages Stream */
+    .ai-messages-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--color-sand);
+    }
+
+    .ai-message {
+      max-width: 88%;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      line-height: 1.45;
+      animation: messagePop 0.2s ease;
+    }
+
+    @keyframes messagePop {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .ai-msg-user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--color-terracotta), var(--color-terracotta-dark));
+      color: #FFFFFF;
+      border-bottom-right-radius: 4px;
+    }
+
+    .ai-msg-assistant {
+      align-self: flex-start;
+      background: #FFFFFF;
+      color: var(--color-charcoal);
+      border: 1px solid var(--color-border);
+      border-bottom-left-radius: 4px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ai-msg-assistant p {
+      margin-bottom: 6px;
+    }
+
+    .ai-msg-assistant p:last-child {
+      margin-bottom: 0;
+    }
+
+    .ai-msg-assistant ul {
+      margin: 6px 0 6px 18px;
+    }
+
+    .ai-msg-assistant strong {
+      color: var(--color-teal-dark);
+    }
+
+    /* Recommendation card inside chat bubble */
+    .ai-rec-card {
+      background: var(--color-sand-dark);
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ai-rec-info {
+      font-size: 12px;
+    }
+
+    .ai-rec-title {
+      font-weight: 700;
+      color: var(--color-charcoal);
+    }
+
+    .ai-rec-btn {
+      background: var(--color-whatsapp);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 9px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+    }
+
+    .ai-typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 14px;
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      align-self: flex-start;
+      width: fit-content;
+    }
+
+    .ai-typing-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--color-terracotta);
+      border-radius: 50%;
+      animation: typingBounce 1.2s infinite ease-in-out;
+    }
+
+    .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typingBounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-5px); }
+    }
+
+    /* Input Bar */
+    .ai-chat-input-bar {
+      padding: 12px 14px;
+      background: #FFFFFF;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+    }
+
+    .ai-chat-input-bar input {
+      flex: 1;
+      padding: 9px 14px;
+      border-radius: var(--radius-full);
+      border: 1.5px solid var(--color-border);
+      font-size: 13.5px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .ai-chat-input-bar input:focus {
+      border-color: var(--color-teal);
+    }
+
+    .ai-send-btn {
+      background: var(--color-teal);
+      color: #FFFFFF;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .ai-send-btn:hover {
+      background: var(--color-teal-dark);
+      transform: scale(1.05);
+    }
+
+    .ai-send-btn:disabled {
+      background: var(--color-border);
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 860px) {
+      .ai-chat-drawer {
+        width: 100%;
+        height: 75vh;
+        bottom: 74px;
+        right: 0;
+        border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Madhubani Top Ribbon -->
+  <div class="top-decorative-ribbon"></div>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand" onclick="showLandingView(); return false;">
+        <span class="brand-icon">🪷</span>
+        <div class="brand-text">
+          <h1>GhoomoBihar</h1>
+          <p>TEJAS 2026 • Bihar Tourism Track</p>
+        </div>
+      </a>
+
+      <div class="nav-links-group">
+        <button id="nav-btn-home" class="nav-btn-link active" onclick="showLandingView()">
+          <span>🏛️</span> Discover Bihar
+        </button>
+        <button id="nav-btn-site" class="nav-btn-link" onclick="openSiteDetail(currentSite)">
+          <span>🧭</span> <span id="nav-active-site-label">Jamui (Host)</span>
+        </button>
+      </div>
+      
+      <div class="nav-actions" id="header-auth-actions">
+        <!-- Dynamically populated -->
+        <button class="btn btn-login" onclick="openUnifiedAuthModal()">
+          <span>🔑</span> Login / Join
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       DASHBOARD OVERLAYS: ADMIN & VENDOR
+       ========================================================================== -->
+  <main style="padding: 0; width: 100%; max-width: 100%;">
+
+    <!-- VENDOR DASHBOARD -->
+    <div id="vendor-dashboard" class="dashboard-container vendor-dashboard-box">
+      <div class="admin-panel-header">
+        <h2 style="color: var(--color-terracotta);"><span>👑</span> Vendor Portal: <span id="v-dash-name">My Business</span></h2>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-primary" onclick="openListingSubmissionModal()">+ Submit New Listing</button>
+          <button class="btn btn-user-badge" onclick="handleLogout()">Logout</button>
+        </div>
+      </div>
+
+      <div class="admin-sub-tabs">
+        <button class="admin-tab-btn active" onclick="setVendorTab('inquiries')">📩 My Inquiries (<span id="v-tab-inquiries-count">0</span>)</button>
+        <button class="admin-tab-btn" onclick="setVendorTab('listings')">📋 My Listings (<span id="v-tab-listings-count">0</span>)</button>
+      </div>
+
+      <!-- Vendor Inquiries View -->
+      <div id="vendor-view-inquiries">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Tourist Name</th>
+              <th>Tourist Phone</th>
+              <th>Requested Listing</th>
+              <th>Tourist Note / Request</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="vendor-inquiries-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Vendor Listings View -->
+      <div id="vendor-view-listings" style="display: none;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Listing Title</th>
+              <th>Destination</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Status</th>
+              <th>Verification</th>
+            </tr>
+          </thead>
+          <tbody id="vendor-listings-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADMIN MODERATION DASHBOARD -->
+    <div id="admin-panel" class="dashboard-container admin-dashboard-box">
+      <div class="admin-panel-header">
+        <h2><span>⚙️</span> Tourism Admin Moderation Dashboard</h2>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn btn-user-badge" onclick="resetDefaultSeedData()">🔄 Reset Demo Seed</button>
+          <button class="btn btn-user-badge" onclick="handleLogout()">Exit Admin Mode</button>
+        </div>
+      </div>
+
+      <div class="admin-sub-tabs">
+        <button class="admin-tab-btn active" onclick="setAdminTab('pending')">Pending Submissions (<span id="admin-tab-pending-count">0</span>)</button>
+        <button class="admin-tab-btn" onclick="setAdminTab('approved')">Active Live Listings (<span id="admin-tab-approved-count">0</span>)</button>
+        <button class="admin-tab-btn" onclick="setAdminTab('requests')">Tourist Inquiries (<span id="admin-tab-requests-count">0</span>)</button>
+      </div>
+
+      <!-- Pending Submissions Table with Photo Thumbnail -->
+      <div id="admin-view-pending">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Destination</th>
+              <th>Price</th>
+              <th>WhatsApp / Phone</th>
+              <th>Specialty</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-pending-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Active Listings Table -->
+      <div id="admin-view-approved" style="display: none;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Destination</th>
+              <th>Rating</th>
+              <th>Verified</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admin-approved-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Tourist Inquiries Table -->
+      <div id="admin-view-requests" style="display: none;">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Tourist Name</th>
+              <th>Tourist Phone</th>
+              <th>Requested Listing</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="admin-requests-tbody">
+            <!-- Populated dynamically -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         VIEW 1: DISCOVER BIHAR LANDING VIEW (DEFAULT HOME)
+         ========================================================================== -->
+    <div id="view-landing-home" class="landing-home-container">
+      
+      <!-- Grand Bihar Tourism Hero -->
+      <section class="landing-hero">
+        <div class="landing-hero-content">
+          <div class="landing-tag">
+            <span>🪷</span> TEJAS India Hackathon 2026 • Bihar Tourism Track
+          </div>
+          <h2 class="landing-title">Discover the Soul of Ancient & Living Bihar</h2>
+          <p class="landing-subtitle">
+            Zero-app, instant QR-code discovery connecting travelers directly with verified local guides, homestays, authentic delicacies, and folk artisans across iconic destinations.
+          </p>
+          <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="openSiteDetail('jamui')">
+              <span>🌲</span> Explore Jamui (Host Location)
+            </button>
+            <button class="btn btn-login" onclick="openSiteDetail('bodh-gaya')">
+              <span>🪷</span> Bodh Gaya Spiritual Trails
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5 Destination Cards Section -->
+      <section class="destinations-grid-section">
+        <div class="section-heading-center">
+          <h2>Select a Heritage Destination</h2>
+          <p>Click any destination card to view detailed visitor guides, travel routes, and verified local micro-entrepreneurs.</p>
+        </div>
+
+        <div class="destinations-grid" id="destinations-gallery-container">
+          <!-- Dynamically populated from SITE_METADATA -->
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ==========================================================================
+         VIEW 2: DESTINATION DETAIL VIEW
+         ========================================================================== -->
+    <div id="view-dest-detail" class="dest-detail-container">
+      
+      <!-- Destination Hero with Full-Image Background & Dark Gradient Overlay -->
+      <section class="dest-hero-bg" id="detail-hero-banner">
+        <div class="dest-hero-overlay"></div>
+        <div class="dest-hero-content">
+          <a class="btn-back-link" onclick="showLandingView()">
+            <span>←</span> Back to All Bihar Destinations
+          </a>
+          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+            <span class="hero-badge" id="detail-hero-badge" style="background: var(--color-gold); color: #2D1E01;">
+              📍 Destination
+            </span>
+          </div>
+          <h1 class="dest-hero-title" id="detail-hero-title">Jamui Heritage & Nature</h1>
+          <p class="dest-hero-subtitle" id="detail-hero-subtitle">
+            Explore ancient Gidhaur palace archives, Simultala pine valley retreats, Patneshwar stone artisans, and eco-guides.
+          </p>
+        </div>
+      </section>
+
+      <!-- Info Cards Strip (Why Visit, Getting There, Visitor Tips) -->
+      <div class="dest-info-strip">
+        <div class="dest-info-cards-grid">
+          
+          <!-- Why Visit & History -->
+          <div class="info-card">
+            <div class="info-card-header">
+              <span>📜</span> Why Visit & History
+            </div>
+            <p id="detail-why-visit">
+              Ancient seat of the Gidhaur royal dynasty with the iconic 19th-century Minto Tower, serene pine-clad hills of Simultala ("Mini Shimla of Bihar"), sacred Patneshwar temple, and rich Nagi-Nakti bird sanctuary.
+            </p>
+          </div>
+
+          <!-- Getting There -->
+          <div class="info-card">
+            <div class="info-card-header">
+              <span>🚂</span> Getting There
+            </div>
+            <div class="info-metric-row">
+              <div class="info-metric-item">
+                <span>Distance from Patna:</span>
+                <strong id="detail-distance">~160 km</strong>
+              </div>
+              <div class="info-metric-item">
+                <span>Nearest Rail Station:</span>
+                <strong id="detail-station">Jamui (JMU) / Jhajha (JAJ)</strong>
+              </div>
+              <div class="info-metric-item">
+                <span>Approx Travel Time:</span>
+                <strong id="detail-time">~3.5 Hours</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visitor Tips -->
+          <div class="info-card">
+            <div class="info-card-header">
+              <span>💡</span> Visitor Tips
+            </div>
+            <div class="info-metric-row">
+              <div style="font-size: 13px; margin-bottom: 4px;">
+                <span style="color: var(--color-muted);">Best Season:</span> <strong id="detail-best-season">Oct to March</strong>
+              </div>
+              <div style="font-size: 12.5px; color: var(--color-charcoal); background: var(--color-sand); padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+                <span style="color: var(--color-terracotta); font-weight: 700;">Tip:</span> <span id="detail-tip">Taste fresh Gidhaur chhena sweets early morning and hire a certified local guide.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Category Filter Bar & Listing Cards -->
+      <section class="site-listings-section">
+        <div class="filter-bar-wrap">
+          <div class="category-pills" id="detail-category-pills">
+            <button class="category-pill-btn active" data-category="all" onclick="setCategory('all')">
+              ✨ All Services
+            </button>
+            <button class="category-pill-btn" data-category="guide" onclick="setCategory('guide')">
+              🧭 Local Guides
+            </button>
+            <button class="category-pill-btn" data-category="homestay" onclick="setCategory('homestay')">
+              🏡 Homestays
+            </button>
+            <button class="category-pill-btn" data-category="food" onclick="setCategory('food')">
+              🍲 Food & Sweets
+            </button>
+            <button class="category-pill-btn" data-category="craft" onclick="setCategory('craft')">
+              🎨 Folk Crafts
+            </button>
+          </div>
+          <div class="results-count" id="detail-results-count">Showing verified listings</div>
+        </div>
+
+        <!-- Dynamic Listings Grid -->
+        <div class="listings-grid" id="detail-listings-grid">
+          <!-- Populated dynamically -->
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ==========================================================================
+       MODAL 1: UNIFIED AUTH MODAL (SIMPLIFIED PASSWORDLESS VENDOR & TRAVELER)
+       ========================================================================== -->
+  <div id="unified-auth-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><span>🔑</span> Welcome to GhoomoBihar</h3>
+        <button class="btn-close-modal" onclick="closeUnifiedAuthModal()">✕</button>
+      </div>
+
+      <div class="modal-tabs">
+        <button id="auth-tab-vendor" class="modal-tab-btn active" onclick="switchAuthTab('vendor')">👑 Business / Vendor</button>
+        <button id="auth-tab-traveler" class="modal-tab-btn" onclick="switchAuthTab('traveler')">🎒 Traveler (Optional)</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- TAB A: SIMPLIFIED PASSWORDLESS VENDOR AUTH -->
+        <div id="auth-view-vendor">
+          
+          <!-- Vendor Phone Login Form (Passwordless) -->
+          <div id="vendor-login-section">
+            <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 16px;">
+              Enter your registered phone number to manage your listings and view tourist inquiries. (Admin: <code>9898989800</code>)
+            </p>
+            <form id="vendor-login-form" onsubmit="handleVendorAuthSubmit(event)">
+              <div class="form-group">
+                <label for="v-login-phone">Your Phone / WhatsApp Number *</label>
+                <input type="tel" id="v-login-phone" placeholder="e.g. 9876543210 (Admin: 9898989800)" required maxlength="12">
+              </div>
+              <div id="vendor-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
+              
+              <div class="form-actions" style="justify-content: space-between; align-items: center;">
+                <a href="#" onclick="toggleVendorSignupView(true); return false;" style="font-size: 12.5px; color: var(--color-terracotta); font-weight: 700;">
+                  New business? Register here →
+                </a>
+                <button type="submit" class="btn btn-primary">Continue</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Vendor Registration Form (With Email & No Password) -->
+          <div id="vendor-signup-section" style="display: none;">
+            <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
+              Register your local service to get direct customer leads via WhatsApp and booking requests.
+            </p>
+            <form id="vendor-signup-form" onsubmit="handleVendorSignupSubmit(event)">
+              <div class="form-group">
+                <label for="v-signup-name">Business / Provider Full Name *</label>
+                <input type="text" id="v-signup-name" placeholder="e.g. Sunil Kumar (Simultala Guides)" required maxlength="60">
+              </div>
+              <div class="form-group">
+                <label for="v-signup-phone">Phone / WhatsApp Number *</label>
+                <input type="tel" id="v-signup-phone" placeholder="e.g. 9123456780" required pattern="[0-9]{10,12}" maxlength="12">
+                <div class="form-hint">Used as your single login identifier. No password needed!</div>
+              </div>
+              <div class="form-group">
+                <label for="v-signup-email">Contact Email Address</label>
+                <input type="email" id="v-signup-email" placeholder="e.g. provider@gmail.com (for inquiry records)">
+              </div>
+              
+              <div class="form-actions" style="justify-content: space-between; align-items: center;">
+                <a href="#" onclick="toggleVendorSignupView(false); return false;" style="font-size: 12.5px; color: var(--color-muted); font-weight: 600;">
+                  ← Back to Login
+                </a>
+                <button type="submit" class="btn btn-primary">Create Account</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- TAB B: TRAVELER LOCAL PROFILE (OPTIONAL) -->
+        <div id="auth-view-traveler" style="display: none;">
+          <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 16px;">
+            Save your name and phone number locally so future booking & package request forms auto-fill automatically. <em>Zero password needed; browsing & booking work with zero login.</em>
+          </p>
+
+          <form id="traveler-profile-form" onsubmit="handleTravelerProfileSubmit(event)">
+            <div class="form-group">
+              <label for="t-profile-name">Your Full Name</label>
+              <input type="text" id="t-profile-name" placeholder="e.g. Rahul Sharma" required maxlength="60">
+            </div>
+            <div class="form-group">
+              <label for="t-profile-phone">Your Phone / WhatsApp Number</label>
+              <input type="tel" id="t-profile-phone" placeholder="e.g. 9876543210" required pattern="[0-9]{10,12}" maxlength="12">
+              <div class="form-hint">Stored safely on your device to expedite direct inquiries.</div>
+            </div>
+
+            <div class="form-actions" style="justify-content: space-between; align-items: center;">
+              <button type="button" class="btn btn-user-badge" id="btn-clear-traveler" onclick="clearTravelerProfile()" style="display: none;">
+                Clear Saved Profile
+              </button>
+              <button type="submit" class="btn btn-primary">Save Traveler Profile</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 2: TOURIST PACKAGE BOOKING REQUEST
+       ========================================================================== -->
+  <div id="package-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><span>📦</span> Request Tourist Package / Booking</h3>
+        <button class="btn-close-modal" onclick="closePackageModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 16px;">
+          Send a direct booking inquiry to <strong id="modal-package-vendor-title" style="color: var(--color-teal);">Local Provider</strong>. No payment or account required!
+        </p>
+
+        <form id="package-request-form" onsubmit="handlePackageRequestSubmit(event)">
+          <input type="hidden" id="package-listing-id">
+          <input type="hidden" id="package-listing-title">
+          <input type="hidden" id="package-listing-price">
+          <input type="hidden" id="package-listing-whatsapp">
+          <input type="hidden" id="package-listing-site">
+
+          <div class="form-group">
+            <label for="tourist-name">Your Full Name *</label>
+            <input type="text" id="tourist-name" placeholder="e.g. Rahul Sharma" required maxlength="60">
+          </div>
+
+          <div class="form-group">
+            <label for="tourist-phone">Your Phone / WhatsApp Number *</label>
+            <input type="tel" id="tourist-phone" placeholder="e.g. 9876543210" required pattern="[0-9]{10,12}" maxlength="12">
+            <div class="form-hint">The local provider will call or WhatsApp you directly to confirm.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="tourist-note">Date / Specific Request (Optional)</label>
+            <textarea id="tourist-note" rows="2" placeholder="e.g. Visiting this Saturday with family of 3" maxlength="200"></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-user-badge" onclick="closePackageModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Booking Request</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 3: ITEMIZED CONFIRMATION RECEIPT
+       ========================================================================== -->
+  <div id="confirmation-modal" class="modal-backdrop">
+    <div class="modal-box">
+      <div class="modal-header" style="background: #E6F4EA;">
+        <h3 style="color: #137333;"><span>✅</span> Booking Request Sent!</h3>
+        <button class="btn-close-modal" onclick="closeConfirmationModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center; margin-bottom: 12px;">
+          <div style="font-size: 38px; line-height: 1; margin-bottom: 6px;">🎉</div>
+          <h4 style="font-family: 'Playfair Display', serif; font-size: 18px; color: var(--color-charcoal);">
+            Inquiry Successfully Forwarded
+          </h4>
+          <p style="font-size: 12.5px; color: var(--color-muted);">
+            Reference ID: <strong id="conf-ref-id" style="color: var(--color-teal);">GB-2026-0000</strong>
+          </p>
+        </div>
+
+        <div class="receipt-card">
+          <div class="receipt-row">
+            <span class="receipt-label">Requested Service:</span>
+            <span class="receipt-value" id="conf-service-title">—</span>
+          </div>
+          <div class="receipt-row">
+            <span class="receipt-label">Destination:</span>
+            <span class="receipt-value" id="conf-service-site">—</span>
+          </div>
+          <div class="receipt-row">
+            <span class="receipt-label">Indicative Price:</span>
+            <span class="receipt-value" id="conf-service-price" style="color: var(--color-teal);">—</span>
+          </div>
+          <div class="receipt-row">
+            <span class="receipt-label">Traveler Name:</span>
+            <span class="receipt-value" id="conf-traveler-name">—</span>
+          </div>
+          <div class="receipt-row">
+            <span class="receipt-label">Contact Phone:</span>
+            <span class="receipt-value" id="conf-traveler-phone">—</span>
+          </div>
+          <div class="receipt-row" id="conf-note-row">
+            <span class="receipt-label">Notes:</span>
+            <span class="receipt-value" id="conf-traveler-note">—</span>
+          </div>
+        </div>
+
+        <p style="font-size: 12.5px; color: var(--color-muted); margin-bottom: 18px; text-align: center;">
+          The local host will reach out to you shortly. You can also message them directly on WhatsApp now!
+        </p>
+
+        <div class="form-actions" style="justify-content: center; gap: 10px;">
+          <a id="conf-wa-btn" href="#" target="_blank" class="btn btn-whatsapp" style="padding: 10px 18px;">
+            <span>💬</span> Message Provider on WhatsApp
+          </a>
+          <button type="button" class="btn btn-user-badge" onclick="closeConfirmationModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 4: ENTREPRENEUR LISTING SUBMISSION (WITH PHOTO & OTHER BINDING)
+       ========================================================================== -->
+  <div id="listing-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3><span>📝</span> Submit Your Tourism Service Listing</h3>
+        <button class="btn-close-modal" onclick="closeListingModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: var(--color-gold-light); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 12.5px; color: #694A06;">
+          👋 Logged in as: <strong id="logged-vendor-name">Local Vendor</strong>. Approved listings receive a verified badge.
+        </div>
+
+        <form id="listing-submission-form" onsubmit="handleListingSubmit(event)">
+          
+          <div class="form-group">
+            <label for="listing-title">Listing / Service Title *</label>
+            <input type="text" id="listing-title" placeholder="e.g. Gidhaur Minto Tower Guided Walk" required maxlength="70">
+          </div>
+
+          <!-- Photo Upload Field (Base64 conversion) -->
+          <div class="form-group">
+            <label for="listing-photo-file">Listing Photo (Auto-displays on card) *</label>
+            <input type="file" id="listing-photo-file" accept="image/*" onchange="handlePhotoUploadPreview(event)">
+            <div id="photo-preview-wrap" style="margin-top: 8px; display: none;">
+              <img id="photo-preview-img" src="" alt="Preview" style="height: 90px; border-radius: var(--radius-sm); border: 1px solid var(--color-border);">
+            </div>
+            <div class="form-hint">Upload a high-quality photo of your stay, tour, delicacy, or craft.</div>
+          </div>
+
+          <!-- Category Selection with "Other" Option -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="listing-category">Service Category *</label>
+              <select id="listing-category" onchange="handleCategoryChange()" required>
+                <option value="guide">🧭 Local Guide</option>
+                <option value="homestay">🏡 Homestay</option>
+                <option value="food">🍲 Food & Sweets</option>
+                <option value="craft">🎨 Folk Craft & Souvenirs</option>
+                <option value="other">✨ Other (please specify)</option>
+              </select>
+              <input type="text" id="listing-category-other" placeholder="Specify custom category" style="display: none; margin-top: 6px;" maxlength="40">
+            </div>
+
+            <!-- Destination Selection with "Other" Option -->
+            <div class="form-group">
+              <label for="listing-site">Heritage Destination *</label>
+              <select id="listing-site" onchange="handleSiteChange()" required>
+                <option value="jamui">🌲 Jamui (Hackathon Host)</option>
+                <option value="bodh-gaya">🪷 Bodh Gaya</option>
+                <option value="nalanda">📜 Nalanda</option>
+                <option value="sonepur">🐘 Sonepur Mela</option>
+                <option value="chhath-ghat">🌊 Chhath Ghat</option>
+                <option value="other">📍 Other (please specify)</option>
+              </select>
+              <input type="text" id="listing-site-other" placeholder="Specify destination name" style="display: none; margin-top: 6px;" maxlength="40">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="listing-desc">Description & Experience Details *</label>
+            <textarea id="listing-desc" rows="3" placeholder="Describe your service, experience, local knowledge, or heritage authenticity..." required maxlength="300"></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="listing-price">Indicative Price (INR) *</label>
+              <input type="text" id="listing-price" placeholder="e.g. ₹500/tour or ₹1,200/night" required maxlength="30">
+            </div>
+            <div class="form-group">
+              <label for="listing-whatsapp">WhatsApp Phone Number *</label>
+              <input type="tel" id="listing-whatsapp" placeholder="e.g. 919876543210" required maxlength="15">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label for="listing-hours">Operating Hours (24h format) *</label>
+              <input type="text" id="listing-hours" placeholder="e.g. 06:00-18:00 or 24 Hours" required maxlength="25">
+            </div>
+            
+            <!-- Dynamic Category-Specific Datalist Suggestions -->
+            <div class="form-group">
+              <label for="listing-specialty">Specialty Highlight *</label>
+              <input type="text" id="listing-specialty" list="specialty-suggestions-datalist" placeholder="Select or type specialty" required maxlength="50">
+              <datalist id="specialty-suggestions-datalist">
+                <!-- Dynamically populated based on chosen category -->
+              </datalist>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-user-badge" onclick="closeListingModal()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit for Admin Approval</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       AI TOURISM CONCIERGE (P2 - FLOATING FAB & CONVERSATIONAL DRAWER)
+       ========================================================================== -->
+  <!-- Floating FAB Button -->
+  <div id="ai-chat-fab" class="ai-chat-fab" onclick="toggleAIChatDrawer()">
+    <span class="ai-fab-icon">✨</span>
+    <span>Ask Bihar AI Concierge</span>
+    <span class="ai-fab-badge">Groq AI</span>
+  </div>
+
+  <!-- Expandable Chat Drawer -->
+  <div id="ai-chat-drawer" class="ai-chat-drawer">
+    <div class="ai-chat-header">
+      <div class="ai-header-info">
+        <div class="ai-avatar">🪷</div>
+        <div>
+          <div class="ai-title">GhoomoBihar AI Concierge</div>
+          <div class="ai-subtitle" id="ai-mode-status"><span class="status-dot"></span> Powered by Groq Compound AI</div>
+        </div>
+      </div>
+      <div class="ai-header-controls">
+        <button class="ai-ctrl-btn" onclick="clearAIChatHistory()" title="Clear Chat">🔄</button>
+        <button class="ai-ctrl-btn" onclick="toggleAIChatDrawer()" title="Close">✕</button>
+      </div>
+    </div>
+
+    <!-- Quick Prompts Scroll Bar -->
+    <div class="ai-quick-prompts-bar">
+      <span class="quick-prompt-label">Quick:</span>
+      <div class="quick-prompts-scroll">
+        <button class="quick-chip" onclick="handleQuickAsk('Top things to do in Jamui?')">🌲 Jamui Tours</button>
+        <button class="quick-chip" onclick="handleQuickAsk('How to reach Simultala from Patna?')">🚂 Reach Simultala</button>
+        <button class="quick-chip" onclick="handleQuickAsk('Best time to visit Bodh Gaya?')">🪷 Bodh Gaya</button>
+        <button class="quick-chip" onclick="handleQuickAsk('Where to get authentic GI-tagged Silao Khaja?')">🍲 Silao Khaja</button>
+        <button class="quick-chip" onclick="handleQuickAsk('Tell me about Nalanda Mahavihara ruins.')">📜 Nalanda Ruins</button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="ai-messages-container" id="ai-messages-list">
+      <!-- Injected dynamically -->
+    </div>
+
+    <!-- Chat Input Bar -->
+    <form class="ai-chat-input-bar" id="ai-chat-form" onsubmit="handleAIChatSubmit(event)">
+      <input type="text" id="ai-chat-input" placeholder="Ask about guides, food, travel routes, stays..." autocomplete="off" maxlength="300">
+      <button type="submit" id="ai-send-btn" class="ai-send-btn" title="Send">
+        <span>➤</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <strong>GhoomoBihar</strong> — Built for TEJAS India Hackathon 2026 (Bihar Tourism Track)
+    </p>
+    <p style="margin-top: 5px;">
+      Celebrating <span class="footer-host-tag">Jamui</span> & Bihar Heritage • Zero-Build Standalone Platform
+    </p>
+  </footer>
+
+  <!-- ==========================================================================
+       JAVASCRIPT APPLICATION ENGINE
+       ========================================================================== -->
+  <script>
+    // --- 1. CONSTANTS & METADATA ---
+    const ADMIN_PHONE = "9898989800";
+
+    const CATEGORY_SUGGESTIONS = {
+      "guide": [
+        "Historical & Archaeological Lore",
+        "Temple Rituals & Meditation Chants",
+        "Wildlife & Migratory Bird Circuit",
+        "Local Royal Folklore Walk",
+        "Sacred River Ghat Confluence Stories"
+      ],
+      "homestay": [
+        "Organic Village Meals & Farming",
+        "Serene Riverbank / Pine Valley Views",
+        "Traditional Bihari Courtyard Stay",
+        "Boutique Eco Retreat",
+        "Family-run Heritage Hospitality"
+      ],
+      "food": [
+        "Pure Desi Ghee Litti Chokha",
+        "GI-Tagged Silao Khaja",
+        "Famous Gidhaur Chhena Sweets",
+        "Giant Saffron Mela Jalebi",
+        "Traditional Woodfire Thekua & Anarsa"
+      ],
+      "craft": [
+        "Madhubani / Mithila Painting",
+        "Sikki Grass Craft & Baskets",
+        "Bawan Buti Handloom Saree Weaves",
+        "Patneshwar Stone & Terracotta Art",
+        "Handforged Brass Bells & Metalcraft"
+      ],
+      "other": [
+        "Authentic Local Experience",
+        "Eco-Friendly Sustainable Tourism",
+        "Certified Traditional Artisan",
+        "Heritage Tour Partner"
+      ]
+    };
+
+    const SITE_METADATA = {
+      "jamui": {
+        name: "Jamui",
+        badge: "🌟 Hackathon Host Location",
+        title: "Jamui Heritage, Palace Lore & Pine Retreats",
+        subtitle: "Explore ancient Gidhaur royal history, serene Simultala pine valley retreats, Patneshwar temple artisans, and Nagi-Nakti wetland bird guides.",
+        image: "assets/jamui.jpeg",
+        whyVisit: "Ancient seat of the Gidhaur royal dynasty with the iconic 19th-century Minto Tower, serene pine-clad hills of Simultala ('Mini Shimla of Bihar'), sacred Patneshwar temple, and rich Nagi-Nakti bird sanctuary.",
+        distance: "~160 km from Patna",
+        station: "Jamui (JMU) / Jhajha (JAJ)",
+        time: "~3.5 Hours (Road / Rail)",
+        season: "October to March",
+        tip: "Taste fresh Gidhaur chhena sweets in the morning and hire a certified local guide for palace archives.",
+        highlights: "Gidhaur Minto Tower, Simultala Pine Trails, Nagi-Nakti Birds, Patneshwar Stone Crafts"
+      },
+      "bodh-gaya": {
+        name: "Bodh Gaya",
+        badge: "🪷 UNESCO World Heritage",
+        title: "Bodh Gaya Sacred Enlightenment Trails",
+        subtitle: "Connect with certified Buddhist heritage scholars, peaceful Sujata village homestays, Bodhi leaf artists, and pure ghee litti stalls.",
+        image: "assets/bodh_gaya.jpeg",
+        whyVisit: "The supreme cradle of Buddhist enlightenment where Prince Siddhartha attained Buddhahood under the sacred Bodhi Tree over 2,500 years ago. UNESCO World Heritage Site with monasteries from over 15 nations.",
+        distance: "~115 km from Patna",
+        station: "Gaya Junction (GAYA - 12 km)",
+        time: "~2.5 Hours (Vande Bharat / Road)",
+        season: "November to February",
+        tip: "Visit the Mahabodhi temple sanctum at 5:00 AM for peaceful morning chanting and meditation.",
+        highlights: "Mahabodhi Temple, Sacred Bodhi Tree, Sujata Village, Niranjana River, International Monasteries"
+      },
+      "nalanda": {
+        name: "Nalanda",
+        badge: "📜 Cradle of World Knowledge",
+        title: "Ancient Nalanda Mahavihara Ruins & Weaves",
+        subtitle: "Walk through 1,500-year-old university ruins with scholar guides, taste crispy Silao Khaja, and meet 52-Buti handloom weavers.",
+        image: "assets/nalanda.jpeg",
+        whyVisit: "The ancient world's premier residential university (5th–12th century CE) hosting 10,000 students and 2,000 scholars from across Asia. UNESCO World Heritage ruins of stupas, viharas, and the Xuanzang memorial.",
+        distance: "~90 km from Patna",
+        station: "Nalanda (NLD) / Rajgir (RGD - 12 km)",
+        time: "~2.0 Hours (4-lane Highway / Train)",
+        season: "October to March",
+        tip: "Stop at nearby Silao on your way to try freshly made, crispy multi-layered GI-tagged Khaja.",
+        highlights: "UNESCO University Ruins, Xuanzang Memorial, Silao Khaja, 52-Buti Handloom Weaves"
+      },
+      "sonepur": {
+        name: "Sonepur Mela",
+        badge: "🐘 Asia's Historic Cultural Gathering",
+        title: "Sonepur Mela & Riverfront Traditions",
+        subtitle: "Immerse in the grand Ganga-Gandak riverfront fair, traditional jalebi stalls, and handcrafted brass bell artisans.",
+        image: "assets/sonepur_mela.jpeg",
+        whyVisit: "One of Asia's most historic cultural and livestock gatherings held at the sacred confluence of the Ganga and Gandak rivers during Kartik Purnima, dating back to Emperor Chandragupta Maurya.",
+        distance: "~25 km from Patna",
+        station: "Sonpur Junction (SEE)",
+        time: "~45 Minutes via JP Ganga Setu",
+        season: "November / December (Kartik Purnima)",
+        tip: "Witness the sacred morning river bath at Harihar Kshetra and enjoy giant saffron mela jalebis.",
+        highlights: "Ganga-Gandak Sangam, Cultural Mela, Giant Saffron Jalebis, Brass Bells & Livestock Ornaments"
+      },
+      "chhath-ghat": {
+        name: "Chhath Ghat",
+        badge: "🌊 Sacred Sun Mahaparv",
+        title: "Patna Ganga Ghats & Sunrise Arghya",
+        subtitle: "Experience sunrise Ganges boat circuits, authentic pure ghee thekua artisans, and Madhubani painted bamboo soop crafts.",
+        image: "assets/chhath_ghat.jpeg",
+        whyVisit: "The epicenter of Bihar's most sacred Vedic folk festival dedicated to the Sun God (Surya) and Chhathi Maiya. Witness millions gathered on the illuminated banks of the sacred Ganges for sunrise and sunset arghya.",
+        distance: "In Patna City (Ganga Riverfront)",
+        station: "Patna Junction (PNBE)",
+        time: "15–20 Minutes in city",
+        season: "October / November (Chhath Festival)",
+        tip: "Book an early dawn boat ride at Collectorate Ghat for breathtaking sunrise arghya vistas.",
+        highlights: "Ganges Sunrise Boat Tours, Pure Ghee Thekua, Madhubani Painted Bamboo Soop, Evening Ganga Arati"
+      }
+    };
+
+    const DEFAULT_LISTINGS = [
+      // === JAMUI (Host Location) ===
+      {
+        id: "jamui-g-01",
+        title: "Gidhaur Royal Heritage & Lore Walk",
+        category: "guide",
+        site: "jamui",
+        description: "Guided tour through the historic Gidhaur Minto Tower, palace courtyards, and royal archives with ancient folklore.",
+        price: "₹800/group",
+        whatsapp: "919876543210",
+        openHours: "06:00-18:00",
+        rating: 4.9,
+        specialty: "Historical & Archaeological Lore",
+        verified: true,
+        status: "approved",
+        submittedBy: "Sunil Kumar (Gidhaur Royal Guides)",
+        photo: "assets/jamui.jpeg"
+      },
+      {
+        id: "jamui-h-01",
+        title: "Simultala Pine View Nature Retreat",
+        category: "homestay",
+        site: "jamui",
+        description: "Boutique eco-homestay in Simultala (the 'Mini Shimla' of Bihar), offering fresh local dining and pine trail walks.",
+        price: "₹1,200/night",
+        whatsapp: "919876543211",
+        openHours: "24 Hours",
+        rating: 4.8,
+        specialty: "Serene Riverbank / Pine Valley Views",
+        verified: true,
+        status: "approved",
+        submittedBy: "Simultala Eco Stays",
+        photo: "assets/jamui.jpeg"
+      },
+      {
+        id: "jamui-f-01",
+        title: "Authentic Gidhaur Chhena Sweets",
+        category: "food",
+        site: "jamui",
+        description: "Heritage sweet shop famous for freshly prepared soft chhena rasgullas and traditional Belhar gulab jamuns.",
+        price: "₹120/box",
+        whatsapp: "919876543212",
+        openHours: "07:00-21:00",
+        rating: 4.9,
+        specialty: "Famous Gidhaur Chhena Sweets",
+        verified: true,
+        status: "approved",
+        submittedBy: "Gidhaur Heritage Sweets",
+        photo: "assets/jamui.jpeg"
+      },
+      {
+        id: "jamui-c-01",
+        title: "Patneshwar Terracotta & Stone Crafts",
+        category: "craft",
+        site: "jamui",
+        description: "Direct artisan workshop handcrafting traditional black stone carvings, terracotta temple bells, and clay souvenirs.",
+        price: "₹450/piece",
+        whatsapp: "919876543213",
+        openHours: "09:00-19:00",
+        rating: 4.7,
+        specialty: "Patneshwar Stone & Terracotta Art",
+        verified: true,
+        status: "approved",
+        submittedBy: "Patneshwar Artisan Guild",
+        photo: "assets/jamui.jpeg"
+      },
+      {
+        id: "jamui-g-02",
+        title: "Nagi-Nakti Bird Sanctuary Eco-Guide",
+        category: "guide",
+        site: "jamui",
+        description: "Certified wetland guide for migratory bird watching, nature photography, and reservoir boat circuits in Jamui.",
+        price: "₹600/tour",
+        whatsapp: "919876543214",
+        openHours: "05:30-17:30",
+        rating: 4.9,
+        specialty: "Wildlife & Migratory Bird Circuit",
+        verified: true,
+        status: "approved",
+        submittedBy: "Jamui Wetland Conservation",
+        photo: "assets/jamui.jpeg"
+      },
+
+      // === BODH GAYA ===
+      {
+        id: "bg-g-01",
+        title: "Mahabodhi Temple Scholar & Meditation Walk",
+        category: "guide",
+        site: "bodh-gaya",
+        description: "Senior Buddhist heritage scholar explaining the 7 sacred weeks, Bodhi Tree lineage, and ancient Pali inscriptions.",
+        price: "₹500/tour",
+        whatsapp: "919876543220",
+        openHours: "05:00-20:00",
+        rating: 4.9,
+        specialty: "Temple Rituals & Meditation Chants",
+        verified: true,
+        status: "approved",
+        submittedBy: "Bodh Gaya Scholar Collective",
+        photo: "assets/bodh_gaya.jpeg"
+      },
+      {
+        id: "bg-h-01",
+        title: "Sujata Village Peaceful Homestay",
+        category: "homestay",
+        site: "bodh-gaya",
+        description: "Tranquil family homestay near Niranjana River, offering traditional organic meals and bicycle rentals.",
+        price: "₹1,400/night",
+        whatsapp: "919876543221",
+        openHours: "24 Hours",
+        rating: 4.8,
+        specialty: "Family-run Heritage Hospitality",
+        verified: true,
+        status: "approved",
+        submittedBy: "Sujata Village Stays",
+        photo: "assets/bodh_gaya.jpeg"
+      },
+      {
+        id: "bg-f-01",
+        title: "Nirvana Woodfire Litti Chokha & Sattu",
+        category: "food",
+        site: "bodh-gaya",
+        description: "Traditional clay-chulha litti chokha made with mustard oil, roasted sattu, and authentic spiced baingan bharta.",
+        price: "₹90/plate",
+        whatsapp: "919876543222",
+        openHours: "08:00-22:00",
+        rating: 4.8,
+        specialty: "Pure Desi Ghee Litti Chokha",
+        verified: true,
+        status: "approved",
+        submittedBy: "Nirvana Bihari Kitchen",
+        photo: "assets/bodh_gaya.jpeg"
+      },
+      {
+        id: "bg-c-01",
+        title: "Bodhi Leaf & Silk Miniature Art",
+        category: "craft",
+        site: "bodh-gaya",
+        description: "Original Bodhi tree skeleton leaf paintings depicting Buddha life chronicles, framed in handspun silk.",
+        price: "₹350/piece",
+        whatsapp: "919876543223",
+        openHours: "09:00-20:00",
+        rating: 4.9,
+        specialty: "Madhubani / Mithila Painting",
+        verified: true,
+        status: "approved",
+        submittedBy: "Bodhi Art Studio",
+        photo: "assets/bodh_gaya.jpeg"
+      },
+
+      // === NALANDA ===
+      {
+        id: "nl-g-01",
+        title: "Ancient Nalanda Ruins & Monastic Archaeology",
+        category: "guide",
+        site: "nalanda",
+        description: "Deep dive into the 5th-century university ruins, temple architecture, and Xuanzang's historical travelogue.",
+        price: "₹600/group",
+        whatsapp: "919876543230",
+        openHours: "08:00-17:30",
+        rating: 5.0,
+        specialty: "Historical & Archaeological Lore",
+        verified: true,
+        status: "approved",
+        submittedBy: "Nalanda Heritage Guides",
+        photo: "assets/nalanda.jpeg"
+      },
+      {
+        id: "nl-f-01",
+        title: "Silao Authentic 52-Layer Crispy Khaja",
+        category: "food",
+        site: "nalanda",
+        description: "GI-tagged world-famous Silao Khaja, delicate multi-layered sweet pastry prepared with age-old secret recipe.",
+        price: "₹160/box",
+        whatsapp: "919876543231",
+        openHours: "07:00-21:30",
+        rating: 4.9,
+        specialty: "GI-Tagged Silao Khaja",
+        verified: true,
+        status: "approved",
+        submittedBy: "Silao Heritage Confectioners",
+        photo: "assets/nalanda.jpeg"
+      },
+      {
+        id: "nl-c-01",
+        title: "Bawan Buti Handloom Saree Weavers",
+        category: "craft",
+        site: "nalanda",
+        description: "Heritage weaver collective crafting exquisite 52-motif (Bawan Buti) cotton sarees and traditional scarves.",
+        price: "₹850/piece",
+        whatsapp: "919876543232",
+        openHours: "09:00-19:00",
+        rating: 4.8,
+        specialty: "Bawan Buti Handloom Saree Weaves",
+        verified: true,
+        status: "approved",
+        submittedBy: "Bawan Buti Weaver Collective",
+        photo: "assets/nalanda.jpeg"
+      },
+
+      // === SONEPUR MELA ===
+      {
+        id: "sp-g-01",
+        title: "Sonepur Fair & Harihar Kshetra Walk",
+        category: "guide",
+        site: "sonepur",
+        description: "Experience Asia's legendary cultural gathering, elephant bath traditions, and sacred Ganga-Gandak confluence rituals.",
+        price: "₹700/group",
+        whatsapp: "919876543240",
+        openHours: "06:00-21:00",
+        rating: 4.8,
+        specialty: "Sacred River Ghat Confluence Stories",
+        verified: true,
+        status: "approved",
+        submittedBy: "Sonepur Cultural Trust",
+        photo: "assets/sonepur_mela.jpeg"
+      },
+      {
+        id: "sp-f-01",
+        title: "Mela Spiced Milk Jalebi & Kadak Chai",
+        category: "food",
+        site: "sonepur",
+        description: "Crispy giant golden jalebis dipped in saffron syrup paired with clay-cup spiced buffalo milk chai.",
+        price: "₹60/serving",
+        whatsapp: "919876543241",
+        openHours: "06:00-23:00",
+        rating: 4.9,
+        specialty: "Giant Saffron Mela Jalebi",
+        verified: true,
+        status: "approved",
+        submittedBy: "Sonepur Mela Halwai",
+        photo: "assets/sonepur_mela.jpeg"
+      },
+      {
+        id: "sp-c-01",
+        title: "Handcrafted Brass Bells & Livestock Ornaments",
+        category: "craft",
+        site: "sonepur",
+        description: "Traditional brass bell-makers producing resonant temple gongs, cattle collars, and decorative metalwork.",
+        price: "₹300/piece",
+        whatsapp: "919876543242",
+        openHours: "08:00-21:00",
+        rating: 4.7,
+        specialty: "Handforged Brass Bells & Metalcraft",
+        verified: true,
+        status: "approved",
+        submittedBy: "Harihar Brass Guild",
+        photo: "assets/sonepur_mela.jpeg"
+      },
+
+      // === CHHATH GHAT ===
+      {
+        id: "cg-g-01",
+        title: "Patliputra Sunrise Ghat Boat Tour",
+        category: "guide",
+        site: "chhath-ghat",
+        description: "Dawn boat ride across the Ganges witnessing morning arati, Vedic sun worship hymns, and historic ghat architecture.",
+        price: "₹900/boat",
+        whatsapp: "919876543250",
+        openHours: "04:30-19:30",
+        rating: 5.0,
+        specialty: "Sacred River Ghat Confluence Stories",
+        verified: true,
+        status: "approved",
+        submittedBy: "Ganga Boatman Guild",
+        photo: "assets/chhath_ghat.jpeg"
+      },
+      {
+        id: "cg-f-01",
+        title: "Pure Desi Ghee Thekua & Anarsa House",
+        category: "food",
+        site: "chhath-ghat",
+        description: "Traditional Bihari dry sweet made from whole wheat, jaggery, cardamom, and pure cow ghee using wooden moulds.",
+        price: "₹140/kg",
+        whatsapp: "919876543251",
+        openHours: "07:00-21:00",
+        rating: 5.0,
+        specialty: "Traditional Woodfire Thekua & Anarsa",
+        verified: true,
+        status: "approved",
+        submittedBy: "Patliputra Thekua Artisans",
+        photo: "assets/chhath_ghat.jpeg"
+      },
+      {
+        id: "cg-c-01",
+        title: "Madhubani Painted Bamboo Soop & Thalis",
+        category: "craft",
+        site: "chhath-ghat",
+        description: "Hand-painted organic bamboo baskets (soop) and brass puja thalis decorated with authentic Mithila sun motifs.",
+        price: "₹400/set",
+        whatsapp: "919876543252",
+        openHours: "08:00-20:00",
+        rating: 4.9,
+        specialty: "Sikki Grass Craft & Baskets",
+        verified: true,
+        status: "approved",
+        submittedBy: "Mithila Folk Craft Studio",
+        photo: "assets/chhath_ghat.jpeg"
+      }
+    ];
+
+    // --- 2. APPLICATION STATE ---
+    let currentSite = "jamui";
+    let currentCategory = "all";
+    let activeView = "landing"; // "landing" or "detail"
+    let listings = [];
+    let currentVendor = null;
+    let isAdminActive = false;
+    let travelerProfile = null;
+    let uploadedPhotoBase64 = "";
+
+    // --- 3. SANITIZATION HELPER ---
+    function sanitizeHTML(str) {
+      if (!str) return "";
+      const div = document.createElement("div");
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function escapeAttr(str) {
+      return (str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    }
+
+    // --- 4. INITIALIZATION ---
+    function initApp() {
+      // Load listings
+      const savedListings = localStorage.getItem("ghoomobihar_listings");
+      if (savedListings) {
+        try {
+          listings = JSON.parse(savedListings);
+        } catch (e) {
+          listings = [...DEFAULT_LISTINGS];
+        }
+      } else {
+        listings = [...DEFAULT_LISTINGS];
+        saveListings();
+      }
+
+      // Check traveler profile
+      const savedTraveler = localStorage.getItem("ghoomobihar_traveler_profile");
+      if (savedTraveler) {
+        try {
+          travelerProfile = JSON.parse(savedTraveler);
+        } catch (e) {
+          travelerProfile = null;
+        }
+      }
+
+      // Check vendor / admin session
+      const savedVendor = localStorage.getItem("ghoomobihar_current_vendor");
+      if (savedVendor) {
+        try {
+          currentVendor = JSON.parse(savedVendor);
+        } catch (e) {
+          currentVendor = null;
+        }
+      }
+
+      const savedAdmin = localStorage.getItem("ghoomobihar_admin_active");
+      if (savedAdmin === "true") {
+        isAdminActive = true;
+      }
+
+      // Build landing gallery & update UI
+      renderLandingDestinations();
+      updateAuthHeaderUI();
+      renderVendorDashboard();
+      renderAdminTables();
+      handleCategoryChange(); // Init suggestions datalist
+      // Start on Landing Page by default!
+      showLandingView();
+
+      // Auto-refresh dynamic open/closed badges every 60 seconds
+      setInterval(() => {
+        if (activeView === 'detail') {
+          renderDetailListings();
+        }
+      }, 60000);
+    }
+
+    function saveListings() {
+      localStorage.setItem("ghoomobihar_listings", JSON.stringify(listings));
+      renderAdminTables();
+      renderVendorDashboard();
+    }
+
+    function resetDefaultSeedData() {
+      if (confirm("Reset all listings back to the default Bihar demo dataset?")) {
+        listings = [...DEFAULT_LISTINGS];
+        saveListings();
+        renderDetailListings();
+        renderAdminTables();
+        renderVendorDashboard();
+        showToast("🔄 Reset to default Bihar seed data!");
+      }
+    }
+
+    // --- 5. NAVIGATION VIEW SWITCHING ---
+    function showLandingView() {
+      activeView = "landing";
+      document.getElementById("view-landing-home").style.display = "block";
+      document.getElementById("view-dest-detail").style.display = "none";
+      document.getElementById("nav-btn-home").classList.add("active");
+      document.getElementById("nav-btn-site").classList.remove("active");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openSiteDetail(siteKey) {
+      if (!SITE_METADATA[siteKey]) siteKey = "jamui";
+      currentSite = siteKey;
+      activeView = "detail";
+
+      const meta = SITE_METADATA[siteKey];
+
+      // Update Nav
+      document.getElementById("nav-active-site-label").textContent = `${meta.name} Listings`;
+      document.getElementById("nav-btn-home").classList.remove("active");
+      document.getElementById("nav-btn-site").classList.add("active");
+
+      // Update Detail Hero with Full Background Image & Dark Overlay
+      const heroBanner = document.getElementById("detail-hero-banner");
+      heroBanner.style.backgroundImage = `url('${meta.image}')`;
+      document.getElementById("detail-hero-badge").textContent = meta.badge;
+      document.getElementById("detail-hero-title").textContent = meta.title;
+      document.getElementById("detail-hero-subtitle").textContent = meta.subtitle;
+
+      // Update Info Cards
+      document.getElementById("detail-why-visit").textContent = meta.whyVisit;
+      document.getElementById("detail-distance").textContent = meta.distance;
+      document.getElementById("detail-station").textContent = meta.station;
+      document.getElementById("detail-time").textContent = meta.time;
+      document.getElementById("detail-best-season").textContent = meta.season;
+      document.getElementById("detail-tip").textContent = meta.tip;
+
+      // Show detail view
+      document.getElementById("view-landing-home").style.display = "none";
+      document.getElementById("view-dest-detail").style.display = "block";
+
+      // Reset category filter to 'all' & render listings
+      setCategory('all');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderLandingDestinations() {
+      const container = document.getElementById("destinations-gallery-container");
+      container.innerHTML = "";
+
+      Object.keys(SITE_METADATA).forEach(siteKey => {
+        const meta = SITE_METADATA[siteKey];
+        const card = document.createElement("div");
+        card.className = "dest-card";
+        card.onclick = () => openSiteDetail(siteKey);
+
+        const isHost = siteKey === "jamui";
+
+        card.innerHTML = `
+          <div class="dest-card-img-wrap">
+            <img src="${meta.image}" alt="${meta.name}" class="dest-card-img">
+            <span class="dest-badge-overlay ${isHost ? 'dest-host-badge' : ''}">${meta.badge}</span>
+          </div>
+          <div class="dest-card-body">
+            <div>
+              <h3 class="dest-card-title">${meta.name}</h3>
+              <p class="dest-card-desc">${meta.subtitle}</p>
+              <div class="dest-highlights-box">
+                <strong>Key Highlights:</strong> ${meta.highlights}
+              </div>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="event.stopPropagation(); openSiteDetail('${siteKey}');">
+              Explore ${meta.name} Listings ➔
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setCategory(catKey) {
+      currentCategory = catKey;
+      document.querySelectorAll("#detail-category-pills .category-pill-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.category === catKey);
+      });
+      renderDetailListings();
+    }
+
+    // --- 5.1 DYNAMIC OPEN/CLOSED STATUS CALCULATION ENGINE ---
+    function computeOpenStatus(openHours) {
+      if (!openHours) {
+        return { isOpen: true, label: "Open Daily", cssClass: "status-open", schedule: "Open Daily" };
+      }
+      const clean = openHours.trim().toLowerCase();
+
+      // 1. 24 Hours / Always Open
+      if (clean.includes("24 hour") || clean.includes("24/7") || clean.includes("always")) {
+        return { isOpen: true, label: "Open 24 Hours", cssClass: "status-open", schedule: "Open 24 Hours" };
+      }
+
+      // 2. Parse Standard Range HH:MM-HH:MM (e.g. "06:00-18:00", "05:30-17:30", "08:00-22:00")
+      const match = openHours.match(/(\d{1,2}):?(\d{2})?\s*(am|pm)?\s*[-–to]+\s*(\d{1,2}):?(\d{2})?\s*(am|pm)?/i);
+      if (!match) {
+        return { isOpen: true, label: openHours, cssClass: "status-open", schedule: openHours };
+      }
+
+      function parseMinutes(hStr, mStr, ampm) {
+        let h = parseInt(hStr, 10);
+        let m = mStr ? parseInt(mStr, 10) : 0;
+        if (ampm) {
+          const isPM = ampm.toLowerCase() === 'pm';
+          if (isPM && h < 12) h += 12;
+          if (!isPM && h === 12) h = 0;
+        }
+        return h * 60 + m;
+      }
+
+      function format12H(minutes) {
+        let h = Math.floor(minutes / 60) % 24;
+        let m = minutes % 60;
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        let h12 = h % 12;
+        if (h12 === 0) h12 = 12;
+        const mStr = m > 0 ? (':' + (m < 10 ? '0' + m : m)) : ':00';
+        return `${h12}${mStr} ${ampm}`;
+      }
+
+      const startMin = parseMinutes(match[1], match[2], match[3]);
+      const endMin = parseMinutes(match[4], match[5], match[6]);
+
+      const now = new Date();
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+
+      let isOpen = false;
+      if (startMin <= endMin) {
+        isOpen = currentMin >= startMin && currentMin < endMin;
+      } else {
+        // Overnight, e.g. 18:00 - 02:00
+        isOpen = currentMin >= startMin || currentMin < endMin;
+      }
+
+      const formattedSchedule = `${format12H(startMin)} - ${format12H(endMin)}`;
+
+      if (isOpen) {
+        return {
+          isOpen: true,
+          label: `Open Now • Closes ${format12H(endMin)}`,
+          cssClass: "status-open",
+          schedule: formattedSchedule
+        };
+      } else {
+        return {
+          isOpen: false,
+          label: `Closed • Opens ${format12H(startMin)}`,
+          cssClass: "status-closed",
+          schedule: formattedSchedule
+        };
+      }
+    }
+
+    // --- 6. RENDER LISTINGS (WITH DYNAMIC STATUS, PHOTO, VISIBLE PHONE, CATEGORY FILTER) ---
+    function renderDetailListings() {
+      const grid = document.getElementById("detail-listings-grid");
+      grid.innerHTML = "";
+
+      const filtered = listings.filter(item => {
+        const matchesSite = item.site === currentSite;
+        const matchesCategory = currentCategory === "all" || item.category === currentCategory;
+        const isApproved = item.status === "approved";
+        return matchesSite && matchesCategory && isApproved;
+      });
+
+      const siteName = SITE_METADATA[currentSite]?.name || currentSite;
+      document.getElementById("detail-results-count").textContent = `Showing ${filtered.length} verified listings in ${siteName}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; background: #FFFFFF; border-radius: var(--radius-lg); border: 1.5px dashed var(--color-border);">
+            <div style="font-size: 40px; margin-bottom: 12px;">🪷</div>
+            <h3 style="font-family: 'Playfair Display', serif; font-size: 21px; margin-bottom: 8px;">No Listings Found</h3>
+            <p style="color: var(--color-muted); font-size: 14px; margin-bottom: 18px;">
+              No approved ${currentCategory === 'all' ? 'services' : currentCategory} currently available in ${siteName}.
+            </p>
+            <button class="btn btn-login" onclick="openUnifiedAuthModal('vendor')">👑 Register as First Vendor</button>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "listing-card";
+
+        const cleanPhone = item.whatsapp.replace(/\D/g, "");
+        const waText = encodeURIComponent(
+          `Namaste! I found "${item.title}" on GhoomoBihar (${siteName}). I would like to inquire about your ${item.category} service (Price: ${item.price}). Please share availability.`
+        );
+        const waUrl = `https://wa.me/${cleanPhone}?text=${waText}`;
+
+        const title = sanitizeHTML(item.title);
+        const desc = sanitizeHTML(item.description);
+        const price = sanitizeHTML(item.price);
+        const hours = sanitizeHTML(item.openHours);
+        const specialty = sanitizeHTML(item.specialty);
+        const rating = item.rating ? Number(item.rating).toFixed(1) : "4.8";
+        const displayPhone = sanitizeHTML(item.whatsapp);
+        const cardPhoto = item.photo || SITE_METADATA[item.site]?.image || "assets/jamui.jpeg";
+
+        const categoryIcons = {
+          guide: "🧭 Guide",
+          homestay: "🏡 Homestay",
+          food: "🍲 Food & Sweets",
+          craft: "🎨 Folk Craft"
+        };
+        const categoryLabel = categoryIcons[item.category] || sanitizeHTML(item.category);
+        const statusObj = computeOpenStatus(item.openHours);
+
+        card.innerHTML = `
+          <img src="${cardPhoto}" alt="${title}" class="listing-card-img">
+          <div class="listing-card-body">
+            <div>
+              <div class="card-top-meta">
+                <span class="category-tag">${categoryLabel}</span>
+                <div class="badges-group">
+                  <span class="status-badge ${statusObj.cssClass}">
+                    <span class="status-dot"></span> ${statusObj.label}
+                  </span>
+                  ${item.verified ? '<span class="verified-badge">✓ Verified</span>' : ''}
+                  <span class="rating-badge">★ ${rating}</span>
+                </div>
+              </div>
+
+              <h3 class="card-title">${title}</h3>
+              ${specialty ? `<div class="card-specialty"><span>🌿</span> ${specialty}</div>` : ''}
+              <p class="card-desc">${desc}</p>
+            </div>
+
+            <div>
+              <!-- Plain Visible Phone Contact Row -->
+              <div class="card-contact-row">
+                <span>📞</span>
+                <span>Direct Host Contact: <a href="tel:${cleanPhone}">+${displayPhone}</a></span>
+              </div>
+
+              <div class="card-info-row">
+                <span class="card-price">${price}</span>
+                <span class="card-hours"><span>🕒</span> ${statusObj.schedule || hours}</span>
+              </div>
+
+              <div class="card-actions">
+                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                  <span>💬</span> WhatsApp
+                </a>
+                <button class="btn-package" onclick="openPackageModal('${item.id}', '${escapeAttr(title)}', '${escapeAttr(price)}', '${escapeAttr(displayPhone)}', '${item.site}')">
+                  <span>📦</span> Book / Request
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // --- 7. SIMPLIFIED PASSWORDLESS VENDOR & TRAVELER AUTH ---
+    function openUnifiedAuthModal(defaultTab = 'vendor') {
+      switchAuthTab(defaultTab);
+      document.getElementById("vendor-login-msg").style.display = "none";
+      document.getElementById("unified-auth-modal").classList.add("active");
+
+      if (travelerProfile) {
+        document.getElementById("t-profile-name").value = travelerProfile.name;
+        document.getElementById("t-profile-phone").value = travelerProfile.phone;
+        document.getElementById("btn-clear-traveler").style.display = "inline-block";
+      } else {
+        document.getElementById("traveler-profile-form").reset();
+        document.getElementById("btn-clear-traveler").style.display = "none";
+      }
+    }
+
+    function closeUnifiedAuthModal() {
+      document.getElementById("unified-auth-modal").classList.remove("active");
+    }
+
+    function switchAuthTab(tab) {
+      document.getElementById("auth-tab-vendor").classList.toggle("active", tab === 'vendor');
+      document.getElementById("auth-tab-traveler").classList.toggle("active", tab === 'traveler');
+      document.getElementById("auth-view-vendor").style.display = tab === 'vendor' ? 'block' : 'none';
+      document.getElementById("auth-view-traveler").style.display = tab === 'traveler' ? 'block' : 'none';
+    }
+
+    function toggleVendorSignupView(showSignup) {
+      document.getElementById("vendor-login-section").style.display = showSignup ? "none" : "block";
+      document.getElementById("vendor-signup-section").style.display = showSignup ? "block" : "none";
+      document.getElementById("vendor-login-msg").style.display = "none";
+    }
+
+    // Passwordless Vendor/Admin Login (Phone Alone)
+    function handleVendorAuthSubmit(e) {
+      e.preventDefault();
+      const phone = document.getElementById("v-login-phone").value.trim();
+      const msgDiv = document.getElementById("vendor-login-msg");
+
+      // 1. Check Hardcoded Admin Phone
+      if (phone === ADMIN_PHONE) {
+        isAdminActive = true;
+        currentVendor = null;
+        localStorage.setItem("ghoomobihar_admin_active", "true");
+        localStorage.removeItem("ghoomobihar_current_vendor");
+
+        updateAuthHeaderUI();
+        closeUnifiedAuthModal();
+        showToast("⚙️ Admin Access Unlocked! Welcome to Admin Dashboard.");
+
+        document.getElementById("admin-panel").classList.add("active");
+        document.getElementById("vendor-dashboard").classList.remove("active");
+        renderAdminTables();
+        document.getElementById("admin-panel").scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      // 2. Check Stored Vendor Accounts
+      const vendors = JSON.parse(localStorage.getItem("ghoomobihar_vendors") || "[]");
+      const matched = vendors.find(v => v.phone.replace(/\D/g, "") === phone.replace(/\D/g, ""));
+
+      if (matched) {
+        currentVendor = matched;
+        isAdminActive = false;
+        localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(matched));
+        localStorage.removeItem("ghoomobihar_admin_active");
+
+        updateAuthHeaderUI();
+        closeUnifiedAuthModal();
+        showToast(`🎉 Welcome back, ${matched.name}!`);
+
+        document.getElementById("vendor-dashboard").classList.add("active");
+        document.getElementById("admin-panel").classList.remove("active");
+        renderVendorDashboard();
+        document.getElementById("vendor-dashboard").scrollIntoView({ behavior: 'smooth' });
+      } else {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Phone not registered. Click <a href="#" onclick="toggleVendorSignupView(true); document.getElementById('v-signup-phone').value='${phone}'; return false;" style="font-weight: 700; text-decoration: underline;">here to register your business</a> in 10 seconds!</span>`;
+        msgDiv.style.display = "block";
+      }
+    }
+
+    // Simplified Vendor Signup (With Email & No Password)
+    function handleVendorSignupSubmit(e) {
+      e.preventDefault();
+      const name = sanitizeHTML(document.getElementById("v-signup-name").value.trim());
+      const phone = sanitizeHTML(document.getElementById("v-signup-phone").value.trim());
+      const email = sanitizeHTML(document.getElementById("v-signup-email").value.trim());
+
+      const vendors = JSON.parse(localStorage.getItem("ghoomobihar_vendors") || "[]");
+      if (vendors.find(v => v.phone === phone)) {
+        alert("A business with this phone number is already registered. Logging you in!");
+      } else {
+        const newVendor = { id: "v-" + Date.now(), name, phone, email };
+        vendors.push(newVendor);
+        localStorage.setItem("ghoomobihar_vendors", JSON.stringify(vendors));
+      }
+
+      const activeVendor = vendors.find(v => v.phone === phone) || { name, phone, email };
+      currentVendor = activeVendor;
+      isAdminActive = false;
+      localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(activeVendor));
+      localStorage.removeItem("ghoomobihar_admin_active");
+
+      updateAuthHeaderUI();
+      closeUnifiedAuthModal();
+      showToast(`🎉 Business Registered! Welcome, ${name}.`);
+
+      document.getElementById("vendor-dashboard").classList.add("active");
+      document.getElementById("admin-panel").classList.remove("active");
+      renderVendorDashboard();
+      document.getElementById("vendor-dashboard").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Traveler Profile
+    function handleTravelerProfileSubmit(e) {
+      e.preventDefault();
+      const name = sanitizeHTML(document.getElementById("t-profile-name").value.trim());
+      const phone = sanitizeHTML(document.getElementById("t-profile-phone").value.trim());
+
+      travelerProfile = { name, phone };
+      localStorage.setItem("ghoomobihar_traveler_profile", JSON.stringify(travelerProfile));
+
+      updateAuthHeaderUI();
+      closeUnifiedAuthModal();
+      showToast(`🎒 Traveler Profile Saved for ${name}! Booking forms will auto-fill.`);
+    }
+
+    function clearTravelerProfile() {
+      travelerProfile = null;
+      localStorage.removeItem("ghoomobihar_traveler_profile");
+      updateAuthHeaderUI();
+      closeUnifiedAuthModal();
+      showToast("Traveler profile cleared.");
+    }
+
+    function handleLogout() {
+      currentVendor = null;
+      isAdminActive = false;
+      localStorage.removeItem("ghoomobihar_current_vendor");
+      localStorage.removeItem("ghoomobihar_admin_active");
+
+      document.getElementById("vendor-dashboard").classList.remove("active");
+      document.getElementById("admin-panel").classList.remove("active");
+
+      updateAuthHeaderUI();
+      showToast("Logged out successfully.");
+    }
+
+    function updateAuthHeaderUI() {
+      const container = document.getElementById("header-auth-actions");
+      container.innerHTML = "";
+
+      if (isAdminActive) {
+        container.innerHTML = `
+          <button class="btn btn-user-badge" onclick="toggleAdminPanelDirectly()" style="background: var(--color-charcoal); color: #fff;">
+            <span>⚙️</span> Admin Mode
+          </button>
+          <button class="btn btn-user-badge" onclick="handleLogout()">🚪 Logout</button>
+        `;
+      } else if (currentVendor) {
+        container.innerHTML = `
+          <button class="btn btn-user-badge" onclick="toggleVendorDashboardDirectly()">
+            <span>👑</span> ${sanitizeHTML(currentVendor.name.split(" ")[0])}'s Dashboard
+          </button>
+          <button class="btn btn-user-badge" onclick="handleLogout()">🚪 Logout</button>
+        `;
+      } else {
+        if (travelerProfile) {
+          container.innerHTML = `
+            <button class="btn btn-user-badge" onclick="openUnifiedAuthModal('traveler')">
+              <span>🎒</span> ${sanitizeHTML(travelerProfile.name.split(" ")[0])}
+            </button>
+            <button class="btn btn-login" onclick="openUnifiedAuthModal('vendor')">
+              <span>👑</span> Business Login
+            </button>
+          `;
+        } else {
+          container.innerHTML = `
+            <button class="btn btn-login" onclick="openUnifiedAuthModal('vendor')">
+              <span>🔑</span> Login / Join
+            </button>
+          `;
+        }
+      }
+    }
+
+    function toggleAdminPanelDirectly() {
+      const panel = document.getElementById("admin-panel");
+      panel.classList.toggle("active");
+      if (panel.classList.contains("active")) {
+        panel.scrollIntoView({ behavior: 'smooth' });
+        renderAdminTables();
+      }
+    }
+
+    function toggleVendorDashboardDirectly() {
+      const dash = document.getElementById("vendor-dashboard");
+      dash.classList.toggle("active");
+      if (dash.classList.contains("active")) {
+        dash.scrollIntoView({ behavior: 'smooth' });
+        renderVendorDashboard();
+      }
+    }
+
+    // --- 8. VENDOR "MY INQUIRIES" & LISTINGS DASHBOARD ---
+    function setVendorTab(tab) {
+      document.querySelectorAll("#vendor-dashboard .admin-tab-btn").forEach((btn, idx) => {
+        btn.classList.toggle("active", (idx === 0 && tab === 'inquiries') || (idx === 1 && tab === 'listings'));
+      });
+      document.getElementById("vendor-view-inquiries").style.display = tab === 'inquiries' ? 'block' : 'none';
+      document.getElementById("vendor-view-listings").style.display = tab === 'listings' ? 'block' : 'none';
+    }
+
+    function renderVendorDashboard() {
+      if (!currentVendor) return;
+      document.getElementById("v-dash-name").textContent = currentVendor.name;
+
+      const vendorListings = listings.filter(l => 
+        l.submittedBy === currentVendor.name || 
+        l.whatsapp.replace(/\D/g, "") === currentVendor.phone.replace(/\D/g, "")
+      );
+      document.getElementById("v-tab-listings-count").textContent = vendorListings.length;
+
+      const listingsTbody = document.getElementById("vendor-listings-tbody");
+      if (vendorListings.length === 0) {
+        listingsTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--color-muted); padding: 18px;">You haven't submitted any listings yet. Click "+ Submit New Listing" above!</td></tr>`;
+      } else {
+        listingsTbody.innerHTML = vendorListings.map(item => `
+          <tr>
+            <td><img src="${item.photo || 'assets/jamui.jpeg'}" class="table-thumbnail" alt="Photo"></td>
+            <td><strong>${sanitizeHTML(item.title)}</strong></td>
+            <td>${SITE_METADATA[item.site]?.name || item.site}</td>
+            <td><span class="category-tag">${item.category}</span></td>
+            <td>${sanitizeHTML(item.price)}</td>
+            <td>
+              <span style="font-weight: 700; color: ${item.status === 'approved' ? '#137333' : '#B06000'};">
+                ${item.status === 'approved' ? '🟢 Live' : '⏳ Pending Review'}
+              </span>
+            </td>
+            <td>${item.verified ? '<span class="verified-badge">✓ Verified</span>' : '—'}</td>
+          </tr>
+        `).join("");
+      }
+
+      // Filter Inquiries for THIS vendor
+      const allRequests = JSON.parse(localStorage.getItem("ghoomobihar_requests") || "[]");
+      const vendorListingIds = vendorListings.map(l => l.id);
+      const vendorListingTitles = vendorListings.map(l => l.title.toLowerCase());
+
+      const myInquiries = allRequests.filter(req => 
+        vendorListingIds.includes(req.listingId) || 
+        vendorListingTitles.includes((req.listingTitle || "").toLowerCase()) ||
+        req.vendorPhone === currentVendor.phone
+      );
+
+      document.getElementById("v-tab-inquiries-count").textContent = myInquiries.length;
+      const inquiriesTbody = document.getElementById("vendor-inquiries-tbody");
+
+      if (myInquiries.length === 0) {
+        inquiriesTbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--color-muted); padding: 22px;">No tourist booking inquiries received yet for your listings.</td></tr>`;
+      } else {
+        inquiriesTbody.innerHTML = myInquiries.map(req => {
+          const waMsg = encodeURIComponent(`Namaste ${req.touristName}! I am ${currentVendor.name} regarding your GhoomoBihar booking request for "${req.listingTitle}".`);
+          return `
+            <tr>
+              <td>${sanitizeHTML(req.date)}</td>
+              <td><strong>${sanitizeHTML(req.touristName)}</strong></td>
+              <td><a href="tel:${sanitizeHTML(req.touristPhone)}" style="color: var(--color-teal); font-weight: 700;">${sanitizeHTML(req.touristPhone)}</a></td>
+              <td>${sanitizeHTML(req.listingTitle)}</td>
+              <td>${sanitizeHTML(req.touristNote || "—")}</td>
+              <td>
+                <a href="https://wa.me/${req.touristPhone.replace(/\D/g, "")}?text=${waMsg}" target="_blank" class="btn-action-sm btn-approve" style="text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                  💬 WhatsApp
+                </a>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      }
+    }
+
+    // --- 9. PACKAGE REQUEST & CONFIRMATION ---
+    function openPackageModal(listingId, listingTitle, price, whatsapp, site) {
+      document.getElementById("package-listing-id").value = listingId;
+      document.getElementById("package-listing-title").value = listingTitle;
+      document.getElementById("package-listing-price").value = price;
+      document.getElementById("package-listing-whatsapp").value = whatsapp;
+      document.getElementById("package-listing-site").value = site;
+      document.getElementById("modal-package-vendor-title").textContent = listingTitle;
+
+      if (travelerProfile) {
+        document.getElementById("tourist-name").value = travelerProfile.name;
+        document.getElementById("tourist-phone").value = travelerProfile.phone;
+      } else {
+        document.getElementById("tourist-name").value = "";
+        document.getElementById("tourist-phone").value = "";
+      }
+      document.getElementById("tourist-note").value = "";
+
+      document.getElementById("package-modal").classList.add("active");
+    }
+
+    function closePackageModal() {
+      document.getElementById("package-modal").classList.remove("active");
+    }
+
+    function handlePackageRequestSubmit(event) {
+      event.preventDefault();
+      const listingId = document.getElementById("package-listing-id").value;
+      const listingTitle = document.getElementById("package-listing-title").value;
+      const price = document.getElementById("package-listing-price").value;
+      const vendorWhatsapp = document.getElementById("package-listing-whatsapp").value;
+      const site = document.getElementById("package-listing-site").value;
+      const touristName = sanitizeHTML(document.getElementById("tourist-name").value.trim());
+      const touristPhone = sanitizeHTML(document.getElementById("tourist-phone").value.trim());
+      const touristNote = sanitizeHTML(document.getElementById("tourist-note").value.trim());
+
+      const refId = "GB-" + (site.toUpperCase().replace(/\W/g, "")) + "-" + Math.floor(1000 + Math.random() * 9000);
+
+      const requestObj = {
+        id: "req-" + Date.now(),
+        refId,
+        date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        listingId,
+        listingTitle,
+        price,
+        vendorPhone: vendorWhatsapp,
+        site,
+        touristName,
+        touristPhone,
+        touristNote
+      };
+
+      const existingReqs = JSON.parse(localStorage.getItem("ghoomobihar_requests") || "[]");
+      existingReqs.unshift(requestObj);
+      localStorage.setItem("ghoomobihar_requests", JSON.stringify(existingReqs));
+
+      closePackageModal();
+
+      // Show Itemized Confirmation Modal
+      showBookingConfirmation(requestObj);
+      renderAdminTables();
+      renderVendorDashboard();
+    }
+
+    function showBookingConfirmation(req) {
+      document.getElementById("conf-ref-id").textContent = req.refId;
+      document.getElementById("conf-service-title").textContent = req.listingTitle;
+      document.getElementById("conf-service-site").textContent = SITE_METADATA[req.site]?.name || req.site;
+      document.getElementById("conf-service-price").textContent = req.price || "Standard Rate";
+      document.getElementById("conf-traveler-name").textContent = req.touristName;
+      document.getElementById("conf-traveler-phone").textContent = req.touristPhone;
+      document.getElementById("conf-traveler-note").textContent = req.touristNote || "None";
+
+      const waMsg = encodeURIComponent(
+        `Namaste! I just requested a booking for "${req.listingTitle}" on GhoomoBihar (Ref: ${req.refId}).\nName: ${req.touristName}\nPhone: ${req.touristPhone}\nRequest: ${req.touristNote || "Standard booking"}`
+      );
+      document.getElementById("conf-wa-btn").href = `https://wa.me/${(req.vendorPhone || "").replace(/\D/g, "")}?text=${waMsg}`;
+
+      document.getElementById("confirmation-modal").classList.add("active");
+    }
+
+    function closeConfirmationModal() {
+      document.getElementById("confirmation-modal").classList.remove("active");
+    }
+
+    // --- 10. LISTING ONBOARDING (PHOTO BASE64 & DYNAMIC SUGGESTIONS) ---
+    function openListingSubmissionModal() {
+      if (!currentVendor) {
+        openUnifiedAuthModal('vendor');
+        return;
+      }
+      document.getElementById("logged-vendor-name").textContent = currentVendor.name;
+      document.getElementById("listing-whatsapp").value = currentVendor.phone;
+      document.getElementById("listing-site").value = currentSite;
+      uploadedPhotoBase64 = "";
+      document.getElementById("photo-preview-wrap").style.display = "none";
+      document.getElementById("listing-submission-form").reset();
+      document.getElementById("listing-whatsapp").value = currentVendor.phone;
+      handleCategoryChange();
+      handleSiteChange();
+
+      document.getElementById("listing-modal").classList.add("active");
+    }
+
+    function closeListingModal() {
+      document.getElementById("listing-modal").classList.remove("active");
+    }
+
+    function handlePhotoUploadPreview(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        uploadedPhotoBase64 = evt.target.result;
+        document.getElementById("photo-preview-img").src = uploadedPhotoBase64;
+        document.getElementById("photo-preview-wrap").style.display = "block";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Dynamic Category Change Handler (Other option + Specialty Suggestions Datalist)
+    function handleCategoryChange() {
+      const select = document.getElementById("listing-category");
+      const otherInput = document.getElementById("listing-category-other");
+      const catVal = select ? select.value : "guide";
+
+      if (otherInput) {
+        otherInput.style.display = (catVal === "other") ? "block" : "none";
+        if (catVal === "other") otherInput.focus();
+      }
+
+      // Update Specialty Datalist Suggestions dynamically
+      const datalist = document.getElementById("specialty-suggestions-datalist");
+      if (datalist) {
+        const suggestions = CATEGORY_SUGGESTIONS[catVal] || CATEGORY_SUGGESTIONS["other"];
+        datalist.innerHTML = suggestions.map(s => `<option value="${s}">`).join("");
+      }
+    }
+
+    // Dynamic Site Change Handler (Other option)
+    function handleSiteChange() {
+      const select = document.getElementById("listing-site");
+      const otherInput = document.getElementById("listing-site-other");
+      const siteVal = select ? select.value : "jamui";
+
+      if (otherInput) {
+        otherInput.style.display = (siteVal === "other") ? "block" : "none";
+        if (siteVal === "other") otherInput.focus();
+      }
+    }
+
+    function handleListingSubmit(e) {
+      e.preventDefault();
+      const title = sanitizeHTML(document.getElementById("listing-title").value.trim());
+      
+      // Get category (standard or custom other)
+      let category = document.getElementById("listing-category").value;
+      if (category === "other") {
+        category = sanitizeHTML(document.getElementById("listing-category-other").value.trim()) || "Local Service";
+      }
+
+      // Get destination (standard or custom other)
+      let site = document.getElementById("listing-site").value;
+      if (site === "other") {
+        site = sanitizeHTML(document.getElementById("listing-site-other").value.trim()) || "Bihar Heritage";
+      }
+
+      const description = sanitizeHTML(document.getElementById("listing-desc").value.trim());
+      const price = sanitizeHTML(document.getElementById("listing-price").value.trim());
+      const whatsapp = sanitizeHTML(document.getElementById("listing-whatsapp").value.trim());
+      const openHours = sanitizeHTML(document.getElementById("listing-hours").value.trim());
+      const specialty = sanitizeHTML(document.getElementById("listing-specialty").value.trim());
+
+      const newListing = {
+        id: "custom-" + Date.now(),
+        title,
+        category,
+        site,
+        description,
+        price,
+        whatsapp,
+        openHours,
+        rating: 4.9,
+        specialty,
+        verified: false,
+        status: "pending",
+        submittedBy: currentVendor ? currentVendor.name : "Local Entrepreneur",
+        photo: uploadedPhotoBase64 || SITE_METADATA[site]?.image || "assets/jamui.jpeg"
+      };
+
+      listings.push(newListing);
+      saveListings();
+      closeListingModal();
+
+      showToast(`📝 "${title}" submitted! It is now in the Admin review queue.`);
+      renderVendorDashboard();
+    }
+
+    // --- 11. ADMIN DASHBOARD ACTIONS ---
+    function setAdminTab(tab) {
+      document.querySelectorAll("#admin-panel .admin-tab-btn").forEach((btn, idx) => {
+        btn.classList.toggle("active", (idx === 0 && tab === 'pending') || (idx === 1 && tab === 'approved') || (idx === 2 && tab === 'requests'));
+      });
+      document.getElementById("admin-view-pending").style.display = tab === 'pending' ? 'block' : 'none';
+      document.getElementById("admin-view-approved").style.display = tab === 'approved' ? 'block' : 'none';
+      document.getElementById("admin-view-requests").style.display = tab === 'requests' ? 'block' : 'none';
+    }
+
+    function renderAdminTables() {
+      // 1. Pending Table with Photo Thumbnail
+      const pendingTbody = document.getElementById("admin-pending-tbody");
+      const pendingListings = listings.filter(l => l.status === "pending");
+      document.getElementById("admin-tab-pending-count").textContent = pendingListings.length;
+
+      if (pendingListings.length === 0) {
+        pendingTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--color-muted); padding: 20px;">No pending submissions in queue. All clear!</td></tr>`;
+      } else {
+        pendingTbody.innerHTML = pendingListings.map(item => `
+          <tr>
+            <td><img src="${item.photo || 'assets/jamui.jpeg'}" class="table-thumbnail" alt="Photo"></td>
+            <td><strong>${sanitizeHTML(item.title)}</strong></td>
+            <td><span class="category-tag">${item.category}</span></td>
+            <td>${SITE_METADATA[item.site]?.name || item.site}</td>
+            <td>${sanitizeHTML(item.price)}</td>
+            <td>${sanitizeHTML(item.whatsapp)}</td>
+            <td>${sanitizeHTML(item.specialty)}</td>
+            <td>
+              <button class="btn-action-sm btn-approve" onclick="adminApproveListing('${item.id}')">✓ Approve & Verify</button>
+              <button class="btn-action-sm btn-reject" onclick="adminRejectListing('${item.id}')">✕ Reject</button>
+            </td>
+          </tr>
+        `).join("");
+      }
+
+      // 2. Approved Table with Photo Thumbnail
+      const approvedTbody = document.getElementById("admin-approved-tbody");
+      const approvedListings = listings.filter(l => l.status === "approved");
+      document.getElementById("admin-tab-approved-count").textContent = approvedListings.length;
+
+      approvedTbody.innerHTML = approvedListings.map(item => `
+        <tr>
+          <td><img src="${item.photo || 'assets/jamui.jpeg'}" class="table-thumbnail" alt="Photo"></td>
+          <td><strong>${sanitizeHTML(item.title)}</strong></td>
+          <td><span class="category-tag">${item.category}</span></td>
+          <td>${SITE_METADATA[item.site]?.name || item.site}</td>
+          <td>★ ${item.rating || 4.8}</td>
+          <td><span class="verified-badge">✓ Verified</span></td>
+          <td>
+            <button class="btn-action-sm btn-reject" onclick="adminRevokeListing('${item.id}')">Deactivate</button>
+          </td>
+        </tr>
+      `).join("");
+
+      // 3. Inquiries Table
+      const requestsTbody = document.getElementById("admin-requests-tbody");
+      const inquiries = JSON.parse(localStorage.getItem("ghoomobihar_requests") || "[]");
+      document.getElementById("admin-tab-requests-count").textContent = inquiries.length;
+
+      if (inquiries.length === 0) {
+        requestsTbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--color-muted); padding: 20px;">No tourist package requests received yet.</td></tr>`;
+      } else {
+        requestsTbody.innerHTML = inquiries.map(req => `
+          <tr>
+            <td>${sanitizeHTML(req.date)}</td>
+            <td><strong>${sanitizeHTML(req.touristName)}</strong></td>
+            <td><a href="tel:${sanitizeHTML(req.touristPhone)}" style="color: var(--color-teal); font-weight: 700;">${sanitizeHTML(req.touristPhone)}</a></td>
+            <td>${sanitizeHTML(req.listingTitle)}</td>
+            <td>${sanitizeHTML(req.touristNote || "—")}</td>
+          </tr>
+        `).join("");
+      }
+    }
+
+    function adminApproveListing(id) {
+      const item = listings.find(l => l.id === id);
+      if (item) {
+        item.status = "approved";
+        item.verified = true; // Auto-verify on admin approval
+        saveListings();
+        renderDetailListings();
+        renderAdminTables();
+        renderVendorDashboard();
+        showToast(`✅ "${item.title}" approved & verified! Now live for tourists.`);
+      }
+    }
+
+    function adminRejectListing(id) {
+      const item = listings.find(l => l.id === id);
+      if (item) {
+        item.status = "rejected";
+        saveListings();
+        renderDetailListings();
+        renderAdminTables();
+        renderVendorDashboard();
+        showToast(`Listing "${item.title}" rejected.`);
+      }
+    }
+
+    function adminRevokeListing(id) {
+      const item = listings.find(l => l.id === id);
+      if (item) {
+        item.status = "rejected";
+        saveListings();
+        renderDetailListings();
+        renderAdminTables();
+        renderVendorDashboard();
+        showToast(`Listing "${item.title}" deactivated.`);
+      }
+    }
+
+    // ==========================================================================
+    // --- 13. AI TOURISM CONCIERGE ENGINE (GROQ COMPOUND AI & LOCAL ENGINE) ---
+    // ==========================================================================
+    let aiChatHistory = [];
+    let isAITyping = false;
+
+    function toggleAIChatDrawer() {
+      const drawer = document.getElementById("ai-chat-drawer");
+      drawer.classList.toggle("active");
+      if (drawer.classList.contains("active")) {
+        if (aiChatHistory.length === 0) {
+          // Welcome greeting
+          addAIMessageToUI("assistant", "Namaste! 🙏 I am your **GhoomoBihar AI Concierge**, powered by Groq Compound AI.\n\nI can help you plan visits to **Jamui** (Hackathon Host), **Bodh Gaya**, **Nalanda**, **Sonepur Mela**, and **Chhath Ghat**, find certified local guides, taste authentic delicacies, or arrange zero-markup homestays.\n\nHow can I guide your journey today?");
+        }
+        setTimeout(() => {
+          const input = document.getElementById("ai-chat-input");
+          if (input) input.focus();
+        }, 150);
+      }
+    }
+
+    function clearAIChatHistory() {
+      aiChatHistory = [];
+      document.getElementById("ai-messages-list").innerHTML = "";
+      addAIMessageToUI("assistant", "Chat cleared! How can I assist your Bihar travel plans today? 🪷");
+    }
+
+    function handleQuickAsk(promptText) {
+      document.getElementById("ai-chat-input").value = promptText;
+      handleAIChatSubmit(new Event("submit"));
+    }
+
+    function handleAIChatSubmit(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById("ai-chat-input");
+      const userText = input.value.trim();
+      if (!userText || isAITyping) return;
+
+      input.value = "";
+      addAIMessageToUI("user", userText);
+      aiChatHistory.push({ sender: "user", text: userText });
+
+      // Show typing indicator
+      showAITypingIndicator(true);
+      isAITyping = true;
+      document.getElementById("ai-send-btn").disabled = true;
+
+      // Attempt live Groq serverless function call
+      fetchAIChatResponse(userText);
+    }
+
+    async function fetchAIChatResponse(userText) {
+      let responseReceived = false;
+      const statusLabel = document.getElementById("ai-mode-status");
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s timeout
+
+        const response = await fetch("/.netlify/functions/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: userText,
+            history: aiChatHistory
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.reply) {
+            responseReceived = true;
+            statusLabel.innerHTML = '<span class="status-dot" style="background: #1EBE5D;"></span> Live Groq Compound AI';
+            showAITypingIndicator(false);
+            addAIMessageToUI("assistant", data.reply);
+            aiChatHistory.push({ sender: "assistant", text: data.reply });
+          }
+        }
+      } catch (err) {
+        console.log("Serverless Groq endpoint unreachable (running locally/offline). Falling back to Local Knowledge Engine:", err.message);
+      }
+
+      if (!responseReceived) {
+        // Zero-fail Local Knowledge Engine
+        statusLabel.innerHTML = '<span class="status-dot" style="background: #E9B44C;"></span> Local Knowledge Mode';
+        setTimeout(() => {
+          showAITypingIndicator(false);
+          const fallbackData = queryLocalKnowledgeEngine(userText);
+          addAIMessageToUI("assistant", fallbackData.reply, fallbackData.recommendation);
+          aiChatHistory.push({ sender: "assistant", text: fallbackData.reply });
+        }, 500);
+      }
+
+      isAITyping = false;
+      document.getElementById("ai-send-btn").disabled = false;
+    }
+
+    function addAIMessageToUI(sender, text, recommendation = null) {
+      const list = document.getElementById("ai-messages-list");
+      const msgDiv = document.createElement("div");
+      msgDiv.className = `ai-message ${sender === 'user' ? 'ai-msg-user' : 'ai-msg-assistant'}`;
+
+      // Simple Markdown format parser for bold, bullets, newlines
+      let formattedText = sanitizeHTML(text)
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/\n• (.*?)/g, '<br>• $1')
+        .replace(/\n- (.*?)/g, '<br>• $1')
+        .replace(/\n/g, '<br>');
+
+      msgDiv.innerHTML = `<p>${formattedText}</p>`;
+
+      if (recommendation) {
+        const recCard = document.createElement("div");
+        recCard.className = "ai-rec-card";
+        const cleanWa = (recommendation.whatsapp || "").replace(/\D/g, "");
+        const waMsg = encodeURIComponent(`Namaste! I found "${recommendation.title}" via GhoomoBihar AI Concierge. I want to inquire about ${recommendation.category}.`);
+        recCard.innerHTML = `
+          <div class="ai-rec-info">
+            <div class="ai-rec-title">📍 ${sanitizeHTML(recommendation.title)}</div>
+            <div style="color: var(--color-muted); font-size: 11px;">${sanitizeHTML(recommendation.specialty)} • ${sanitizeHTML(recommendation.price)}</div>
+          </div>
+          <a href="https://wa.me/${cleanWa}?text=${waMsg}" target="_blank" class="ai-rec-btn">
+            💬 WhatsApp
+          </a>
+        `;
+        msgDiv.appendChild(recCard);
+      }
+
+      list.appendChild(msgDiv);
+      list.scrollTop = list.scrollHeight;
+    }
+
+    function showAITypingIndicator(show) {
+      const list = document.getElementById("ai-messages-list");
+      const existing = document.getElementById("ai-typing-indicator");
+      if (existing) existing.remove();
+
+      if (show) {
+        const indicator = document.createElement("div");
+        indicator.id = "ai-typing-indicator";
+        indicator.className = "ai-typing-indicator";
+        indicator.innerHTML = `
+          <span style="font-size: 11.5px; color: var(--color-muted); margin-right: 4px;">Thinking</span>
+          <span class="ai-typing-dot"></span>
+          <span class="ai-typing-dot"></span>
+          <span class="ai-typing-dot"></span>
+        `;
+        list.appendChild(indicator);
+        list.scrollTop = list.scrollHeight;
+      }
+    }
+
+    // --- 13.1 ZERO-FAIL LOCAL KNOWLEDGE ENGINE ---
+    function queryLocalKnowledgeEngine(query) {
+      const q = query.toLowerCase();
+
+      // 1. JAMUI (Host Location)
+      if (q.includes("jamui") || q.includes("gidhaur") || q.includes("simultala") || q.includes("minto") || q.includes("patneshwar") || q.includes("nagi")) {
+        const matchingListing = listings.find(l => l.site === "jamui" && l.status === "approved") || DEFAULT_LISTINGS[0];
+        return {
+          reply: `**Jamui** is the proud host location for the TEJAS Hackathon! 🌲\n\n**Top Experiences in Jamui:**\n• **Gidhaur Royal Heritage:** Tour the historic 19th-century Minto Tower, palace courtyards, and royal archives.\n• **Simultala Pine Hills:** Known as the *'Mini Shimla of Bihar'*, ideal for serene valley walks and fresh local honey.\n• **Nagi-Nakti Bird Sanctuary:** A vibrant wetland hosting thousands of winter migratory birds.\n• **Local Delicacy:** Famous fresh Gidhaur soft chhena sweets.\n\n*Transit from Patna:* ~160 km (~3.5 hours via rail/road to Jamui/Jhajha Junction).`,
+          recommendation: matchingListing
+        };
+      }
+
+      // 2. BODH GAYA
+      if (q.includes("bodh") || q.includes("gaya") || q.includes("buddha") || q.includes("mahabodhi") || q.includes("sujata") || q.includes("meditat")) {
+        const matchingListing = listings.find(l => l.site === "bodh-gaya" && l.status === "approved") || DEFAULT_LISTINGS[5];
+        return {
+          reply: `**Bodh Gaya** is the supreme cradle of Buddhist enlightenment (UNESCO World Heritage Site). 🪷\n\n**Key Highlights:**\n• **Mahabodhi Temple & Sacred Bodhi Tree:** Where Prince Siddhartha attained enlightenment 2,500+ years ago.\n• **Best Time for Serenity:** Visit at 5:00 AM for tranquil morning chanting and butter lamp arati.\n• **Sujata Village:** Experience village homestays and the historic stupa.\n• **Cuisine:** Traditional woodfire desi ghee Litti Chokha.\n\n*Transit from Patna:* ~115 km (~2.5 hours by train/highway).`,
+          recommendation: matchingListing
+        };
+      }
+
+      // 3. NALANDA
+      if (q.includes("nalanda") || q.includes("khaja") || q.includes("silao") || q.includes("ruin") || q.includes("universit") || q.includes("bawan buti")) {
+        const matchingListing = listings.find(l => l.site === "nalanda" && l.status === "approved") || DEFAULT_LISTINGS[9];
+        return {
+          reply: `**Nalanda** was the ancient world's greatest residential university (5th–12th century CE). 📜\n\n**Must-Do Experiences:**\n• **UNESCO University Ruins:** Monastic cells, stupas, and ancient meditation courtyards with scholar guides.\n• **Silao Khaja:** Try the world-famous, multi-layered GI-tagged crispy Khaja prepared fresh.\n• **Bawan Buti Handlooms:** Meet traditional weavers creating 52-motif heritage sarees.\n\n*Transit from Patna:* ~90 km (~2 hours via 4-lane highway or train).`,
+          recommendation: matchingListing
+        };
+      }
+
+      // 4. SONEPUR MELA
+      if (q.includes("sonepur") || q.includes("sonpur") || q.includes("mela") || q.includes("jalebi") || q.includes("fair") || q.includes("harihar")) {
+        const matchingListing = listings.find(l => l.site === "sonepur" && l.status === "approved") || DEFAULT_LISTINGS[12];
+        return {
+          reply: `**Sonepur Mela** is one of Asia's largest and most historic cultural gatherings. 🐘\n\n**What to Experience:**\n• **Ganga-Gandak Sangam:** Sacred river baths and Harihar Kshetra evening river arati.\n• **Mela Atmosphere:** Cultural folk theater, handicrafts, and brass bell artisans.\n• **Treat:** Giant crisp saffron-soaked mela jalebis paired with hot spiced tea.\n\n*Transit from Patna:* ~25 km (~45 mins across the JP Ganga Setu / Digha Bridge).`,
+          recommendation: matchingListing
+        };
+      }
+
+      // 5. CHHATH GHAT
+      if (q.includes("chhath") || q.includes("ghat") || q.includes("thekua") || q.includes("sun") || q.includes("arghya") || q.includes("patna") || q.includes("boat")) {
+        const matchingListing = listings.find(l => l.site === "chhath-ghat" && l.status === "approved") || DEFAULT_LISTINGS[15];
+        return {
+          reply: `**Chhath Ghat (Patna)** represents the heart of Bihar's sacred Vedic Sun worship. 🌊\n\n**Visitor Tips:**\n• **Dawn Boat Tour:** Cruise the Ganges at sunrise from Collectorate or Gandhi Ghat to witness riverside rituals.\n• **Prasad Delicacy:** Authentic woodfire pure cow ghee Thekua and Anarsa.\n• **Mithila Crafts:** Handcrafted bamboo soop painted with traditional Madhubani sun motifs.\n\n*Location:* Located directly along the Ganga riverfront in Patna city.`,
+          recommendation: matchingListing
+        };
+      }
+
+      // 6. HOW TO REACH / TRANSIT
+      if (q.includes("how to reach") || q.includes("reach") || q.includes("distance") || q.includes("train") || q.includes("station") || q.includes("travel")) {
+        return {
+          reply: `**Transit Overview from Patna:** 🚂\n\n• **Jamui (Host):** ~160 km | ~3.5 hrs (Direct train to Jamui/Jhajha or NH-333)\n• **Bodh Gaya:** ~115 km | ~2.5 hrs (Vande Bharat / Jan Shatabdi to Gaya Jn)\n• **Nalanda:** ~90 km | ~2.0 hrs (4-lane highway via Bakhtiyarpur or train to Nalanda/Rajgir)\n• **Sonepur Mela:** ~25 km | ~45 mins (JP Ganga Setu / Digha Bridge)\n• **Chhath Ghats:** In Patna City along the riverfront (15 mins from Patna Jn)`,
+          recommendation: null
+        };
+      }
+
+      // 7. DEFAULT WELCOME FALLBACK
+      return {
+        reply: `Namaste! I can help you explore Bihar's premier heritage sites: **Jamui** (Hackathon Host), **Bodh Gaya**, **Nalanda**, **Sonepur Mela**, and **Chhath Ghat**.\n\nYou can ask me:\n• *"What are the top things to do in Jamui?"*\n• *"Where can I buy authentic GI-tagged Silao Khaja?"*\n• *"How do I reach Simultala pine retreats from Patna?"*\n• *"Connect me with a verified Nalanda ruins guide."*`,
+        recommendation: null
+      };
+    }
+
+    // --- 14. TOAST NOTIFICATION UTILITY ---
+    function showToast(msg) {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+      const toast = document.createElement("div");
+      toast.className = "toast";
+      toast.innerHTML = `<span>🪷</span> <span>${sanitizeHTML(msg)}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.transition = "opacity 0.3s ease, transform 0.3s ease";
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(100%)";
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Initialize application on DOM ready
+    document.addEventListener("DOMContentLoaded", initApp);
+  </script>
+</body>
+</html>

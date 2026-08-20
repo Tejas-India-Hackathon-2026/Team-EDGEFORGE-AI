@@ -7,27 +7,38 @@
 ## Sessions
 
 ### Session: 2026-08-20 09:07 (Project Initialization)
+- Initialized GSD project repository with finalized `SPEC.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `DECISIONS.md`, and `TODO.md`.
+
+---
+
+### Session: 2026-08-20 12:44 (Scope Refresh: Jamui, Groq, Vendor Auth, Package Requests)
+- Updated `SPEC.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `TODO.md`, `DECISIONS.md`, and `STATE.md` with 5 new scope items.
+- Created root `brain.md` single-source context guide.
+
+---
+
+### Session: 2026-08-20 13:00 (Phase 1: Core Foundation & P0 Execution)
 
 #### Objective
-Initialize GSD framework for GhoomoBihar (TEJAS India Hackathon 2026, Bihar Tourism Track).
+Build and deliver complete standalone `index.html` covering all P0 requirements.
 
 #### Accomplished
-- ✅ Initialized Git repository.
-- ✅ Synthesized user requirements, constraints, and demo scripts into finalized `.gsd/SPEC.md`.
-- ✅ Created traceable `.gsd/REQUIREMENTS.md` with P0, P1, and P2 tiers.
-- ✅ Designed 4-phase milestone roadmap in `.gsd/ROADMAP.md`.
-- ✅ Recorded architectural decisions (`DECISIONS.md`) for standalone `index.html`, admin toggle, localStorage persistence, and serverless AI.
-- ✅ Established initial `STATE.md`, `TODO.md`, and directory scaffolding.
+- ✅ Created `index.html` with Madhubani folk color palette and layout.
+- ✅ Implemented 5-Site Selector defaulting to Jamui on page load.
+- ✅ Implemented Category Filter tabs (All, Guides, Homestays, Food & Sweets, Folk Crafts).
+- ✅ Structured enriched listing cards with `openHours`, `rating`, `specialty`, and `verified` tags.
+- ✅ Built 1-tap WhatsApp deep link generator with contextual inquiry text.
+- ✅ Implemented zero-auth Tourist Package Request modal saving inquiries to `localStorage`.
+- ✅ Built Demo Vendor Auth modal (login/signup) gating Entrepreneur Listing submission.
+- ✅ Implemented Admin Moderation Dashboard with approve (auto-verified seal), reject, and inquiry viewer.
+- ✅ Completed bidirectional `localStorage` persistence and XSS text sanitization.
 
 #### Verification
-- [x] SPEC.md marked as `FINALIZED`.
-- [x] ROADMAP.md outlines 4 clear phases with forward dependencies.
-- [x] Git repo initialized.
-
-#### Handoff Notes
-- Ready to proceed with Phase 1: Core Foundation & P0 Essentials.
-- Team preference: Small reviewable stages with plain English explanations and fail-safe coding.
+- [x] `index.html` runs 100% standalone without external dependencies or build tooling.
+- [x] Jamui is active on initial load.
+- [x] All modal workflows (Tourist Booking, Vendor Auth, Listing Onboarding, Admin Moderation) tested and operational.
 
 ---
 
 *Last updated: 2026-08-20*
+
