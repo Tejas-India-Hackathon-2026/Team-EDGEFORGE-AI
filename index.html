@@ -1211,6 +1211,202 @@
       font-weight: 800;
     }
 
+    /* Tourism Feedback + District Expansion Roadmap */
+    .roadmap-section {
+      padding: 70px 24px;
+      background: linear-gradient(180deg, var(--color-cream), var(--color-sand));
+      border-top: 1px solid var(--color-border);
+    }
+
+    .roadmap-shell {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .roadmap-summary {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(250px, 0.6fr);
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 28px;
+    }
+
+    .roadmap-kpis {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .roadmap-kpi {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .roadmap-kpi strong {
+      display: block;
+      color: var(--color-teal-dark);
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      margin-bottom: 3px;
+    }
+
+    .roadmap-kpi span {
+      color: var(--color-muted);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .roadmap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .roadmap-phase {
+      position: relative;
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .roadmap-phase::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--color-border-dark);
+    }
+
+    .roadmap-phase.live::before { background: var(--color-badge-verified); }
+    .roadmap-phase.next::before { background: var(--color-gold); }
+    .roadmap-phase.scale::before { background: var(--color-terracotta); }
+
+    .roadmap-phase-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 10px;
+      border-radius: var(--radius-full);
+      background: var(--color-sand);
+      color: var(--color-teal-dark);
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      margin-bottom: 12px;
+    }
+
+    .roadmap-phase h3 {
+      font-family: 'Playfair Display', serif;
+      color: var(--color-charcoal);
+      font-size: 21px;
+      margin-bottom: 8px;
+    }
+
+    .roadmap-phase p {
+      color: var(--color-muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .district-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .district-chip {
+      padding: 5px 9px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--color-border);
+      background: var(--color-cream);
+      color: var(--color-charcoal);
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    .roadmap-feedback-cta {
+      margin-top: 22px;
+      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      background: var(--color-teal-dark);
+      color: #FFFFFF;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .roadmap-feedback-cta p {
+      margin: 3px 0 0;
+      color: rgba(255,255,255,0.78);
+      font-size: 12.5px;
+    }
+
+    .feedback-privacy-note {
+      background: var(--color-sand);
+      border: 1px solid var(--color-border);
+      border-left: 4px solid var(--color-teal);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      color: var(--color-muted);
+      font-size: 11.5px;
+      margin-bottom: 16px;
+    }
+
+    .feedback-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 14px;
+    }
+
+    .feedback-form-grid .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .feedback-consent {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      color: var(--color-muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .feedback-consent input {
+      margin-top: 2px;
+    }
+
+    @media (max-width: 800px) {
+      .roadmap-summary,
+      .roadmap-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .roadmap-feedback-cta {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .roadmap-section { padding: 48px 16px; }
+      .roadmap-kpis,
+      .feedback-form-grid { grid-template-columns: 1fr; }
+      .feedback-form-grid .full-width { grid-column: auto; }
+    }
+
     /* ==========================================================================
        AI TOURISM CONCIERGE (P2 - GROQ COMPOUND AI & LOCAL ENGINE)
        ========================================================================== */
@@ -1847,6 +2043,9 @@
             <button class="btn btn-login" onclick="openSiteDetail('bodh-gaya')">
               <span>🪷</span> Bodh Gaya Spiritual Trails
             </button>
+            <button class="btn btn-user-badge" onclick="openFeedbackModal()">
+              <span>⭐</span> Share Travel Feedback
+            </button>
           </div>
         </div>
       </section>
@@ -1860,6 +2059,76 @@
 
         <div class="destinations-grid" id="destinations-gallery-container">
           <!-- Dynamically populated from SITE_METADATA -->
+        </div>
+      </section>
+
+      <section class="roadmap-section" id="district-expansion-roadmap">
+        <div class="roadmap-shell">
+          <div class="roadmap-summary">
+            <div class="section-heading-center" style="text-align: left; margin: 0;">
+              <span class="hero-badge" style="display: inline-flex; margin-bottom: 10px;">🗺️ Proposed District Expansion</span>
+              <h2>From five destination clusters to all 38 Bihar districts</h2>
+              <p>Expansion is staged around verified local supply, visitor safety, multilingual content and measurable tourist demand—not random district additions.</p>
+            </div>
+            <div class="roadmap-kpis" aria-label="Expansion indicators">
+              <div class="roadmap-kpi">
+                <strong>5 / 38</strong>
+                <span>District footprints live</span>
+              </div>
+              <div class="roadmap-kpi">
+                <strong id="roadmap-feedback-count">0</strong>
+                <span>Visitor signals captured</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-grid">
+            <article class="roadmap-phase live">
+              <span class="roadmap-phase-label">● Phase 1 · Live pilot</span>
+              <h3>Prove the operating model</h3>
+              <p>Validate QR discovery, verified vendor onboarding, safety guidance, feedback and direct tourist-to-local connections.</p>
+              <div class="district-chip-list" aria-label="Current pilot districts">
+                <span class="district-chip">Jamui</span>
+                <span class="district-chip">Gaya</span>
+                <span class="district-chip">Nalanda</span>
+                <span class="district-chip">Saran</span>
+                <span class="district-chip">Patna</span>
+              </div>
+            </article>
+
+            <article class="roadmap-phase next">
+              <span class="roadmap-phase-label">◆ Phase 2 · Next 6 months</span>
+              <h3>Expand heritage circuits</h3>
+              <p>Prioritize districts with strong official tourism assets and onboard verified guides, food, stays and crafts district-by-district.</p>
+              <div class="district-chip-list" aria-label="Next proposed districts">
+                <span class="district-chip">Rohtas</span>
+                <span class="district-chip">Kaimur</span>
+                <span class="district-chip">Vaishali</span>
+                <span class="district-chip">East Champaran</span>
+              </div>
+            </article>
+
+            <article class="roadmap-phase scale">
+              <span class="roadmap-phase-label">▲ Phase 3 · Statewide scale</span>
+              <h3>Build the 38-district network</h3>
+              <p>Roll out a reusable district template, local moderation partners, safety escalation, analytics and Hindi/English AI support.</p>
+              <div class="district-chip-list" aria-label="Statewide scale examples">
+                <span class="district-chip">Bhagalpur</span>
+                <span class="district-chip">Banka</span>
+                <span class="district-chip">Munger</span>
+                <span class="district-chip">West Champaran</span>
+                <span class="district-chip">+ 25 districts</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="roadmap-feedback-cta">
+            <div>
+              <strong>Visitor demand helps decide what comes next.</strong>
+              <p>Current top requested district: <span id="roadmap-top-request">Awaiting feedback</span></p>
+            </div>
+            <button class="btn btn-primary" onclick="openFeedbackModal()">Suggest a district</button>
+          </div>
         </div>
       </section>
 
@@ -2469,6 +2738,117 @@
     </div>
   </div>
 
+  <!-- TOURISM FEEDBACK MODAL -->
+  <div id="tourism-feedback-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3><span>⭐</span> Bihar Tourism Feedback</h3>
+        <button class="btn-close-modal" onclick="closeFeedbackModal()" aria-label="Close feedback form">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="feedback-privacy-note">
+          Your feedback supports service improvement and district planning. Do not enter Aadhaar, payment details, passwords or other sensitive information.
+        </div>
+
+        <form id="tourism-feedback-form" onsubmit="handleTourismFeedbackSubmit(event)">
+          <div class="feedback-form-grid">
+            <div class="form-group">
+              <label for="feedback-name">Your Name (optional)</label>
+              <input type="text" id="feedback-name" maxlength="60" autocomplete="name" placeholder="e.g. Ananya">
+            </div>
+
+            <div class="form-group">
+              <label for="feedback-visited-district">District / Cluster Visited *</label>
+              <select id="feedback-visited-district" required>
+                <option value="">Select destination</option>
+                <option value="Jamui">Jamui</option>
+                <option value="Gaya">Gaya / Bodh Gaya</option>
+                <option value="Nalanda">Nalanda</option>
+                <option value="Saran">Saran / Sonepur</option>
+                <option value="Patna">Patna / Chhath Ghats</option>
+                <option value="Other">Another Bihar district</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="feedback-rating">Overall Experience *</label>
+              <select id="feedback-rating" required>
+                <option value="">Select rating</option>
+                <option value="5">5 — Excellent</option>
+                <option value="4">4 — Good</option>
+                <option value="3">3 — Average</option>
+                <option value="2">2 — Needs improvement</option>
+                <option value="1">1 — Poor</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="feedback-focus-area">Main Feedback Area *</label>
+              <select id="feedback-focus-area" required>
+                <option value="">Select area</option>
+                <option value="safety">Safety & trust</option>
+                <option value="cleanliness">Cleanliness & facilities</option>
+                <option value="guides">Guides & local information</option>
+                <option value="food">Food & local businesses</option>
+                <option value="transport">Transport & directions</option>
+                <option value="digital">Website & digital experience</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="feedback-comments">What should we improve? *</label>
+              <textarea id="feedback-comments" rows="4" required minlength="20" maxlength="600" placeholder="Tell us what worked, what did not, and one practical improvement..."></textarea>
+              <div class="form-hint">20–600 characters. Please keep the feedback specific and respectful.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="feedback-recommend">Would you recommend this experience? *</label>
+              <select id="feedback-recommend" required>
+                <option value="">Select response</option>
+                <option value="yes">Yes</option>
+                <option value="maybe">Maybe</option>
+                <option value="no">No</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="feedback-requested-district">Which district should we add next?</label>
+              <select id="feedback-requested-district" onchange="toggleOtherDistrictField()">
+                <option value="">No preference</option>
+                <option value="Rohtas">Rohtas</option>
+                <option value="Kaimur">Kaimur</option>
+                <option value="Vaishali">Vaishali</option>
+                <option value="East Champaran">East Champaran</option>
+                <option value="Bhagalpur">Bhagalpur</option>
+                <option value="Banka">Banka</option>
+                <option value="Munger">Munger</option>
+                <option value="West Champaran">West Champaran</option>
+                <option value="Other">Other district</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width" id="feedback-other-district-group" style="display: none;">
+              <label for="feedback-other-district">Enter Bihar district</label>
+              <input type="text" id="feedback-other-district" maxlength="40" placeholder="District name">
+            </div>
+
+            <label class="feedback-consent full-width" for="feedback-public-consent">
+              <input type="checkbox" id="feedback-public-consent">
+              <span>I allow GhoomoBihar to display an anonymized excerpt of this feedback after moderation. My name will not be shown publicly.</span>
+            </label>
+          </div>
+
+          <div id="tourism-feedback-message" style="display: none; font-size: 12.5px; margin-top: 14px;" role="status" aria-live="polite"></div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-user-badge" onclick="closeFeedbackModal()">Cancel</button>
+            <button type="submit" id="tourism-feedback-submit" class="btn btn-primary">Submit Feedback</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toast-container" class="toast-container"></div>
 
@@ -2924,6 +3304,8 @@
     let isAdminActive = false;
     let travelerProfile = null;
     let uploadedPhotoBase64 = "";
+    let tourismFeedback = [];
+    let remoteExpansionSignals = null;
 
     // --- 3. SANITIZATION HELPER ---
     function sanitizeHTML(str) {
@@ -2964,8 +3346,13 @@
 
       initSupabaseAuth();
 
+      // Load privacy-minimal tourism feedback signals for the expansion roadmap
+      loadTourismFeedback();
+      loadExpansionSignalsFromSupabase();
+
       // Build landing gallery & update UI
       renderLandingDestinations();
+      updateExpansionSignals();
       updateAuthHeaderUI();
       renderVendorDashboard();
       renderAdminTables();
@@ -4564,7 +4951,193 @@
       }
     }
 
-    // --- 15. TOAST NOTIFICATION UTILITY ---
+    // ==========================================================================
+    // --- 15. TOURISM FEEDBACK + DISTRICT EXPANSION SIGNALS ---
+    // ==========================================================================
+    const SITE_TO_DISTRICT = {
+      "jamui": "Jamui",
+      "bodh-gaya": "Gaya",
+      "nalanda": "Nalanda",
+      "sonepur": "Saran",
+      "chhath-ghat": "Patna"
+    };
+
+    function loadTourismFeedback() {
+      try {
+        const saved = JSON.parse(localStorage.getItem("ghoomobihar_tourism_feedback") || "[]");
+        tourismFeedback = Array.isArray(saved) ? saved.filter(item => item && typeof item === "object") : [];
+      } catch (err) {
+        console.warn("Feedback cache notice:", err.message);
+        tourismFeedback = [];
+      }
+    }
+
+    function saveTourismFeedback() {
+      localStorage.setItem("ghoomobihar_tourism_feedback", JSON.stringify(tourismFeedback.slice(-100)));
+      updateExpansionSignals();
+    }
+
+    function updateExpansionSignals() {
+      const countNode = document.getElementById("roadmap-feedback-count");
+      const topRequestNode = document.getElementById("roadmap-top-request");
+      const totalFeedback = remoteExpansionSignals
+        ? remoteExpansionSignals.total_feedback
+        : tourismFeedback.length;
+      if (countNode) countNode.textContent = String(totalFeedback);
+      if (!topRequestNode) return;
+
+      if (remoteExpansionSignals && remoteExpansionSignals.top_requested_district) {
+        const count = remoteExpansionSignals.top_request_count;
+        topRequestNode.textContent = `${remoteExpansionSignals.top_requested_district} (${count} request${count === 1 ? "" : "s"})`;
+        return;
+      }
+
+      const districtCounts = tourismFeedback.reduce((counts, item) => {
+        const district = (item.requested_district || "").trim();
+        if (!district) return counts;
+        counts[district] = (counts[district] || 0) + 1;
+        return counts;
+      }, {});
+
+      const ranked = Object.entries(districtCounts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+      topRequestNode.textContent = ranked.length ? `${ranked[0][0]} (${ranked[0][1]} request${ranked[0][1] === 1 ? "" : "s"})` : "Awaiting feedback";
+    }
+
+    async function loadExpansionSignalsFromSupabase() {
+      const sb = getSupabaseClient();
+      if (!sb) return;
+      try {
+        const { data, error } = await sb.rpc("get_tourism_feedback_signals");
+        if (error || !Array.isArray(data) || !data[0]) return;
+        remoteExpansionSignals = {
+          total_feedback: Number(data[0].total_feedback || 0),
+          top_requested_district: data[0].top_requested_district || null,
+          top_request_count: Number(data[0].top_request_count || 0)
+        };
+        updateExpansionSignals();
+      } catch (err) {
+        console.warn("Expansion signal sync notice:", err.message);
+      }
+    }
+
+    function openFeedbackModal() {
+      const modal = document.getElementById("tourism-feedback-modal");
+      const message = document.getElementById("tourism-feedback-message");
+      if (message) {
+        message.style.display = "none";
+        message.textContent = "";
+      }
+
+      if (activeView === "detail" && SITE_TO_DISTRICT[currentSite]) {
+        document.getElementById("feedback-visited-district").value = SITE_TO_DISTRICT[currentSite];
+      }
+      modal.classList.add("active");
+    }
+
+    function closeFeedbackModal() {
+      document.getElementById("tourism-feedback-modal").classList.remove("active");
+    }
+
+    function toggleOtherDistrictField() {
+      const selection = document.getElementById("feedback-requested-district").value;
+      const group = document.getElementById("feedback-other-district-group");
+      const input = document.getElementById("feedback-other-district");
+      const show = selection === "Other";
+      group.style.display = show ? "block" : "none";
+      input.required = show;
+      if (!show) input.value = "";
+    }
+
+    function safeFeedbackText(value, maxLength) {
+      return (value || "")
+        .trim()
+        .replace(/[\u0000-\u001F\u007F]/g, " ")
+        .replace(/\s{2,}/g, " ")
+        .slice(0, maxLength);
+    }
+
+    async function handleTourismFeedbackSubmit(event) {
+      event.preventDefault();
+      const form = document.getElementById("tourism-feedback-form");
+      const message = document.getElementById("tourism-feedback-message");
+      const submitBtn = document.getElementById("tourism-feedback-submit");
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const now = Date.now();
+      const previousSubmission = Number(localStorage.getItem("ghoomobihar_feedback_last_submit") || "0");
+      if (now - previousSubmission < 20000) {
+        message.textContent = "Please wait a few seconds before submitting another response.";
+        message.style.display = "block";
+        message.style.color = "var(--color-terracotta)";
+        return;
+      }
+
+      let requestedDistrict = document.getElementById("feedback-requested-district").value;
+      if (requestedDistrict === "Other") {
+        requestedDistrict = safeFeedbackText(document.getElementById("feedback-other-district").value, 40);
+      }
+
+      const comments = safeFeedbackText(document.getElementById("feedback-comments").value, 600);
+      if (comments.length < 20) {
+        message.textContent = "Please provide at least 20 characters of useful feedback.";
+        message.style.display = "block";
+        message.style.color = "var(--color-terracotta)";
+        return;
+      }
+
+      const feedback = {
+        id: (window.crypto && typeof window.crypto.randomUUID === "function")
+          ? window.crypto.randomUUID()
+          : `feedback-${now}-${Math.random().toString(16).slice(2)}`,
+        tourist_name: safeFeedbackText(document.getElementById("feedback-name").value, 60) || null,
+        visited_district: document.getElementById("feedback-visited-district").value,
+        rating: Number(document.getElementById("feedback-rating").value),
+        focus_area: document.getElementById("feedback-focus-area").value,
+        comments,
+        recommend: document.getElementById("feedback-recommend").value,
+        requested_district: requestedDistrict || null,
+        consent_public: document.getElementById("feedback-public-consent").checked,
+        status: "pending",
+        created_at: new Date(now).toISOString()
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
+      message.style.display = "none";
+
+      let syncedToSupabase = false;
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          const { error } = await sb.from("tourism_feedback").insert(feedback);
+          if (error) {
+            console.warn("Feedback sync notice:", error.message);
+          } else {
+            syncedToSupabase = true;
+            await loadExpansionSignalsFromSupabase();
+          }
+        } catch (err) {
+          console.warn("Feedback sync notice:", err.message);
+        }
+      }
+
+      tourismFeedback.push({ ...feedback, synced: syncedToSupabase });
+      saveTourismFeedback();
+      localStorage.setItem("ghoomobihar_feedback_last_submit", String(now));
+
+      form.reset();
+      toggleOtherDistrictField();
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Feedback";
+      closeFeedbackModal();
+      showToast("Thank you—your tourism feedback has been recorded.");
+    }
+
+    // --- 16. TOAST NOTIFICATION UTILITY ---
     function showToast(msg) {
       const container = document.getElementById("toast-container");
       if (!container) return;
