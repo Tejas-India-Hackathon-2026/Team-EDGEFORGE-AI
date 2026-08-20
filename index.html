@@ -2251,6 +2251,32 @@
           👋 Logged in as: <strong id="logged-vendor-name">Local Vendor</strong>. Approved listings receive a verified badge.
         </div>
 
+        <!-- Shartak AI Listing Assistant -->
+        <div class="ai-listing-assistant-box" style="background: linear-gradient(135deg, #F0F9F8 0%, #FAF6F0 100%); border: 1.5px solid rgba(26, 83, 92, 0.22); border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 18px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: var(--color-teal); font-size: 13.5px;">
+              <span>✨</span> Draft with Shartak AI
+            </div>
+            <span style="font-size: 11px; background: rgba(26, 83, 92, 0.1); color: var(--color-teal); padding: 2px 8px; border-radius: var(--radius-pill); font-weight: 600;">AI Assistant</span>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 8px;">
+            <label for="ai-draft-brief" style="font-size: 12.5px; font-weight: 600; color: var(--color-charcoal); margin-bottom: 4px;">Describe your service in simple words</label>
+            <textarea id="ai-draft-brief" rows="2" placeholder="Example: I am a local Bodh Gaya guide. I offer 2-hour temple walks in Hindi and English for ₹500 per group." style="font-size: 13px; background: #FFFFFF;"></textarea>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+            <button type="button" id="btn-generate-ai-draft" class="btn btn-primary" onclick="handleGenerateAIDraft()" style="font-size: 12.5px; padding: 7px 14px;">
+              <span>✨</span> Generate Listing Draft
+            </button>
+            <span class="form-hint" style="margin-top: 0; font-size: 11.5px; color: var(--color-text-muted);">
+              Shartak will suggest details. Review and edit everything before publishing.
+            </span>
+          </div>
+
+          <div id="ai-draft-status-msg" style="display: none; font-size: 12.5px; margin-top: 10px;"></div>
+        </div>
+
         <form id="listing-submission-form" onsubmit="handleListingSubmit(event)">
           
           <div class="form-group">
@@ -3856,11 +3882,116 @@
       uploadedPhotoBase64 = "";
       document.getElementById("photo-preview-wrap").style.display = "none";
       document.getElementById("listing-submission-form").reset();
+      const briefInput = document.getElementById("ai-draft-brief");
+      if (briefInput) briefInput.value = "";
+      const statusDiv = document.getElementById("ai-draft-status-msg");
+      if (statusDiv) statusDiv.style.display = "none";
       document.getElementById("listing-whatsapp").value = currentVendor.phone;
       handleCategoryChange();
       handleSiteChange();
 
       document.getElementById("listing-modal").classList.add("active");
+    }
+
+    // --- 10.1 SHARTAK AI LISTING ASSISTANT ---
+    async function handleGenerateAIDraft() {
+      if (!currentVendor) {
+        openUnifiedAuthModal('vendor');
+        return;
+      }
+
+      const briefInput = document.getElementById("ai-draft-brief");
+      const brief = (briefInput ? briefInput.value : "").trim();
+      const statusDiv = document.getElementById("ai-draft-status-msg");
+      const btn = document.getElementById("btn-generate-ai-draft");
+
+      if (!brief) {
+        if (statusDiv) {
+          statusDiv.innerHTML = `<span style="color: var(--color-terracotta); font-weight: 600;">Please describe your service in simple words first.</span>`;
+          statusDiv.style.display = "block";
+        }
+        if (briefInput) briefInput.focus();
+        return;
+      }
+
+      if (statusDiv) {
+        statusDiv.innerHTML = `<span style="color: var(--color-teal); display: inline-flex; align-items: center; gap: 6px; font-weight: 600;"><span>⏳</span> Shartak is drafting your listing details...</span>`;
+        statusDiv.style.display = "block";
+      }
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span>⏳</span> Drafting...`;
+      }
+
+      try {
+        const response = await fetch("/.netlify/functions/listing-assistant", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ brief: brief })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data || !data.draft) {
+          throw new Error(data && data.error ? data.error : "Unable to generate draft");
+        }
+
+        const draft = data.draft;
+
+        // Populate fields safely without altering site destination, WhatsApp, or uploaded photo
+        if (draft.title && document.getElementById("listing-title")) {
+          document.getElementById("listing-title").value = draft.title;
+        }
+
+        if (draft.category && document.getElementById("listing-category")) {
+          const catSelect = document.getElementById("listing-category");
+          const validOptions = Array.from(catSelect.options).map(o => o.value);
+          if (validOptions.includes(draft.category)) {
+            catSelect.value = draft.category;
+          } else {
+            catSelect.value = "other";
+            const otherInput = document.getElementById("listing-category-other");
+            if (otherInput) otherInput.value = draft.category;
+          }
+          handleCategoryChange();
+        }
+
+        if (draft.description && document.getElementById("listing-desc")) {
+          document.getElementById("listing-desc").value = draft.description;
+        }
+
+        if (draft.price && document.getElementById("listing-price")) {
+          document.getElementById("listing-price").value = draft.price;
+        }
+
+        if (draft.specialty && document.getElementById("listing-specialty")) {
+          document.getElementById("listing-specialty").value = draft.specialty;
+        }
+
+        if (draft.openHours && document.getElementById("listing-hours")) {
+          document.getElementById("listing-hours").value = draft.openHours;
+        }
+
+        if (statusDiv) {
+          statusDiv.innerHTML = `<span style="color: #2B6CB0; background: #EBF8FF; border: 1px solid #BEE3F8; padding: 6px 10px; border-radius: var(--radius-sm); display: block; font-weight: 500;">✨ <strong>Draft generated!</strong> Review and edit the fields below before submitting.</span>`;
+          statusDiv.style.display = "block";
+        }
+
+        showToast("✨ Shartak filled in your listing details! Review before publishing.");
+
+      } catch (err) {
+        console.warn("AI listing assistant notice:", err.message);
+        if (statusDiv) {
+          statusDiv.innerHTML = `<span style="color: var(--color-terracotta);">Could not generate draft right now. You can fill the details manually below.</span>`;
+          statusDiv.style.display = "block";
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = `<span>✨</span> Generate Listing Draft`;
+        }
+      }
     }
 
     function closeListingModal() {
