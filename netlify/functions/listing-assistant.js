@@ -94,8 +94,7 @@ CRITICAL RULES:
       model: 'groq/compound',
       messages: messages,
       temperature: 0.3,
-      max_tokens: 500,
-      response_format: { type: 'json_object' }
+      max_tokens: 500
     });
 
     const responseText = await new Promise((resolve, reject) => {
@@ -114,7 +113,7 @@ CRITICAL RULES:
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve(data);
           } else {
-            reject(new Error(`Groq API returned status ${res.statusCode}`));
+            reject(new Error(`Groq API returned status ${res.statusCode}: ${data}`));
           }
         });
       });
@@ -132,7 +131,7 @@ CRITICAL RULES:
     const groqResponse = JSON.parse(responseText);
     let rawContent = groqResponse.choices?.[0]?.message?.content || '{}';
 
-    // Strip any markdown code fences if model included them despite json_object mode
+    // Strip any markdown code fences if model included them
     rawContent = rawContent.trim();
     if (rawContent.startsWith('```json')) {
       rawContent = rawContent.slice(7);
@@ -143,6 +142,13 @@ CRITICAL RULES:
       rawContent = rawContent.slice(0, -3);
     }
     rawContent = rawContent.trim();
+
+    // Extract JSON substring between first { and last }
+    const firstBrace = rawContent.indexOf('{');
+    const lastBrace = rawContent.lastIndexOf('}');
+    if (firstBrace !== -1 && lastBrace !== -1 && lastBrace >= firstBrace) {
+      rawContent = rawContent.substring(firstBrace, lastBrace + 1);
+    }
 
     let parsedDraft = {};
     try {
