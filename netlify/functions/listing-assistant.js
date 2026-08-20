@@ -91,10 +91,11 @@ CRITICAL RULES:
     ];
 
     const postData = JSON.stringify({
-      model: 'groq/compound',
+      model: 'openai/gpt-oss-20b',
       messages: messages,
-      temperature: 0.3,
-      max_tokens: 500
+      temperature: 0.2,
+      max_tokens: 1000,
+      reasoning_effort: 'low'
     });
 
     const responseText = await new Promise((resolve, reject) => {
