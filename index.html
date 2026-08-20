@@ -1665,7 +1665,6 @@
         <span class="brand-icon">🪷</span>
         <div class="brand-text">
           <h1>GhoomoBihar</h1>
-          <p>TEJAS 2026 • Bihar Tourism Track</p>
         </div>
       </a>
 
@@ -1674,7 +1673,7 @@
           <span>🏛️</span> Discover Bihar
         </button>
         <button id="nav-btn-site" class="nav-btn-link" onclick="openSiteDetail(currentSite)">
-          <span>🧭</span> <span id="nav-active-site-label">Jamui (Host)</span>
+          <span>🧭</span> <span id="nav-active-site-label">Jamui</span>
         </button>
       </div>
       
@@ -1758,13 +1757,16 @@
       </div>
 
       <div class="admin-sub-tabs">
-        <button class="admin-tab-btn active" onclick="setAdminTab('pending')">Pending Submissions (<span id="admin-tab-pending-count">0</span>)</button>
-        <button class="admin-tab-btn" onclick="setAdminTab('approved')">Active Live Listings (<span id="admin-tab-approved-count">0</span>)</button>
-        <button class="admin-tab-btn" onclick="setAdminTab('requests')">Tourist Inquiries (<span id="admin-tab-requests-count">0</span>)</button>
+        <button class="admin-tab-btn active" onclick="setAdminTab('pending')">🔔 New — Needs Review (<span id="admin-tab-pending-count">0</span>)</button>
+        <button class="admin-tab-btn" onclick="setAdminTab('approved')">📋 All Active Listings (<span id="admin-tab-approved-count">0</span>)</button>
+        <button class="admin-tab-btn" onclick="setAdminTab('requests')">📩 Tourist Inquiries (<span id="admin-tab-requests-count">0</span>)</button>
       </div>
 
-      <!-- Pending Submissions Table with Photo Thumbnail -->
+      <!-- New Submissions Needing Review Table -->
       <div id="admin-view-pending">
+        <div style="background: var(--color-sand); border: 1px solid var(--color-border); border-left: 4px solid var(--color-terracotta); padding: 10px 14px; margin-bottom: 14px; border-radius: var(--radius-sm); font-size: 13px;">
+          <strong>📢 New Vendor Submissions:</strong> These listings are live on the site. You can review them, verify them, or remove them at any time.
+        </div>
         <table class="admin-table">
           <thead>
             <tr>
@@ -1775,7 +1777,7 @@
               <th>Price</th>
               <th>WhatsApp / Phone</th>
               <th>Specialty</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="admin-pending-tbody">
@@ -1784,7 +1786,7 @@
         </table>
       </div>
 
-      <!-- Active Listings Table -->
+      <!-- All Active Listings Table -->
       <div id="admin-view-approved" style="display: none;">
         <table class="admin-table">
           <thead>
@@ -1795,7 +1797,7 @@
               <th>Destination</th>
               <th>Rating</th>
               <th>Verified</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="admin-approved-tbody">
@@ -1831,16 +1833,13 @@
       <!-- Grand Bihar Tourism Hero -->
       <section class="landing-hero">
         <div class="landing-hero-content">
-          <div class="landing-tag">
-            <span>🪷</span> TEJAS India Hackathon 2026 • Bihar Tourism Track
-          </div>
           <h2 class="landing-title">Discover the Soul of Ancient & Living Bihar</h2>
           <p class="landing-subtitle">
             Zero-app, instant QR-code discovery connecting travelers directly with verified local guides, homestays, authentic delicacies, and folk artisans across iconic destinations.
           </p>
           <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
             <button class="btn btn-primary" onclick="openSiteDetail('jamui')">
-              <span>🌲</span> Explore Jamui (Host Location)
+              <span>🌲</span> Explore Jamui
             </button>
             <button class="btn btn-login" onclick="openSiteDetail('bodh-gaya')">
               <span>🪷</span> Bodh Gaya Spiritual Trails
@@ -1995,15 +1994,21 @@
         <!-- TAB A: SIMPLIFIED PASSWORDLESS VENDOR AUTH -->
         <div id="auth-view-vendor">
           
-          <!-- Vendor Phone Login Form (Passwordless) -->
+          <!-- Vendor Phone Login Form (Passwordless with Security Check) -->
           <div id="vendor-login-section">
             <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 16px;">
-              Enter your registered phone number to manage your listings and view tourist inquiries. (Admin: <code>9898989800</code>)
+              Enter your registered phone number to manage your listings and view tourist inquiries.
             </p>
             <form id="vendor-login-form" onsubmit="handleVendorAuthSubmit(event)">
               <div class="form-group">
                 <label for="v-login-phone">Your Phone / WhatsApp Number *</label>
-                <input type="tel" id="v-login-phone" placeholder="e.g. 9876543210 (Admin: 9898989800)" required maxlength="12">
+                <input type="tel" id="v-login-phone" placeholder="e.g. 9876543210" required maxlength="12">
+              </div>
+              <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
+                <label for="v-login-captcha" id="v-login-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
+                  Security Check: What is 4 + 3? *
+                </label>
+                <input type="number" id="v-login-captcha" placeholder="Enter answer" required style="background: #FFFFFF;">
               </div>
               <div id="vendor-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
               
@@ -2016,7 +2021,7 @@
             </form>
           </div>
 
-          <!-- Vendor Registration Form (With Email & No Password) -->
+          <!-- Vendor Registration Form (With Email, Security Check & No Password) -->
           <div id="vendor-signup-section" style="display: none;">
             <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
               Register your local service to get direct customer leads via WhatsApp and booking requests.
@@ -2032,8 +2037,14 @@
                 <div class="form-hint">Used as your single login identifier. No password needed!</div>
               </div>
               <div class="form-group">
-                <label for="v-signup-email">Contact Email Address</label>
-                <input type="email" id="v-signup-email" placeholder="e.g. provider@gmail.com (for inquiry records)">
+                <label for="v-signup-email">Contact Email Address *</label>
+                <input type="email" id="v-signup-email" placeholder="e.g. provider@gmail.com" required>
+              </div>
+              <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
+                <label for="v-signup-captcha" id="v-signup-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
+                  Security Check: What is 5 + 2? *
+                </label>
+                <input type="number" id="v-signup-captcha" placeholder="Enter answer" required style="background: #FFFFFF;">
               </div>
               
               <div class="form-actions" style="justify-content: space-between; align-items: center;">
@@ -2232,7 +2243,7 @@
             <div class="form-group">
               <label for="listing-site">Heritage Destination *</label>
               <select id="listing-site" onchange="handleSiteChange()" required>
-                <option value="jamui">🌲 Jamui (Hackathon Host)</option>
+                <option value="jamui">🌲 Jamui</option>
                 <option value="bodh-gaya">🪷 Bodh Gaya</option>
                 <option value="nalanda">📜 Nalanda</option>
                 <option value="sonepur">🐘 Sonepur Mela</option>
@@ -2290,8 +2301,8 @@
   <!-- Floating FAB Button -->
   <div id="ai-chat-fab" class="ai-chat-fab" onclick="toggleAIChatDrawer()">
     <span class="ai-fab-icon">✨</span>
-    <span>Ask Bihar AI Concierge</span>
-    <span class="ai-fab-badge">Groq AI</span>
+    <span>Ask Shartak</span>
+    <span class="ai-fab-badge">AI Guide</span>
   </div>
 
   <!-- Expandable Chat Drawer -->
@@ -2300,8 +2311,8 @@
       <div class="ai-header-info">
         <div class="ai-avatar">🪷</div>
         <div>
-          <div class="ai-title">GhoomoBihar AI Concierge</div>
-          <div class="ai-subtitle" id="ai-mode-status"><span class="status-dot"></span> Powered by Groq Compound AI</div>
+          <div class="ai-title">Shartak</div>
+          <div class="ai-subtitle" id="ai-mode-status"><span class="status-dot"></span> Bihar Tourism AI Guide</div>
         </div>
       </div>
       <div class="ai-header-controls">
@@ -2329,7 +2340,7 @@
 
     <!-- Chat Input Bar -->
     <form class="ai-chat-input-bar" id="ai-chat-form" onsubmit="handleAIChatSubmit(event)">
-      <input type="text" id="ai-chat-input" placeholder="Ask about guides, food, travel routes, stays..." autocomplete="off" maxlength="300">
+      <input type="text" id="ai-chat-input" placeholder="Ask Shartak about guides, food, travel routes, stays..." autocomplete="off" maxlength="300">
       <button type="submit" id="ai-send-btn" class="ai-send-btn" title="Send">
         <span>➤</span>
       </button>
@@ -2352,7 +2363,7 @@
           <div class="qr-poster-top">
             <span class="qr-bihar-tag">🪷 BIHAR TOURISM OFFICIAL STAND</span>
             <h3 id="qr-site-name" class="qr-site-title">Jamui Heritage & Nature</h3>
-            <p id="qr-site-badge" class="qr-site-subtitle">🌟 Hackathon Host Location</p>
+            <p id="qr-site-badge" class="qr-site-subtitle">🌲 Heritage & Nature</p>
           </div>
 
           <div class="qr-code-frame">
@@ -2391,7 +2402,7 @@
   <!-- Footer -->
   <footer>
     <p>
-      <strong>GhoomoBihar</strong> — Built for TEJAS India Hackathon 2026 (Bihar Tourism Track)
+      <strong>GhoomoBihar</strong> — Discover Bihar's Ancient & Living Heritage
     </p>
     <p style="margin-top: 5px;">
       Celebrating <span class="footer-host-tag">Jamui</span> & Bihar Heritage • Zero-Build Standalone Platform
@@ -2445,7 +2456,7 @@
     const SITE_METADATA = {
       "jamui": {
         name: "Jamui",
-        badge: "🌟 Hackathon Host Location",
+        badge: "🌲 Heritage & Nature",
         title: "Jamui Heritage, Palace Lore & Pine Retreats",
         subtitle: "Explore ancient Gidhaur royal history, serene Simultala pine valley retreats, Patneshwar temple artisans, and Nagi-Nakti wetland bird guides.",
         image: "assets/jamui.jpeg",
@@ -2516,7 +2527,7 @@
     };
 
     const DEFAULT_LISTINGS = [
-      // === JAMUI (Host Location) ===
+      // === JAMUI (Featured Destination) ===
       {
         id: "jamui-g-01",
         title: "Gidhaur Royal Heritage & Lore Walk",
@@ -3182,9 +3193,32 @@
     }
 
     // --- 7. SIMPLIFIED PASSWORDLESS VENDOR & TRAVELER AUTH ---
+    // --- 7. AUTH & SECURITY CHECK ENGINE ---
+    let currentLoginCaptchaAns = 7;
+    let currentSignupCaptchaAns = 7;
+
+    function generateMathCaptcha() {
+      const n1 = Math.floor(Math.random() * 6) + 3;
+      const n2 = Math.floor(Math.random() * 5) + 2;
+      currentLoginCaptchaAns = n1 + n2;
+      const loginLabel = document.getElementById("v-login-captcha-label");
+      if (loginLabel) loginLabel.textContent = `Security Check: What is ${n1} + ${n2}? *`;
+      const loginInput = document.getElementById("v-login-captcha");
+      if (loginInput) loginInput.value = "";
+
+      const s1 = Math.floor(Math.random() * 7) + 2;
+      const s2 = Math.floor(Math.random() * 6) + 1;
+      currentSignupCaptchaAns = s1 + s2;
+      const signupLabel = document.getElementById("v-signup-captcha-label");
+      if (signupLabel) signupLabel.textContent = `Security Check: What is ${s1} + ${s2}? *`;
+      const signupInput = document.getElementById("v-signup-captcha");
+      if (signupInput) signupInput.value = "";
+    }
+
     function openUnifiedAuthModal(defaultTab = 'vendor') {
       switchAuthTab(defaultTab);
       document.getElementById("vendor-login-msg").style.display = "none";
+      generateMathCaptcha();
       document.getElementById("unified-auth-modal").classList.add("active");
 
       if (travelerProfile) {
@@ -3212,13 +3246,15 @@
       document.getElementById("vendor-login-section").style.display = showSignup ? "none" : "block";
       document.getElementById("vendor-signup-section").style.display = showSignup ? "block" : "none";
       document.getElementById("vendor-login-msg").style.display = "none";
+      generateMathCaptcha();
     }
 
-    // Passwordless Vendor/Admin Login (Phone Alone)
+    // Passwordless Vendor/Admin Login (With Security Check)
     function handleVendorAuthSubmit(e) {
       e.preventDefault();
       const phone = document.getElementById("v-login-phone").value.trim();
       const msgDiv = document.getElementById("vendor-login-msg");
+      const enteredCaptcha = parseInt((document.getElementById("v-login-captcha").value || "").trim());
 
       // 1. Check Hardcoded Admin Phone
       if (phone === ADMIN_PHONE) {
@@ -3235,6 +3271,14 @@
         document.getElementById("vendor-dashboard").classList.remove("active");
         renderAdminTables();
         document.getElementById("admin-panel").scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      // Security Check verification for standard vendor logins
+      if (enteredCaptcha !== currentLoginCaptchaAns) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Please solve the simple math problem to continue.</span>`;
+        msgDiv.style.display = "block";
+        generateMathCaptcha();
         return;
       }
 
@@ -3262,12 +3306,20 @@
       }
     }
 
-    // Simplified Vendor Signup (With Email & No Password)
+    // Simplified Vendor Signup (With Email, Security Check & No Password)
     function handleVendorSignupSubmit(e) {
       e.preventDefault();
       const name = sanitizeHTML(document.getElementById("v-signup-name").value.trim());
       const phone = sanitizeHTML(document.getElementById("v-signup-phone").value.trim());
       const email = sanitizeHTML(document.getElementById("v-signup-email").value.trim());
+      const enteredCaptcha = parseInt((document.getElementById("v-signup-captcha").value || "").trim());
+
+      // Security Check Verification
+      if (enteredCaptcha !== currentSignupCaptchaAns) {
+        alert("Incorrect security check answer. Please solve the simple math problem to create an account.");
+        generateMathCaptcha();
+        return;
+      }
 
       const vendors = JSON.parse(localStorage.getItem("ghoomobihar_vendors") || "[]");
       if (vendors.find(v => v.phone === phone)) {
@@ -3648,16 +3700,18 @@
         rating: 4.9,
         specialty,
         verified: false,
-        status: "pending",
+        status: "approved", // Immediately live on the platform!
+        reviewedByAdmin: false, // Flag for Admin Review Queue
         submittedBy: currentVendor ? currentVendor.name : "Local Entrepreneur",
         photo: uploadedPhotoBase64 || SITE_METADATA[site]?.image || "assets/jamui.jpeg"
       };
 
       listings.push(newListing);
       saveListings();
+      renderDetailListings();
       closeListingModal();
 
-      showToast(`📝 "${title}" submitted! It is now in the Admin review queue.`);
+      showToast(`🎉 "${title}" is now LIVE on GhoomoBihar! Submitted for admin review.`);
       renderVendorDashboard();
     }
 
@@ -3672,46 +3726,52 @@
     }
 
     function renderAdminTables() {
-      // 1. Pending Table with Photo Thumbnail
+      // 1. New Submissions Needing Review Table (reviewedByAdmin === false)
       const pendingTbody = document.getElementById("admin-pending-tbody");
-      const pendingListings = listings.filter(l => l.status === "pending");
-      document.getElementById("admin-tab-pending-count").textContent = pendingListings.length;
+      const needsReviewListings = listings.filter(l => l.reviewedByAdmin === false);
+      document.getElementById("admin-tab-pending-count").textContent = needsReviewListings.length;
 
-      if (pendingListings.length === 0) {
-        pendingTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--color-muted); padding: 20px;">No pending submissions in queue. All clear!</td></tr>`;
+      if (needsReviewListings.length === 0) {
+        pendingTbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--color-muted); padding: 20px;">✓ All listings have been reviewed by Admin. No pending reviews in queue!</td></tr>`;
       } else {
-        pendingTbody.innerHTML = pendingListings.map(item => `
+        pendingTbody.innerHTML = needsReviewListings.map(item => `
           <tr>
             <td><img src="${item.photo || 'assets/jamui.jpeg'}" class="table-thumbnail" alt="Photo"></td>
-            <td><strong>${sanitizeHTML(item.title)}</strong></td>
+            <td><strong>${sanitizeHTML(item.title)}</strong><br><span style="font-size: 11px; color: var(--color-terracotta); font-weight: 700;">● Live (Needs Review)</span></td>
             <td><span class="category-tag">${item.category}</span></td>
             <td>${SITE_METADATA[item.site]?.name || item.site}</td>
             <td>${sanitizeHTML(item.price)}</td>
             <td>${sanitizeHTML(item.whatsapp)}</td>
             <td>${sanitizeHTML(item.specialty)}</td>
             <td>
-              <button class="btn-action-sm btn-approve" onclick="adminApproveListing('${item.id}')">✓ Approve & Verify</button>
-              <button class="btn-action-sm btn-reject" onclick="adminRejectListing('${item.id}')">✕ Reject</button>
+              <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                <button class="btn-action-sm btn-approve" onclick="adminMarkReviewed('${item.id}')" title="Acknowledge listing as reviewed">✓ Mark Reviewed</button>
+                <button class="btn-action-sm btn-approve" style="background: var(--color-gold); color: #2D1E01;" onclick="adminApproveListing('${item.id}')" title="Verify listing">✓ Verify</button>
+                <button class="btn-action-sm btn-reject" onclick="adminRemoveListing('${item.id}')" title="Permanently delete from platform">🗑️ Remove</button>
+              </div>
             </td>
           </tr>
         `).join("");
       }
 
-      // 2. Approved Table with Photo Thumbnail
+      // 2. All Active Listings Table with Permanent Remove Button
       const approvedTbody = document.getElementById("admin-approved-tbody");
-      const approvedListings = listings.filter(l => l.status === "approved");
-      document.getElementById("admin-tab-approved-count").textContent = approvedListings.length;
+      const activeListings = listings.filter(l => l.status === "approved");
+      document.getElementById("admin-tab-approved-count").textContent = activeListings.length;
 
-      approvedTbody.innerHTML = approvedListings.map(item => `
+      approvedTbody.innerHTML = activeListings.map(item => `
         <tr>
           <td><img src="${item.photo || 'assets/jamui.jpeg'}" class="table-thumbnail" alt="Photo"></td>
           <td><strong>${sanitizeHTML(item.title)}</strong></td>
           <td><span class="category-tag">${item.category}</span></td>
           <td>${SITE_METADATA[item.site]?.name || item.site}</td>
           <td>★ ${item.rating || 4.8}</td>
-          <td><span class="verified-badge">✓ Verified</span></td>
+          <td>${item.verified ? '<span class="verified-badge">✓ Verified</span>' : '<span style="color: var(--color-muted); font-size: 12px;">Unverified</span>'}</td>
           <td>
-            <button class="btn-action-sm btn-reject" onclick="adminRevokeListing('${item.id}')">Deactivate</button>
+            <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+              ${!item.verified ? `<button class="btn-action-sm btn-approve" onclick="adminApproveListing('${item.id}')">✓ Verify</button>` : ''}
+              <button class="btn-action-sm btn-reject" onclick="adminRemoveListing('${item.id}')" title="Permanently delete from platform">🗑️ Remove</button>
+            </div>
           </td>
         </tr>
       `).join("");
@@ -3736,45 +3796,46 @@
       }
     }
 
+    function adminMarkReviewed(id) {
+      const item = listings.find(l => l.id === id);
+      if (item) {
+        item.reviewedByAdmin = true;
+        saveListings();
+        renderAdminTables();
+        renderVendorDashboard();
+        showToast(`✓ "${item.title}" marked as reviewed.`);
+      }
+    }
+
     function adminApproveListing(id) {
       const item = listings.find(l => l.id === id);
       if (item) {
         item.status = "approved";
-        item.verified = true; // Auto-verify on admin approval
+        item.reviewedByAdmin = true;
+        item.verified = true;
         saveListings();
         renderDetailListings();
         renderAdminTables();
         renderVendorDashboard();
-        showToast(`✅ "${item.title}" approved & verified! Now live for tourists.`);
+        showToast(`✅ "${item.title}" verified! Verified badge added.`);
       }
     }
 
-    function adminRejectListing(id) {
+    function adminRemoveListing(id) {
       const item = listings.find(l => l.id === id);
-      if (item) {
-        item.status = "rejected";
+      const title = item ? item.title : "Listing";
+      if (confirm(`Permanently remove "${title}" from GhoomoBihar? This deletes it completely from localStorage.`)) {
+        listings = listings.filter(l => l.id !== id);
         saveListings();
         renderDetailListings();
         renderAdminTables();
         renderVendorDashboard();
-        showToast(`Listing "${item.title}" rejected.`);
-      }
-    }
-
-    function adminRevokeListing(id) {
-      const item = listings.find(l => l.id === id);
-      if (item) {
-        item.status = "rejected";
-        saveListings();
-        renderDetailListings();
-        renderAdminTables();
-        renderVendorDashboard();
-        showToast(`Listing "${item.title}" deactivated.`);
+        showToast(`🗑️ "${title}" permanently removed from platform.`);
       }
     }
 
     // ==========================================================================
-    // --- 13. AI TOURISM CONCIERGE ENGINE (GROQ COMPOUND AI & LOCAL ENGINE) ---
+    // --- 13. SHARTAK AI CONCIERGE ENGINE (SERVERLESS GATEWAY & LOCAL ENGINE) ---
     // ==========================================================================
     let aiChatHistory = [];
     let isAITyping = false;
@@ -3784,8 +3845,8 @@
       drawer.classList.toggle("active");
       if (drawer.classList.contains("active")) {
         if (aiChatHistory.length === 0) {
-          // Welcome greeting
-          addAIMessageToUI("assistant", "Namaste! 🙏 I am your **GhoomoBihar AI Concierge**, powered by Groq Compound AI.\n\nI can help you plan visits to **Jamui** (Hackathon Host), **Bodh Gaya**, **Nalanda**, **Sonepur Mela**, and **Chhath Ghat**, find certified local guides, taste authentic delicacies, or arrange zero-markup homestays.\n\nHow can I guide your journey today?");
+          // Welcome greeting with clickable destination options
+          addAIMessageToUI("assistant", "Namaste! 🙏 I am **Shartak**, your GhoomoBihar guide. Where would you like to visit?", null, true);
         }
         setTimeout(() => {
           const input = document.getElementById("ai-chat-input");
@@ -3797,7 +3858,7 @@
     function clearAIChatHistory() {
       aiChatHistory = [];
       document.getElementById("ai-messages-list").innerHTML = "";
-      addAIMessageToUI("assistant", "Chat cleared! How can I assist your Bihar travel plans today? 🪷");
+      addAIMessageToUI("assistant", "Namaste! 🙏 I am **Shartak**, your GhoomoBihar guide. Where would you like to visit?", null, true);
     }
 
     function handleQuickAsk(promptText) {
@@ -3847,19 +3908,19 @@
           const data = await response.json();
           if (data.reply) {
             responseReceived = true;
-            statusLabel.innerHTML = '<span class="status-dot" style="background: #1EBE5D;"></span> Live Groq Compound AI';
+            statusLabel.innerHTML = '<span class="status-dot" style="background: #1EBE5D;"></span> Live AI Guide';
             showAITypingIndicator(false);
             addAIMessageToUI("assistant", data.reply);
             aiChatHistory.push({ sender: "assistant", text: data.reply });
           }
         }
       } catch (err) {
-        console.log("Serverless Groq endpoint unreachable (running locally/offline). Falling back to Local Knowledge Engine:", err.message);
+        console.log("Serverless chat endpoint unreachable (running locally/offline). Falling back to Local Knowledge Engine:", err.message);
       }
 
       if (!responseReceived) {
         // Zero-fail Local Knowledge Engine
-        statusLabel.innerHTML = '<span class="status-dot" style="background: #E9B44C;"></span> Local Knowledge Mode';
+        statusLabel.innerHTML = '<span class="status-dot" style="background: #E9B44C;"></span> Local AI Guide';
         setTimeout(() => {
           showAITypingIndicator(false);
           const fallbackData = queryLocalKnowledgeEngine(userText);
@@ -3872,7 +3933,7 @@
       document.getElementById("ai-send-btn").disabled = false;
     }
 
-    function addAIMessageToUI(sender, text, recommendation = null) {
+    function addAIMessageToUI(sender, text, recommendation = null, showDestinationChips = false) {
       const list = document.getElementById("ai-messages-list");
       const msgDiv = document.createElement("div");
       msgDiv.className = `ai-message ${sender === 'user' ? 'ai-msg-user' : 'ai-msg-assistant'}`;
@@ -3888,11 +3949,27 @@
 
       msgDiv.innerHTML = `<p>${formattedText}</p>`;
 
+      if (showDestinationChips) {
+        const chipsDiv = document.createElement("div");
+        chipsDiv.style.display = "flex";
+        chipsDiv.style.gap = "6px";
+        chipsDiv.style.flexWrap = "wrap";
+        chipsDiv.style.marginTop = "10px";
+        chipsDiv.innerHTML = `
+          <button class="quick-chip" onclick="handleQuickAsk('Tell me about Jamui tourism')">🌲 Jamui</button>
+          <button class="quick-chip" onclick="handleQuickAsk('Tell me about Bodh Gaya tourism')">🪷 Bodh Gaya</button>
+          <button class="quick-chip" onclick="handleQuickAsk('Tell me about Nalanda tourism')">📜 Nalanda</button>
+          <button class="quick-chip" onclick="handleQuickAsk('Tell me about Sonepur Mela')">🐘 Sonepur Mela</button>
+          <button class="quick-chip" onclick="handleQuickAsk('Tell me about Chhath Ghat')">🌊 Chhath Ghat</button>
+        `;
+        msgDiv.appendChild(chipsDiv);
+      }
+
       if (recommendation) {
         const recCard = document.createElement("div");
         recCard.className = "ai-rec-card";
         const cleanWa = (recommendation.whatsapp || "").replace(/\D/g, "");
-        const waMsg = encodeURIComponent(`Namaste! I found "${recommendation.title}" via GhoomoBihar AI Concierge. I want to inquire about ${recommendation.category}.`);
+        const waMsg = encodeURIComponent(`Namaste! I found "${recommendation.title}" via Shartak AI guide. I want to inquire about ${recommendation.category}.`);
         recCard.innerHTML = `
           <div class="ai-rec-info">
             <div class="ai-rec-title">📍 ${sanitizeHTML(recommendation.title)}</div>
@@ -3933,11 +4010,11 @@
     function queryLocalKnowledgeEngine(query) {
       const q = query.toLowerCase();
 
-      // 1. JAMUI (Host Location)
+      // 1. JAMUI
       if (q.includes("jamui") || q.includes("gidhaur") || q.includes("simultala") || q.includes("minto") || q.includes("patneshwar") || q.includes("nagi")) {
         const matchingListing = listings.find(l => l.site === "jamui" && l.status === "approved") || DEFAULT_LISTINGS[0];
         return {
-          reply: `**Jamui** is the proud host location for the TEJAS Hackathon! 🌲\n\n**Top Experiences in Jamui:**\n• **Gidhaur Royal Heritage:** Tour the historic 19th-century Minto Tower, palace courtyards, and royal archives.\n• **Simultala Pine Hills:** Known as the *'Mini Shimla of Bihar'*, ideal for serene valley walks and fresh local honey.\n• **Nagi-Nakti Bird Sanctuary:** A vibrant wetland hosting thousands of winter migratory birds.\n• **Local Delicacy:** Famous fresh Gidhaur soft chhena sweets.\n\n*Transit from Patna:* ~160 km (~3.5 hours via rail/road to Jamui/Jhajha Junction).`,
+          reply: `**Jamui** is a land of rich heritage, ancient palace lore, and serene pine valleys! 🌲\n\n**Top Experiences in Jamui:**\n• **Gidhaur Royal Heritage:** Tour the historic 19th-century Minto Tower, palace courtyards, and royal archives.\n• **Simultala Pine Hills:** Known as the *'Mini Shimla of Bihar'*, ideal for serene valley walks and fresh local honey.\n• **Nagi-Nakti Bird Sanctuary:** A vibrant wetland hosting thousands of winter migratory birds.\n• **Local Delicacy:** Famous fresh Gidhaur soft chhena sweets.\n\n*Transit from Patna:* ~160 km (~3.5 hours via rail/road to Jamui/Jhajha Junction).`,
           recommendation: matchingListing
         };
       }
@@ -3981,14 +4058,14 @@
       // 6. HOW TO REACH / TRANSIT
       if (q.includes("how to reach") || q.includes("reach") || q.includes("distance") || q.includes("train") || q.includes("station") || q.includes("travel")) {
         return {
-          reply: `**Transit Overview from Patna:** 🚂\n\n• **Jamui (Host):** ~160 km | ~3.5 hrs (Direct train to Jamui/Jhajha or NH-333)\n• **Bodh Gaya:** ~115 km | ~2.5 hrs (Vande Bharat / Jan Shatabdi to Gaya Jn)\n• **Nalanda:** ~90 km | ~2.0 hrs (4-lane highway via Bakhtiyarpur or train to Nalanda/Rajgir)\n• **Sonepur Mela:** ~25 km | ~45 mins (JP Ganga Setu / Digha Bridge)\n• **Chhath Ghats:** In Patna City along the riverfront (15 mins from Patna Jn)`,
+          reply: `**Transit Overview from Patna:** 🚂\n\n• **Jamui:** ~160 km | ~3.5 hrs (Direct train to Jamui/Jhajha or NH-333)\n• **Bodh Gaya:** ~115 km | ~2.5 hrs (Vande Bharat / Jan Shatabdi to Gaya Jn)\n• **Nalanda:** ~90 km | ~2.0 hrs (4-lane highway via Bakhtiyarpur or train to Nalanda/Rajgir)\n• **Sonepur Mela:** ~25 km | ~45 mins (JP Ganga Setu / Digha Bridge)\n• **Chhath Ghats:** In Patna City along the riverfront (15 mins from Patna Jn)`,
           recommendation: null
         };
       }
 
       // 7. DEFAULT WELCOME FALLBACK
       return {
-        reply: `Namaste! I can help you explore Bihar's premier heritage sites: **Jamui** (Hackathon Host), **Bodh Gaya**, **Nalanda**, **Sonepur Mela**, and **Chhath Ghat**.\n\nYou can ask me:\n• *"What are the top things to do in Jamui?"*\n• *"Where can I buy authentic GI-tagged Silao Khaja?"*\n• *"How do I reach Simultala pine retreats from Patna?"*\n• *"Connect me with a verified Nalanda ruins guide."*`,
+        reply: `Namaste! 🙏 I am **Shartak**, your GhoomoBihar guide. Where would you like to visit?\n\nYou can ask me:\n• *"What are the top things to do in Jamui?"*\n• *"Where can I buy authentic GI-tagged Silao Khaja?"*\n• *"How do I reach Simultala pine retreats from Patna?"*\n• *"Connect me with a verified Nalanda ruins guide."*`,
         recommendation: null
       };
     }
