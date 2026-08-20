@@ -1563,6 +1563,85 @@
       cursor: not-allowed;
     }
 
+    /* ==========================================================================
+       QR STANDEE POSTER POPUP (ON-SITE PHYSICAL DISCOVERY)
+       ========================================================================== */
+    .qr-standee-card {
+      background: #FFFFFF;
+      border: 3px solid var(--color-teal);
+      border-radius: var(--radius-lg);
+      padding: 24px 20px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      background-image: radial-gradient(var(--color-sand-dark) 15%, transparent 16%), radial-gradient(var(--color-sand-dark) 15%, transparent 16%);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+    }
+
+    .qr-bihar-tag {
+      display: inline-block;
+      background: var(--color-terracotta);
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+      margin-bottom: 8px;
+    }
+
+    .qr-site-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--color-teal-dark);
+      margin-bottom: 4px;
+    }
+
+    .qr-site-subtitle {
+      font-size: 12.5px;
+      color: var(--color-muted);
+      margin-bottom: 16px;
+    }
+
+    .qr-code-frame {
+      background: #FFFFFF;
+      border: 2px dashed var(--color-gold);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: inline-block;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .qr-img-element {
+      width: 190px;
+      height: 190px;
+      display: block;
+      margin: 0 auto;
+      border-radius: var(--radius-sm);
+    }
+
+    .qr-scan-badge {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--color-teal);
+      margin-top: 8px;
+    }
+
+    .qr-instruction {
+      font-size: 12.5px;
+      color: var(--color-charcoal);
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+
+    .qr-no-app-tag {
+      font-size: 11.5px;
+      color: var(--color-badge-verified);
+      font-weight: 700;
+    }
+
     @media (max-width: 860px) {
       .ai-chat-drawer {
         width: 100%;
@@ -1796,10 +1875,13 @@
           <a class="btn-back-link" onclick="showLandingView()">
             <span>←</span> Back to All Bihar Destinations
           </a>
-          <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 8px; flex-wrap: wrap;">
             <span class="hero-badge" id="detail-hero-badge" style="background: var(--color-gold); color: #2D1E01;">
               📍 Destination
             </span>
+            <button class="btn btn-user-badge" style="padding: 4px 12px; font-size: 12px; background: rgba(0,0,0,0.35); color: #FFFFFF; border: 1px solid rgba(255,255,255,0.35);" onclick="openQRModal(currentSite)">
+              <span>📱</span> View On-Site Standee QR
+            </button>
           </div>
           <h1 class="dest-hero-title" id="detail-hero-title">Jamui Heritage & Nature</h1>
           <p class="dest-hero-subtitle" id="detail-hero-subtitle">
@@ -2252,6 +2334,55 @@
         <span>➤</span>
       </button>
     </form>
+  </div>
+
+  <!-- ==========================================================================
+       MODAL 5: DESTINATION ON-SITE QR CODE STANDEE PREVIEW
+       ========================================================================== -->
+  <div id="qr-standee-modal" class="modal-backdrop">
+    <div class="modal-box" style="max-width: 460px; text-align: center;">
+      <div class="modal-header" style="background: var(--color-teal); color: #FFFFFF;">
+        <h3 style="color: #FFFFFF;"><span>📱</span> On-Site Tourism QR Standee</h3>
+        <button class="btn-close-modal" onclick="closeQRModal()" style="color: #FFFFFF;">✕</button>
+      </div>
+      <div class="modal-body" style="padding: 22px;">
+        
+        <!-- Standee Poster Card Frame -->
+        <div class="qr-standee-card" id="qr-standee-poster">
+          <div class="qr-poster-top">
+            <span class="qr-bihar-tag">🪷 BIHAR TOURISM OFFICIAL STAND</span>
+            <h3 id="qr-site-name" class="qr-site-title">Jamui Heritage & Nature</h3>
+            <p id="qr-site-badge" class="qr-site-subtitle">🌟 Hackathon Host Location</p>
+          </div>
+
+          <div class="qr-code-frame">
+            <img id="qr-code-img" src="" alt="Destination QR Code" class="qr-img-element">
+            <div class="qr-scan-badge">⚡ Instant WhatsApp Discovery</div>
+          </div>
+
+          <div class="qr-poster-bottom">
+            <p class="qr-instruction">
+              <strong>Scan with any phone camera</strong> to browse verified local guides, homestays, food & crafts on WhatsApp.
+            </p>
+            <div class="qr-no-app-tag">✓ Zero App Download • Instant Direct Connect</div>
+          </div>
+        </div>
+
+        <!-- Standee Actions -->
+        <div class="form-actions" style="justify-content: center; gap: 8px; margin-top: 18px; flex-wrap: wrap;">
+          <button class="btn btn-primary" onclick="printQRStandee()">
+            <span>🖨️</span> Print / Save Standee
+          </button>
+          <button class="btn btn-user-badge" onclick="copySiteDirectLink()">
+            <span>🔗</span> Copy Direct Link
+          </button>
+          <button class="btn btn-user-badge" onclick="closeQRModal()">
+            Done
+          </button>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <!-- Toast Notification Container -->
@@ -2851,9 +2982,14 @@
                 <strong>Key Highlights:</strong> ${meta.highlights}
               </div>
             </div>
-            <button class="btn btn-primary" style="width: 100%;" onclick="event.stopPropagation(); openSiteDetail('${siteKey}');">
-              Explore ${meta.name} Listings ➔
-            </button>
+            <div style="display: grid; grid-template-columns: 1.35fr 1fr; gap: 8px; margin-top: 10px;">
+              <button class="btn btn-primary" style="font-size: 13px;" onclick="event.stopPropagation(); openSiteDetail('${siteKey}');">
+                Explore ${meta.name} ➔
+              </button>
+              <button class="btn btn-user-badge" style="padding: 8px 10px; font-size: 12px; justify-content: center;" onclick="event.stopPropagation(); openQRModal('${siteKey}');">
+                <span>📱</span> Standee QR
+              </button>
+            </div>
           </div>
         `;
         container.appendChild(card);
@@ -3857,7 +3993,51 @@
       };
     }
 
-    // --- 14. TOAST NOTIFICATION UTILITY ---
+    // ==========================================================================
+    // --- 14. DESTINATION ON-SITE QR STANDEE MODAL ---
+    // ==========================================================================
+    function openQRModal(siteKey) {
+      if (!siteKey || !SITE_METADATA[siteKey]) siteKey = currentSite || "jamui";
+      const meta = SITE_METADATA[siteKey];
+
+      document.getElementById("qr-site-name").textContent = `${meta.name} Heritage Standee`;
+      document.getElementById("qr-site-badge").textContent = `${meta.badge} • On-Site QR Scan`;
+
+      const baseUrl = window.location.href.split('#')[0].split('?')[0];
+      const targetUrl = `${baseUrl}#site=${siteKey}`;
+
+      const qrImg = document.getElementById("qr-code-img");
+      qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&color=1A535C&bgcolor=FFFFFF&data=${encodeURIComponent(targetUrl)}`;
+      
+      // Fallback SVG if offline or QR API blocked
+      qrImg.onerror = function() {
+        qrImg.src = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%23ffffff"/><rect x="20" y="20" width="50" height="50" fill="%231A535C"/><rect x="30" y="30" width="30" height="30" fill="%23ffffff"/><rect x="38" y="38" width="14" height="14" fill="%231A535C"/><rect x="130" y="20" width="50" height="50" fill="%231A535C"/><rect x="140" y="30" width="30" height="30" fill="%23ffffff"/><rect x="148" y="38" width="14" height="14" fill="%231A535C"/><rect x="20" y="130" width="50" height="50" fill="%231A535C"/><rect x="30" y="140" width="30" height="30" fill="%23ffffff"/><rect x="38" y="148" width="14" height="14" fill="%231A535C"/><rect x="90" y="30" width="20" height="40" fill="%231A535C"/><rect x="80" y="90" width="40" height="20" fill="%23C85A32"/><rect x="130" y="130" width="50" height="50" fill="%231A535C"/><text x="100" y="180" font-size="12" font-weight="bold" fill="%231A535C" text-anchor="middle">GhoomoBihar QR</text></svg>`;
+      };
+
+      document.getElementById("qr-standee-modal").classList.add("active");
+    }
+
+    function closeQRModal() {
+      document.getElementById("qr-standee-modal").classList.remove("active");
+    }
+
+    function printQRStandee() {
+      window.print();
+    }
+
+    function copySiteDirectLink() {
+      const baseUrl = window.location.href.split('#')[0].split('?')[0];
+      const targetUrl = `${baseUrl}#site=${currentSite}`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(targetUrl).then(() => {
+          showToast("🔗 Standee link copied to clipboard!");
+        });
+      } else {
+        showToast(`🔗 Standee Link: ${targetUrl}`);
+      }
+    }
+
+    // --- 15. TOAST NOTIFICATION UTILITY ---
     function showToast(msg) {
       const container = document.getElementById("toast-container");
       if (!container) return;
