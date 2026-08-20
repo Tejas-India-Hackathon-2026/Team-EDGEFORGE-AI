@@ -3319,6 +3319,29 @@
       return (str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
     }
 
+    function migrateBuiltInListingPhotos() {
+      const photoByListingId = {
+        "nl-g-01": "assets/nalanda_ruins.jpeg",
+        "nl-f-01": "assets/silao_khaja.jpeg",
+        "nl-c-01": "assets/bawan_buti_weaving.jpeg"
+      };
+
+      if (!Array.isArray(listings)) return;
+
+      let changed = false;
+      listings = listings.map((listing) => {
+        const updatedPhoto = photoByListingId[listing.id];
+        if (!updatedPhoto || listing.photo === updatedPhoto) return listing;
+
+        changed = true;
+        return { ...listing, photo: updatedPhoto };
+      });
+
+      if (changed) {
+        localStorage.setItem("ghoomobihar_listings", JSON.stringify(listings));
+      }
+    }
+
     // --- 4. INITIALIZATION ---
     function initApp() {
       // Load listings
@@ -3333,6 +3356,9 @@
         listings = [...DEFAULT_LISTINGS];
         saveListings();
       }
+
+      // Keep existing browsers in sync when built-in listing artwork changes.
+      migrateBuiltInListingPhotos();
 
       // Check traveler profile
       const savedTraveler = localStorage.getItem("ghoomobihar_traveler_profile");
