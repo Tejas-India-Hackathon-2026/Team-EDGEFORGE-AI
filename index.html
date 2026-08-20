@@ -1652,6 +1652,9 @@
       }
     }
   </style>
+
+  <!-- Supabase JS Client (v2) -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onload="if (typeof initSupabaseAuth === 'function') initSupabaseAuth();"></script>
 </head>
 <body>
 
@@ -1976,7 +1979,7 @@
   </main>
 
   <!-- ==========================================================================
-       MODAL 1: UNIFIED AUTH MODAL (SIMPLIFIED PASSWORDLESS VENDOR & TRAVELER)
+       MODAL 1: UNIFIED AUTH MODAL (SUPABASE EMAIL AUTH & TRAVELER)
        ========================================================================== -->
   <div id="unified-auth-modal" class="modal-backdrop">
     <div class="modal-box">
@@ -1988,21 +1991,26 @@
       <div class="modal-tabs">
         <button id="auth-tab-vendor" class="modal-tab-btn active" onclick="switchAuthTab('vendor')">👑 Business / Vendor</button>
         <button id="auth-tab-traveler" class="modal-tab-btn" onclick="switchAuthTab('traveler')">🎒 Traveler (Optional)</button>
+        <button id="auth-tab-admin" class="modal-tab-btn" onclick="switchAuthTab('admin')">⚙️ Admin Mode</button>
       </div>
 
       <div class="modal-body">
-        <!-- TAB A: SIMPLIFIED PASSWORDLESS VENDOR AUTH -->
+        <!-- TAB A: SUPABASE EMAIL AUTH FOR BUSINESS / VENDOR -->
         <div id="auth-view-vendor">
           
-          <!-- Vendor Phone Login Form (Passwordless with Security Check) -->
+          <!-- Vendor Email Login Form -->
           <div id="vendor-login-section">
-            <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 16px;">
-              Enter your registered phone number to manage your listings and view tourist inquiries.
+            <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
+              Sign in to your business dashboard with your verified email and password.
             </p>
-            <form id="vendor-login-form" onsubmit="handleVendorAuthSubmit(event)">
+            <form id="vendor-login-form" onsubmit="handleVendorLoginSubmit(event)">
               <div class="form-group">
-                <label for="v-login-phone">Your Phone / WhatsApp Number *</label>
-                <input type="tel" id="v-login-phone" placeholder="e.g. 9876543210" required maxlength="12">
+                <label for="v-login-email">Email Address *</label>
+                <input type="email" id="v-login-email" placeholder="e.g. provider@gmail.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="v-login-password">Password *</label>
+                <input type="password" id="v-login-password" placeholder="Enter your password" required minlength="6" autocomplete="current-password">
               </div>
               <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
                 <label for="v-login-captcha" id="v-login-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
@@ -2012,19 +2020,24 @@
               </div>
               <div id="vendor-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
               
-              <div class="form-actions" style="justify-content: space-between; align-items: center;">
+              <div class="form-actions" style="justify-content: space-between; align-items: center; margin-top: 14px;">
                 <a href="#" onclick="toggleVendorSignupView(true); return false;" style="font-size: 12.5px; color: var(--color-terracotta); font-weight: 700;">
                   New business? Register here →
                 </a>
-                <button type="submit" class="btn btn-primary">Continue</button>
+                <button type="submit" id="v-login-submit-btn" class="btn btn-primary">Sign In</button>
+              </div>
+
+              <div style="margin-top: 16px; padding-top: 10px; border-top: 1px dashed var(--color-border); text-align: center; font-size: 12px;">
+                <span style="color: var(--color-muted);">Site administrator?</span>
+                <a href="#" onclick="switchAuthTab('admin'); return false;" style="color: var(--color-terracotta); font-weight: 600; margin-left: 4px;">Open Admin Mode →</a>
               </div>
             </form>
           </div>
 
-          <!-- Vendor Registration Form (With Email, Security Check & No Password) -->
+          <!-- Vendor Registration Form (With Email, Password, Contact Phone & Math Check) -->
           <div id="vendor-signup-section" style="display: none;">
             <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
-              Register your local service to get direct customer leads via WhatsApp and booking requests.
+              Register your business to connect with tourists. An email verification link will be sent to confirm your identity.
             </p>
             <form id="vendor-signup-form" onsubmit="handleVendorSignupSubmit(event)">
               <div class="form-group">
@@ -2032,13 +2045,17 @@
                 <input type="text" id="v-signup-name" placeholder="e.g. Sunil Kumar (Simultala Guides)" required maxlength="60">
               </div>
               <div class="form-group">
-                <label for="v-signup-phone">Phone / WhatsApp Number *</label>
-                <input type="tel" id="v-signup-phone" placeholder="e.g. 9123456780" required pattern="[0-9]{10,12}" maxlength="12">
-                <div class="form-hint">Used as your single login identifier. No password needed!</div>
+                <label for="v-signup-email">Email Address *</label>
+                <input type="email" id="v-signup-email" placeholder="e.g. provider@gmail.com" required autocomplete="email">
               </div>
               <div class="form-group">
-                <label for="v-signup-email">Contact Email Address *</label>
-                <input type="email" id="v-signup-email" placeholder="e.g. provider@gmail.com" required>
+                <label for="v-signup-password">Password (min 6 characters) *</label>
+                <input type="password" id="v-signup-password" placeholder="Create a password" required minlength="6" autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label for="v-signup-phone">Phone / WhatsApp Number (Contact Only) *</label>
+                <input type="tel" id="v-signup-phone" placeholder="e.g. 9123456780" required pattern="[0-9]{10,12}" maxlength="12">
+                <div class="form-hint">Public business contact number for tourist calls and WhatsApp inquiries (not used for login).</div>
               </div>
               <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
                 <label for="v-signup-captcha" id="v-signup-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
@@ -2047,11 +2064,13 @@
                 <input type="number" id="v-signup-captcha" placeholder="Enter answer" required style="background: #FFFFFF;">
               </div>
               
-              <div class="form-actions" style="justify-content: space-between; align-items: center;">
+              <div id="vendor-signup-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
+
+              <div class="form-actions" style="justify-content: space-between; align-items: center; margin-top: 14px;">
                 <a href="#" onclick="toggleVendorSignupView(false); return false;" style="font-size: 12.5px; color: var(--color-muted); font-weight: 600;">
                   ← Back to Login
                 </a>
-                <button type="submit" class="btn btn-primary">Create Account</button>
+                <button type="submit" id="v-signup-submit-btn" class="btn btn-primary">Create Account</button>
               </div>
             </form>
           </div>
@@ -2079,6 +2098,30 @@
                 Clear Saved Profile
               </button>
               <button type="submit" class="btn btn-primary">Save Traveler Profile</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- TAB C: ADMIN MODE -->
+        <div id="auth-view-admin" style="display: none;">
+          <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
+            Platform administration portal for managing listings, approvals, and platform metrics.
+          </p>
+          <form id="admin-login-form" onsubmit="handleAdminAuthSubmit(event)">
+            <div class="form-group">
+              <label for="admin-login-phone">Admin Phone Number *</label>
+              <input type="tel" id="admin-login-phone" placeholder="Enter admin phone (e.g. 9898989800)" required maxlength="12">
+            </div>
+            <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
+              <label for="admin-login-captcha" id="admin-login-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
+                Security Check: What is 4 + 3? *
+              </label>
+              <input type="number" id="admin-login-captcha" placeholder="Enter answer" required style="background: #FFFFFF;">
+            </div>
+            <div id="admin-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
+
+            <div class="form-actions" style="justify-content: flex-end; margin-top: 14px;">
+              <button type="submit" class="btn btn-primary">Unlock Admin Panel</button>
             </div>
           </form>
         </div>
@@ -2413,6 +2456,24 @@
        JAVASCRIPT APPLICATION ENGINE
        ========================================================================== -->
   <script>
+    // --- 0. SUPABASE CLIENT INITIALIZATION ---
+    const SUPABASE_URL = "https://rbvspugzkpjfscweuykh.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_FgqJZJiv48R_LUJ28P_M2A__4dr4HVK";
+
+    let supabaseClient = null;
+    function getSupabaseClient() {
+      if (!supabaseClient && window.supabase && typeof window.supabase.createClient === "function") {
+        try {
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+        } catch (error) {
+          console.error("Supabase initialization failed:", error);
+        }
+      }
+      return supabaseClient;
+    }
+    // Attempt immediate init if CDN already loaded
+    getSupabaseClient();
+
     // --- 1. CONSTANTS & METADATA ---
     const ADMIN_PHONE = "9898989800";
 
@@ -2873,20 +2934,13 @@
         }
       }
 
-      // Check vendor / admin session
-      const savedVendor = localStorage.getItem("ghoomobihar_current_vendor");
-      if (savedVendor) {
-        try {
-          currentVendor = JSON.parse(savedVendor);
-        } catch (e) {
-          currentVendor = null;
-        }
-      }
-
+      // Check admin session
       const savedAdmin = localStorage.getItem("ghoomobihar_admin_active");
       if (savedAdmin === "true") {
         isAdminActive = true;
       }
+
+      initSupabaseAuth();
 
       // Build landing gallery & update UI
       renderLandingDestinations();
@@ -3192,10 +3246,66 @@
       });
     }
 
-    // --- 7. SIMPLIFIED PASSWORDLESS VENDOR & TRAVELER AUTH ---
-    // --- 7. AUTH & SECURITY CHECK ENGINE ---
+    // --- 7. SUPABASE EMAIL AUTH & SECURITY CHECK ENGINE ---
     let currentLoginCaptchaAns = 7;
     let currentSignupCaptchaAns = 7;
+
+    async function initSupabaseAuth() {
+      const sb = getSupabaseClient();
+      if (!sb) return;
+      try {
+        sb.auth.onAuthStateChange((event, session) => {
+          if (event === "SIGNED_IN" && session && session.user) {
+            const user = session.user;
+            if (user.email_confirmed_at || user.confirmed_at) {
+              const meta = user.user_metadata || {};
+              currentVendor = {
+                id: user.id,
+                name: meta.name || (user.email ? user.email.split("@")[0] : "Vendor"),
+                phone: meta.phone || "",
+                email: user.email
+              };
+              isAdminActive = false;
+              localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
+              localStorage.removeItem("ghoomobihar_admin_active");
+              updateAuthHeaderUI();
+              renderVendorDashboard();
+            } else {
+              currentVendor = null;
+              localStorage.removeItem("ghoomobihar_current_vendor");
+              updateAuthHeaderUI();
+            }
+          } else if (event === "SIGNED_OUT") {
+            currentVendor = null;
+            localStorage.removeItem("ghoomobihar_current_vendor");
+            updateAuthHeaderUI();
+          }
+        });
+
+        const { data: { session } } = await sb.auth.getSession();
+        if (session && session.user && (session.user.email_confirmed_at || session.user.confirmed_at)) {
+          const meta = session.user.user_metadata || {};
+          currentVendor = {
+            id: session.user.id,
+            name: meta.name || (session.user.email ? session.user.email.split("@")[0] : "Vendor"),
+            phone: meta.phone || "",
+            email: session.user.email
+          };
+          localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
+          updateAuthHeaderUI();
+          renderVendorDashboard();
+        } else {
+          currentVendor = null;
+          localStorage.removeItem("ghoomobihar_current_vendor");
+          updateAuthHeaderUI();
+        }
+      } catch (err) {
+        console.warn("Supabase auth check notice:", err.message);
+        currentVendor = null;
+        localStorage.removeItem("ghoomobihar_current_vendor");
+        updateAuthHeaderUI();
+      }
+    }
 
     function generateMathCaptcha() {
       const n1 = Math.floor(Math.random() * 6) + 3;
@@ -3213,11 +3323,23 @@
       if (signupLabel) signupLabel.textContent = `Security Check: What is ${s1} + ${s2}? *`;
       const signupInput = document.getElementById("v-signup-captcha");
       if (signupInput) signupInput.value = "";
+
+      const adminLabel = document.getElementById("admin-login-captcha-label");
+      if (adminLabel) adminLabel.textContent = `Security Check: What is ${n1} + ${n2}? *`;
+      const adminInput = document.getElementById("admin-login-captcha");
+      if (adminInput) adminInput.value = "";
     }
 
     function openUnifiedAuthModal(defaultTab = 'vendor') {
       switchAuthTab(defaultTab);
-      document.getElementById("vendor-login-msg").style.display = "none";
+      document.getElementById("vendor-login-section").style.display = "block";
+      document.getElementById("vendor-signup-section").style.display = "none";
+      const loginMsg = document.getElementById("vendor-login-msg");
+      if (loginMsg) loginMsg.style.display = "none";
+      const signupMsg = document.getElementById("vendor-signup-msg");
+      if (signupMsg) signupMsg.style.display = "none";
+      const adminMsg = document.getElementById("admin-login-msg");
+      if (adminMsg) adminMsg.style.display = "none";
       generateMathCaptcha();
       document.getElementById("unified-auth-modal").classList.add("active");
 
@@ -3238,25 +3360,118 @@
     function switchAuthTab(tab) {
       document.getElementById("auth-tab-vendor").classList.toggle("active", tab === 'vendor');
       document.getElementById("auth-tab-traveler").classList.toggle("active", tab === 'traveler');
+      const adminTab = document.getElementById("auth-tab-admin");
+      if (adminTab) adminTab.classList.toggle("active", tab === 'admin');
+
       document.getElementById("auth-view-vendor").style.display = tab === 'vendor' ? 'block' : 'none';
       document.getElementById("auth-view-traveler").style.display = tab === 'traveler' ? 'block' : 'none';
+      const adminView = document.getElementById("auth-view-admin");
+      if (adminView) adminView.style.display = tab === 'admin' ? 'block' : 'none';
     }
 
     function toggleVendorSignupView(showSignup) {
       document.getElementById("vendor-login-section").style.display = showSignup ? "none" : "block";
       document.getElementById("vendor-signup-section").style.display = showSignup ? "block" : "none";
-      document.getElementById("vendor-login-msg").style.display = "none";
+      const loginMsg = document.getElementById("vendor-login-msg");
+      if (loginMsg) loginMsg.style.display = "none";
+      const signupMsg = document.getElementById("vendor-signup-msg");
+      if (signupMsg) signupMsg.style.display = "none";
       generateMathCaptcha();
     }
 
-    // Passwordless Vendor/Admin Login (With Security Check)
-    function handleVendorAuthSubmit(e) {
+    // Business/Vendor Login with Supabase Email/Password
+    async function handleVendorLoginSubmit(e) {
       e.preventDefault();
-      const phone = document.getElementById("v-login-phone").value.trim();
+      const email = sanitizeHTML((document.getElementById("v-login-email").value || "").trim());
+      const password = (document.getElementById("v-login-password").value || "").trim();
       const msgDiv = document.getElementById("vendor-login-msg");
       const enteredCaptcha = parseInt((document.getElementById("v-login-captcha").value || "").trim());
+      const submitBtn = document.getElementById("v-login-submit-btn");
 
-      // 1. Check Hardcoded Admin Phone
+      // Security Check verification
+      if (enteredCaptcha !== currentLoginCaptchaAns) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Please solve the simple math problem to continue.</span>`;
+        msgDiv.style.display = "block";
+        generateMathCaptcha();
+        return;
+      }
+
+      const sb = getSupabaseClient();
+      if (!sb) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Authentication service unavailable.</span>`;
+        msgDiv.style.display = "block";
+        return;
+      }
+
+      msgDiv.style.display = "none";
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Signing in..."; }
+
+      try {
+        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          generateMathCaptcha();
+          const errStr = (error.message || "").toLowerCase();
+          if (errStr.includes("email not confirmed") || errStr.includes("not verified")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Please verify your email before signing in. Check your inbox.</span>`;
+          } else if (errStr.includes("invalid login credentials") || errStr.includes("invalid grant")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Invalid email or password. Please try again.</span>`;
+          } else {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Login failed. Please check your credentials and try again.</span>`;
+          }
+          msgDiv.style.display = "block";
+          return;
+        }
+
+        // Verify email confirmed status
+        if (data.user && !data.user.email_confirmed_at && !data.user.confirmed_at) {
+          await sb.auth.signOut();
+          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Please verify your email before signing in. Check your inbox.</span>`;
+          msgDiv.style.display = "block";
+          return;
+        }
+
+        const meta = (data.user && data.user.user_metadata) || {};
+        currentVendor = {
+          id: data.user.id,
+          name: meta.name || (data.user.email ? data.user.email.split("@")[0] : "Vendor"),
+          phone: meta.phone || "",
+          email: data.user.email
+        };
+        isAdminActive = false;
+        localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
+        localStorage.removeItem("ghoomobihar_admin_active");
+
+        updateAuthHeaderUI();
+        closeUnifiedAuthModal();
+        showToast(`🎉 Welcome back, ${currentVendor.name}!`);
+
+        document.getElementById("vendor-dashboard").classList.add("active");
+        document.getElementById("admin-panel").classList.remove("active");
+        renderVendorDashboard();
+        document.getElementById("vendor-dashboard").scrollIntoView({ behavior: 'smooth' });
+      } catch (err) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Network error. Please try again.</span>`;
+        msgDiv.style.display = "block";
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Sign In"; }
+      }
+    }
+
+    // Platform Admin Mode Authentication
+    function handleAdminAuthSubmit(e) {
+      e.preventDefault();
+      const phone = sanitizeHTML((document.getElementById("admin-login-phone").value || "").trim());
+      const enteredCaptcha = parseInt((document.getElementById("admin-login-captcha").value || "").trim());
+      const msgDiv = document.getElementById("admin-login-msg");
+
+      if (enteredCaptcha !== currentLoginCaptchaAns) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Please solve the simple math problem to continue.</span>`;
+        msgDiv.style.display = "block";
+        generateMathCaptcha();
+        return;
+      }
+
       if (phone === ADMIN_PHONE) {
         isAdminActive = true;
         currentVendor = null;
@@ -3271,79 +3486,100 @@
         document.getElementById("vendor-dashboard").classList.remove("active");
         renderAdminTables();
         document.getElementById("admin-panel").scrollIntoView({ behavior: 'smooth' });
-        return;
-      }
-
-      // Security Check verification for standard vendor logins
-      if (enteredCaptcha !== currentLoginCaptchaAns) {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Please solve the simple math problem to continue.</span>`;
+      } else {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Invalid admin phone number.</span>`;
         msgDiv.style.display = "block";
         generateMathCaptcha();
-        return;
-      }
-
-      // 2. Check Stored Vendor Accounts
-      const vendors = JSON.parse(localStorage.getItem("ghoomobihar_vendors") || "[]");
-      const matched = vendors.find(v => v.phone.replace(/\D/g, "") === phone.replace(/\D/g, ""));
-
-      if (matched) {
-        currentVendor = matched;
-        isAdminActive = false;
-        localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(matched));
-        localStorage.removeItem("ghoomobihar_admin_active");
-
-        updateAuthHeaderUI();
-        closeUnifiedAuthModal();
-        showToast(`🎉 Welcome back, ${matched.name}!`);
-
-        document.getElementById("vendor-dashboard").classList.add("active");
-        document.getElementById("admin-panel").classList.remove("active");
-        renderVendorDashboard();
-        document.getElementById("vendor-dashboard").scrollIntoView({ behavior: 'smooth' });
-      } else {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Phone not registered. Click <a href="#" onclick="toggleVendorSignupView(true); document.getElementById('v-signup-phone').value='${phone}'; return false;" style="font-weight: 700; text-decoration: underline;">here to register your business</a> in 10 seconds!</span>`;
-        msgDiv.style.display = "block";
       }
     }
 
-    // Simplified Vendor Signup (With Email, Security Check & No Password)
-    function handleVendorSignupSubmit(e) {
+    // Business/Vendor Registration with Supabase Email/Password
+    async function handleVendorSignupSubmit(e) {
       e.preventDefault();
-      const name = sanitizeHTML(document.getElementById("v-signup-name").value.trim());
-      const phone = sanitizeHTML(document.getElementById("v-signup-phone").value.trim());
-      const email = sanitizeHTML(document.getElementById("v-signup-email").value.trim());
+      const name = sanitizeHTML((document.getElementById("v-signup-name").value || "").trim());
+      const email = sanitizeHTML((document.getElementById("v-signup-email").value || "").trim());
+      const password = (document.getElementById("v-signup-password").value || "").trim();
+      const phone = sanitizeHTML((document.getElementById("v-signup-phone").value || "").trim());
       const enteredCaptcha = parseInt((document.getElementById("v-signup-captcha").value || "").trim());
+      const msgDiv = document.getElementById("vendor-signup-msg");
+      const submitBtn = document.getElementById("v-signup-submit-btn");
 
       // Security Check Verification
       if (enteredCaptcha !== currentSignupCaptchaAns) {
-        alert("Incorrect security check answer. Please solve the simple math problem to create an account.");
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Please solve the simple math problem to create an account.</span>`;
+        msgDiv.style.display = "block";
         generateMathCaptcha();
         return;
       }
 
-      const vendors = JSON.parse(localStorage.getItem("ghoomobihar_vendors") || "[]");
-      if (vendors.find(v => v.phone === phone)) {
-        alert("A business with this phone number is already registered. Logging you in!");
-      } else {
-        const newVendor = { id: "v-" + Date.now(), name, phone, email };
-        vendors.push(newVendor);
-        localStorage.setItem("ghoomobihar_vendors", JSON.stringify(vendors));
+      if (!name || !email || !password) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Please fill in all required fields.</span>`;
+        msgDiv.style.display = "block";
+        return;
       }
 
-      const activeVendor = vendors.find(v => v.phone === phone) || { name, phone, email };
-      currentVendor = activeVendor;
-      isAdminActive = false;
-      localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(activeVendor));
-      localStorage.removeItem("ghoomobihar_admin_active");
+      if (password.length < 6) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Password must be at least 6 characters long.</span>`;
+        msgDiv.style.display = "block";
+        return;
+      }
 
-      updateAuthHeaderUI();
-      closeUnifiedAuthModal();
-      showToast(`🎉 Business Registered! Welcome, ${name}.`);
+      const sb = getSupabaseClient();
+      if (!sb) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Authentication service unavailable.</span>`;
+        msgDiv.style.display = "block";
+        return;
+      }
 
-      document.getElementById("vendor-dashboard").classList.add("active");
-      document.getElementById("admin-panel").classList.remove("active");
-      renderVendorDashboard();
-      document.getElementById("vendor-dashboard").scrollIntoView({ behavior: 'smooth' });
+      msgDiv.style.display = "none";
+      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Creating Account..."; }
+
+      try {
+        const { data, error } = await sb.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              name: name,
+              phone: phone
+            },
+            emailRedirectTo: "https://ghoomobihar.netlify.app"
+          }
+        });
+
+        if (error) {
+          generateMathCaptcha();
+          const errStr = (error.message || "").toLowerCase();
+          if (errStr.includes("already registered") || errStr.includes("already exists")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">An account with this email is already registered. Please <a href="#" onclick="toggleVendorSignupView(false); return false;" style="font-weight:700; text-decoration:underline;">sign in</a>.</span>`;
+          } else if (errStr.includes("password")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Password is too weak. Please use at least 6 characters.</span>`;
+          } else {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Registration failed. Please check your details and try again.</span>`;
+          }
+          msgDiv.style.display = "block";
+          return;
+        }
+
+        // Always ensure user is not automatically logged in
+        if (sb) {
+          await sb.auth.signOut();
+        }
+
+        // Show confirmation message
+        msgDiv.innerHTML = `
+          <div style="background: #EBF8FF; color: #2B6CB0; border: 1px solid #BEE3F8; padding: 10px 12px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.4;">
+            Account created. Please check your email and verify your email address before logging in.
+          </div>
+        `;
+        msgDiv.style.display = "block";
+        showToast("✉️ Account created! Please check your email to verify before logging in.");
+      } catch (err) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Network error. Please try again.</span>`;
+        msgDiv.style.display = "block";
+      } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Create Account"; }
+      }
     }
 
     // Traveler Profile
@@ -3368,7 +3604,16 @@
       showToast("Traveler profile cleared.");
     }
 
-    function handleLogout() {
+    async function handleLogout() {
+      const sb = getSupabaseClient();
+      if (sb) {
+        try {
+          await sb.auth.signOut();
+        } catch (err) {
+          console.warn("Supabase signOut notice:", err.message);
+        }
+      }
+
       currentVendor = null;
       isAdminActive = false;
       localStorage.removeItem("ghoomobihar_current_vendor");
@@ -4132,7 +4377,11 @@
     }
 
     // Initialize application on DOM ready
-    document.addEventListener("DOMContentLoaded", initApp);
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initApp);
+    } else {
+      initApp();
+    }
   </script>
 </body>
 </html>
