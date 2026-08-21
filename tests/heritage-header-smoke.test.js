@@ -16,6 +16,8 @@ assert.match(html, /id="account-menu-panel"[^>]+role="menu"/, "Account options m
 assert.match(html, /function toggleAccountMenu\(event\)/, "Account menu toggle must be implemented");
 assert.match(html, /function closeAccountMenu\(\)/, "Account menu close behavior must be implemented");
 assert.match(html, /document\.getElementById\("header-auth-menu-content"\)/, "Dynamic auth actions must stay inside the menu");
+assert.match(html, /function showLandingView\(\) \{\s+closeAccountMenu\(\);/, "Account menu must close when returning home");
+assert.match(html, /function openSiteDetail\(siteKey\) \{\s+closeAccountMenu\(\);/, "Account menu must close when opening a destination");
 
 assert.match(html, /url\('assets\/bihar-heritage-listing-bg\.webp'\)/, "Destination listings must use the heritage backdrop");
 assert.strictEqual(backdrop.subarray(0, 4).toString("ascii"), "RIFF", "Backdrop must be an optimized WebP asset");

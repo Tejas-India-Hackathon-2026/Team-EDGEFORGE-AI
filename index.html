@@ -3994,6 +3994,7 @@
 
     // --- 5. NAVIGATION VIEW SWITCHING ---
     function showLandingView() {
+      closeAccountMenu();
       activeView = "landing";
       document.getElementById("view-landing-home").style.display = "block";
       document.getElementById("view-dest-detail").style.display = "none";
@@ -4003,6 +4004,7 @@
     }
 
     function openSiteDetail(siteKey) {
+      closeAccountMenu();
       if (!SITE_METADATA[siteKey]) siteKey = "jamui";
       currentSite = siteKey;
       activeView = "detail";
