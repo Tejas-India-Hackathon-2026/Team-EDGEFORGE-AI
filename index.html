@@ -3896,14 +3896,48 @@
       }
     }
 
+    const ADMIN_AUTH_RETRY_DELAYS_MS = [0, 500, 1200];
+
+    function waitForAdminRetry(delayMs) {
+      return new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+
     async function fetchAdminSession(options = {}) {
-      const response = await fetch("/.netlify/functions/admin-auth", {
-        credentials: "same-origin",
-        cache: "no-store",
-        ...options
-      });
-      const payload = await response.json().catch(() => ({}));
-      return { response, payload };
+      let lastError = null;
+
+      for (let attempt = 0; attempt < ADMIN_AUTH_RETRY_DELAYS_MS.length; attempt += 1) {
+        if (ADMIN_AUTH_RETRY_DELAYS_MS[attempt] > 0) {
+          await waitForAdminRetry(ADMIN_AUTH_RETRY_DELAYS_MS[attempt]);
+        }
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+        try {
+          const response = await fetch("/.netlify/functions/admin-auth", {
+            credentials: "same-origin",
+            cache: "no-store",
+            ...options,
+            signal: controller.signal
+          });
+          const payload = await response.json().catch(() => ({}));
+
+          // Netlify may briefly return a gateway error while a new function
+          // instance starts. Retry those temporary responses automatically.
+          if ([502, 503, 504].includes(response.status) && attempt < ADMIN_AUTH_RETRY_DELAYS_MS.length - 1) {
+            continue;
+          }
+
+          return { response, payload };
+        } catch (error) {
+          lastError = error;
+          if (attempt === ADMIN_AUTH_RETRY_DELAYS_MS.length - 1) throw error;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }
+
+      throw lastError || new Error("Admin authentication request failed.");
     }
 
     function activateAdminDashboard() {
@@ -3958,7 +3992,7 @@
         showToast("Admin session verified. Dashboard unlocked.");
       } catch (err) {
         console.warn("Admin login notice:", err.message);
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Secure admin service is unreachable. Please try again.</span>`;
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Secure admin service could not be reached after automatic retries. Refresh once and try again.</span>`;
         msgDiv.style.display = "block";
       } finally {
         passwordInput.value = "";
