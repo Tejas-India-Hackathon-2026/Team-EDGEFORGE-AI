@@ -2376,24 +2376,22 @@
           <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
             Platform administration portal for managing listings, approvals, and platform metrics.
           </p>
-          <form id="admin-login-form" onsubmit="handleAdminMagicLink(event)">
+          <form id="admin-login-form" onsubmit="handleAdminServerLogin(event)">
             <div class="form-group">
-              <label for="admin-login-email">Confirmed Admin Email</label>
-              <input type="email" id="admin-login-email" placeholder="Enter the exact Supabase admin email" required autocomplete="email" spellcheck="false">
+              <label for="admin-login-user-id">Admin User ID *</label>
+              <input type="text" id="admin-login-user-id" placeholder="Enter your user ID" required autocomplete="username" spellcheck="false" maxlength="100">
             </div>
-            <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
-              <label for="admin-login-captcha" id="admin-login-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
-                Security Check: What is 4 + 3? *
-              </label>
-              <input type="number" id="admin-login-captcha" placeholder="Enter answer" required style="background: #FFFFFF;">
+            <div class="form-group">
+              <label for="admin-login-password">Admin Password *</label>
+              <input type="password" id="admin-login-password" placeholder="Enter password" required autocomplete="current-password" minlength="12" maxlength="256">
             </div>
             <div id="admin-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
 
             <div class="form-actions" style="justify-content: flex-end; margin-top: 14px;">
-              <button type="submit" id="admin-magic-link-btn" class="btn btn-primary">Send Secure Admin Link</button>
+              <button type="submit" id="admin-login-submit-btn" class="btn btn-primary">Unlock Admin Panel</button>
             </div>
             <p style="font-size: 11.5px; color: var(--color-muted); margin-top: 10px; text-align: right;">
-              Solve the security check once, send the link, then open the newest email. No password is required.
+              Credentials are verified securely by Netlify and are never stored in this browser.
             </p>
           </form>
         </div>
@@ -3385,6 +3383,7 @@
       }
 
       initSupabaseAuth();
+      initAdminSession();
 
       // Load privacy-minimal tourism feedback signals for the expansion roadmap
       loadTourismFeedback();
@@ -3699,30 +3698,12 @@
     let currentLoginCaptchaAns = 7;
     let currentSignupCaptchaAns = 7;
 
-    function isSupabaseAdmin(user) {
-      return Boolean(user && user.app_metadata && user.app_metadata.role === "admin");
-    }
-
     function applyAuthenticatedUser(user) {
+      if (isAdminActive) return;
       if (!user || (!user.email_confirmed_at && !user.confirmed_at)) {
         currentVendor = null;
-        isAdminActive = false;
         localStorage.removeItem("ghoomobihar_current_vendor");
         updateAuthHeaderUI();
-        return;
-      }
-
-      if (isSupabaseAdmin(user)) {
-        currentVendor = null;
-        isAdminActive = true;
-        localStorage.removeItem("ghoomobihar_current_vendor");
-        updateAuthHeaderUI();
-        const authModal = document.getElementById("unified-auth-modal");
-        if (authModal) authModal.classList.remove("active");
-        const adminPanel = document.getElementById("admin-panel");
-        if (adminPanel) adminPanel.classList.add("active");
-        renderAdminTables();
-        showToast("Admin session verified. Dashboard unlocked.");
         return;
       }
 
@@ -3733,7 +3714,6 @@
         phone: meta.phone || "",
         email: user.email
       };
-      isAdminActive = false;
       localStorage.setItem("ghoomobihar_current_vendor", JSON.stringify(currentVendor));
       updateAuthHeaderUI();
       renderVendorDashboard();
@@ -3748,10 +3728,8 @@
             applyAuthenticatedUser(session.user);
           } else if (event === "SIGNED_OUT") {
             currentVendor = null;
-            isAdminActive = false;
             localStorage.removeItem("ghoomobihar_current_vendor");
             document.getElementById("vendor-dashboard").classList.remove("active");
-            document.getElementById("admin-panel").classList.remove("active");
             updateAuthHeaderUI();
           }
         });
@@ -3761,14 +3739,12 @@
           applyAuthenticatedUser(session.user);
         } else {
           currentVendor = null;
-          isAdminActive = false;
           localStorage.removeItem("ghoomobihar_current_vendor");
           updateAuthHeaderUI();
         }
       } catch (err) {
         console.warn("Supabase auth check notice:", err.message);
         currentVendor = null;
-        isAdminActive = false;
         localStorage.removeItem("ghoomobihar_current_vendor");
         updateAuthHeaderUI();
       }
@@ -3791,10 +3767,6 @@
       const signupInput = document.getElementById("v-signup-captcha");
       if (signupInput) signupInput.value = "";
 
-      const adminLabel = document.getElementById("admin-login-captcha-label");
-      if (adminLabel) adminLabel.textContent = `Security Check: What is ${n1} + ${n2}? *`;
-      const adminInput = document.getElementById("admin-login-captcha");
-      if (adminInput) adminInput.value = "";
     }
 
     function openUnifiedAuthModal(defaultTab = 'vendor') {
@@ -3924,73 +3896,74 @@
       }
     }
 
-    // Passwordless recovery path for an existing Supabase admin account.
-    // The emailed link creates a real Supabase session; app_metadata.role is
-    // still checked before the admin dashboard can be opened.
-    async function handleAdminMagicLink(e) {
-      if (e) e.preventDefault();
-      const email = (document.getElementById("admin-login-email").value || "").trim();
-      const enteredCaptcha = parseInt((document.getElementById("admin-login-captcha").value || "").trim());
+    async function fetchAdminSession(options = {}) {
+      const response = await fetch("/.netlify/functions/admin-auth", {
+        credentials: "same-origin",
+        cache: "no-store",
+        ...options
+      });
+      const payload = await response.json().catch(() => ({}));
+      return { response, payload };
+    }
+
+    function activateAdminDashboard() {
+      isAdminActive = true;
+      currentVendor = null;
+      localStorage.removeItem("ghoomobihar_current_vendor");
+      updateAuthHeaderUI();
+      closeUnifiedAuthModal();
+      document.getElementById("vendor-dashboard").classList.remove("active");
+      document.getElementById("admin-panel").classList.add("active");
+      renderAdminTables();
+    }
+
+    async function initAdminSession() {
+      try {
+        const { response, payload } = await fetchAdminSession({ method: "GET" });
+        if (response.ok && payload.authenticated === true) {
+          activateAdminDashboard();
+        }
+      } catch (err) {
+        console.warn("Admin session check notice:", err.message);
+      }
+    }
+
+    async function handleAdminServerLogin(e) {
+      e.preventDefault();
+      const userIdInput = document.getElementById("admin-login-user-id");
+      const passwordInput = document.getElementById("admin-login-password");
       const msgDiv = document.getElementById("admin-login-msg");
-      const magicLinkBtn = document.getElementById("admin-magic-link-btn");
-
-      if (!email) {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Enter the confirmed admin email first.</span>`;
-        msgDiv.style.display = "block";
-        return;
-      }
-
-      if (enteredCaptcha !== currentLoginCaptchaAns) {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Solve the new question and try again.</span>`;
-        msgDiv.style.display = "block";
-        generateMathCaptcha();
-        return;
-      }
-
-      const sb = getSupabaseClient();
-      if (!sb) {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Authentication service unavailable.</span>`;
-        msgDiv.style.display = "block";
-        return;
-      }
+      const submitBtn = document.getElementById("admin-login-submit-btn");
+      const userId = userIdInput.value.trim();
+      const password = passwordInput.value;
 
       msgDiv.style.display = "none";
-      magicLinkBtn.disabled = true;
-      magicLinkBtn.textContent = "Sending secure link...";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Checking secure access...";
 
       try {
-        const redirectUrl = `${window.location.origin}${window.location.pathname}`;
-        const { error } = await sb.auth.signInWithOtp({
-          email,
-          options: {
-            shouldCreateUser: false,
-            emailRedirectTo: redirectUrl
-          }
+        const { response, payload } = await fetchAdminSession({
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "login", userId, password })
         });
 
-        if (error) {
-          const authMessage = (error.message || "").toLowerCase();
-          if (authMessage.includes("rate") || authMessage.includes("too many")) {
-            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">A login email was requested recently. Check the inbox or wait briefly before trying again.</span>`;
-          } else {
-            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Unable to send the secure link. Confirm that this exact email exists in Supabase Authentication.</span>`;
-          }
+        if (!response.ok || payload.authenticated !== true) {
+          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">${sanitizeHTML(payload.error || "Invalid user ID or password.")}</span>`;
           msgDiv.style.display = "block";
-          generateMathCaptcha();
           return;
         }
 
-        msgDiv.innerHTML = `<span style="color: var(--color-teal); font-weight: 700;">Secure login link sent. Open the newest GhoomoBihar email and click its link; no password is required.</span>`;
-        msgDiv.style.display = "block";
-        generateMathCaptcha();
+        activateAdminDashboard();
+        showToast("Admin session verified. Dashboard unlocked.");
       } catch (err) {
-        console.warn("Admin magic-link notice:", err.message);
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Network error while sending the secure link. Please try once more.</span>`;
+        console.warn("Admin login notice:", err.message);
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Secure admin service is unreachable. Please try again.</span>`;
         msgDiv.style.display = "block";
-        generateMathCaptcha();
       } finally {
-        magicLinkBtn.disabled = false;
-        magicLinkBtn.textContent = "Send Secure Admin Link";
+        passwordInput.value = "";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Unlock Admin Panel";
       }
     }
 
@@ -4106,6 +4079,16 @@
     }
 
     async function handleLogout() {
+      try {
+        await fetchAdminSession({
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "logout" })
+        });
+      } catch (err) {
+        console.warn("Admin signOut notice:", err.message);
+      }
+
       const sb = getSupabaseClient();
       if (sb) {
         try {
@@ -4165,11 +4148,9 @@
     }
 
     async function hasCurrentAdminSession() {
-      const sb = getSupabaseClient();
-      if (!sb) return false;
       try {
-        const { data: { session } } = await sb.auth.getSession();
-        return Boolean(session && isSupabaseAdmin(session.user));
+        const { response, payload } = await fetchAdminSession({ method: "GET" });
+        return response.ok && payload.authenticated === true;
       } catch (err) {
         console.warn("Admin session check notice:", err.message);
         return false;

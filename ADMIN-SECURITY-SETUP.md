@@ -1,16 +1,29 @@
 # Secure admin setup
 
-The previous build exposed a hardcoded admin phone in the page source and trusted a browser `localStorage` flag. The admin portal now uses Supabase email/password authentication and accepts only users whose server-controlled `app_metadata.role` equals `admin`.
+Admin authentication is independent of Supabase. The browser sends the entered user ID and password over HTTPS to `netlify/functions/admin-auth.js`. That function verifies salted hashes stored in Netlify environment variables and returns a signed four-hour session cookie with `HttpOnly`, `Secure` and `SameSite=Strict` flags.
 
-## One-time Supabase steps
+The real user ID, password, hashes and session signing key must never be committed to GitHub or placed in frontend JavaScript.
 
-1. Open Supabase Dashboard → **Authentication → Users**.
-2. Create an admin user with an email and a strong, unique password, or select an existing confirmed user.
-3. Open **SQL Editor** and run `SUPABASE-ADMIN-SETUP.sql` after replacing `REPLACE_WITH_ADMIN_EMAIL`.
-4. Sign out of the website and sign back in through **Admin Mode**.
+## Required Netlify environment variables
 
-Do not place the real password in source code, GitHub, Vercel environment variables, screenshots or documentation.
+| Variable | Purpose |
+| --- | --- |
+| `ADMIN_USER_ID_HASH` | SHA-256 hash of the admin user ID |
+| `ADMIN_PASSWORD_SALT` | Random salt used by scrypt |
+| `ADMIN_PASSWORD_HASH` | 64-byte scrypt output |
+| `ADMIN_SESSION_SECRET` | Random key used to sign session cookies |
+| `ADMIN_ALLOWED_ORIGINS` | Comma-separated trusted origins; normally `https://ghoomobihar.netlify.app` |
+
+Generate these values using a local secret-generation tool. Store the plain user ID and password only in a password manager. After setting the variables under **Netlify → Site configuration → Environment variables**, redeploy the site.
+
+## What the browser can and cannot see
+
+- The source contains only generic placeholders: `Enter your user ID` and `Enter password`.
+- The application never stores the submitted user ID or password in `localStorage`, `sessionStorage`, IndexedDB or a JavaScript-readable cookie.
+- The session cookie is signed and `HttpOnly`, so frontend JavaScript cannot read it.
+- Netlify environment variables and stored hashes are not returned to the browser.
+- A person controlling their own device can inspect values they personally type or view their own HTTPS request in Developer Tools. No website can prevent the device owner from inspecting their own browser. The security goal is to avoid publishing or persistently storing credentials client-side.
 
 ## Security boundary
 
-This prototype stores listings and inquiries in each browser's `localStorage`, so admin changes affect only that browser. Before using a shared production database, move these records to Supabase tables and protect every write with Row Level Security policies that check the authenticated admin role.
+This hackathon prototype still stores listings and inquiries in each browser's `localStorage`, so moderation changes affect only that browser. Production must move these records to a shared database, authorize every write on the server, add rate limiting and keep an audit log. Supabase remains in this repository for vendor authentication and tourism feedback only.
