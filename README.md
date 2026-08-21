@@ -13,6 +13,7 @@
 - [What the prototype demonstrates](#what-the-prototype-demonstrates)
 - [Destination coverage](#destination-coverage)
 - [Architecture](#architecture)
+- [Data persistence and ownership](#data-persistence-and-ownership)
 - [Technology stack](#technology-stack)
 - [User journeys](#user-journeys)
 - [Authentication and security](#authentication-and-security)
@@ -131,13 +132,28 @@ flowchart LR
 6. Booking actions save a prototype inquiry locally and offer direct provider contact.
 7. The public roadmap reads only privacy-safe aggregate feedback through a Supabase RPC.
 
+## Data persistence and ownership
+
+The prototype deliberately uses more than one storage boundary. The browser-local marketplace loop is demonstrable without pretending it is already a production database.
+
+| Record | Current source of truth | Scope |
+| --- | --- | --- |
+| Seed listings | `DEFAULT_LISTINGS` in `index.html` | Deployed application source |
+| Vendor listings and moderation changes | `localStorage.ghoomobihar_listings` | Current browser only |
+| Booking inquiries | `localStorage.ghoomobihar_requests` | Current browser only |
+| Vendor identity | Supabase Auth | Centralized |
+| Tourism feedback | Supabase `tourism_feedback` | Centralized with RLS |
+| Admin session | Netlify Function and signed HttpOnly cookie | Expiring server-verified session |
+
+Clearing browser data removes browser-local listings and inquiries, and those records do not synchronize to another device. See [DATA-ARCHITECTURE.md](DATA-ARCHITECTURE.md) for the exact keys, lifecycle, demonstration steps and safe judging claims.
+
 ## Technology stack
 
 | Layer | Technology | Purpose |
 | --- | --- | --- |
 | Frontend | HTML5, CSS3, vanilla JavaScript | Zero-build responsive application |
 | Authentication | Supabase Auth + Netlify Function | Vendor sign-in + server-verified admin session |
-| Database | Supabase Postgres | Tourism feedback and aggregate demand signals |
+| Database | Supabase Postgres | Tourism feedback and aggregate demand signals; listings remain browser-local in the prototype |
 | Authorization | Signed HttpOnly cookie + Row Level Security | Admin session and feedback protection |
 | Serverless backend | Netlify Functions, Node.js | Secret-preserving AI gateways |
 | AI | Groq chat completions | Tourism concierge and structured listing drafts |
@@ -166,7 +182,7 @@ No frontend framework or bundler is required for the current prototype.
 3. Verify the email, then sign in.
 4. Describe the service to the AI assistant or complete the form manually.
 5. Review every generated field before submitting.
-6. Track submitted listings and locally recorded inquiries in the dashboard.
+6. Track submitted listings and locally recorded inquiries in the same browser's dashboard.
 
 The AI assistant does not invent official verification, contact details, addresses, prices or opening hours that are absent from the vendor brief.
 
@@ -273,6 +289,13 @@ Successful response:
 
 The server keeps the latest six history items, caps the generated response and uses a 12-second request timeout. If the function is unavailable, the interface uses its local Bihar knowledge engine.
 
+The chat status is evidence of the active response path:
+
+- **Live AI Guide:** the Netlify Function returned a usable upstream AI reply.
+- **Local AI Guide:** the live request failed, timed out or returned no reply, so the curated browser knowledge engine answered instead.
+
+The guided Bihar Yatra planner is an in-browser deterministic planner and remains demonstrable even when the upstream AI service is unavailable.
+
 ### Vendor listing assistant
 
 `POST /.netlify/functions/listing-assistant`
@@ -319,6 +342,7 @@ The server accepts briefs up to 1,000 characters, uses a strict JSON prompt, all
 │   ├── admin-auth-smoke.test.js       # Authentication/session regression checks
 │   └── feedback-roadmap-smoke.test.js # Feedback/roadmap regression checks
 ├── ADMIN-SECURITY-SETUP.md            # Admin setup and security boundary
+├── DATA-ARCHITECTURE.md                # Exact prototype storage map and ownership
 ├── DISTRICT-EXPANSION-ROADMAP.md       # Responsible 38-district rollout plan
 ├── .env.example                       # Environment variable template
 └── README.md                           # Project documentation
