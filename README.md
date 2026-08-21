@@ -71,10 +71,10 @@ The prototype is designed around three principles:
 
 ### Administrator experience
 
-- Supabase email/password authentication.
-- Authorization based on server-controlled `app_metadata.role = admin`.
+- User ID/password verification inside a Netlify Function.
+- Signed four-hour `HttpOnly`, `Secure`, `SameSite=Strict` session cookie.
 - Pending-listing review, active-listing management and inquiry views.
-- No admin password or hardcoded admin identity in the repository.
+- No admin user ID, password or signing secret in the repository or browser storage.
 
 ## Destination coverage
 
@@ -102,8 +102,9 @@ flowchart LR
     B --> W[Phone / WhatsApp]
 
     L -->|prototype| P[Listings, inquiries, traveler profile]
-    S --> A[Vendor and admin authentication]
+    S --> A[Vendor authentication]
     S --> F[Tourism feedback + aggregate RPC]
+    N --> H[Admin authentication + signed session]
     N --> C[Tourism concierge]
     N --> D[AI listing draft assistant]
 ```
@@ -112,7 +113,7 @@ flowchart LR
 
 1. The browser loads `index.html` and its bundled CSS and JavaScript.
 2. Destination and seed-listing data render directly in the browser.
-3. Supabase JS manages vendor/admin sessions and submits tourism feedback.
+3. Supabase JS manages vendor sessions and submits tourism feedback.
 4. AI requests go only to same-origin Netlify Functions; the browser never receives `GROQ_API_KEY`.
 5. The functions validate input, call Groq and return a constrained response.
 6. Booking actions save a prototype inquiry locally and offer direct provider contact.
@@ -123,9 +124,9 @@ flowchart LR
 | Layer | Technology | Purpose |
 | --- | --- | --- |
 | Frontend | HTML5, CSS3, vanilla JavaScript | Zero-build responsive application |
-| Authentication | Supabase Auth | Vendor and role-gated admin sign-in |
+| Authentication | Supabase Auth + Netlify Function | Vendor sign-in + server-verified admin session |
 | Database | Supabase Postgres | Tourism feedback and aggregate demand signals |
-| Authorization | Supabase JWT metadata + Row Level Security | Admin role enforcement and feedback protection |
+| Authorization | Signed HttpOnly cookie + Row Level Security | Admin session and feedback protection |
 | Serverless backend | Netlify Functions, Node.js | Secret-preserving AI gateways |
 | AI | Groq chat completions | Tourism concierge and structured listing drafts |
 | Hosting | Netlify | Static hosting, functions and security headers |
@@ -159,10 +160,10 @@ The AI assistant does not invent official verification, contact details, address
 
 ### Admin workflow
 
-1. Create or select a confirmed Supabase user.
-2. Assign the admin role using `SUPABASE-ADMIN-SETUP.sql`.
+1. Generate the admin credential hashes and signing secret locally.
+2. Store only those generated values in Netlify environment variables and redeploy.
 3. Open **Login / Join → Admin Mode**.
-4. Sign in with the confirmed admin account.
+4. Enter the private user ID and password.
 5. Review pending listings, active listings and inquiries.
 
 See [ADMIN-SECURITY-SETUP.md](ADMIN-SECURITY-SETUP.md) for the one-time configuration.
@@ -172,10 +173,10 @@ See [ADMIN-SECURITY-SETUP.md](ADMIN-SECURITY-SETUP.md) for the one-time configur
 ### Implemented controls
 
 - Admin credentials are not stored in HTML, JavaScript, documentation or Git history.
-- Vendor and admin authentication use Supabase email/password sessions.
-- Email confirmation is checked before vendor or admin access.
-- Admin access additionally requires `app_metadata.role` to equal `admin`.
-- Admin role metadata is assigned from Supabase SQL, not from a browser form.
+- Vendor authentication uses Supabase email/password sessions and email confirmation.
+- Admin credentials are verified by a Netlify Function using SHA-256 for user ID lookup and salted scrypt for the password.
+- Admin state uses a signed, expiring `HttpOnly`, `Secure`, `SameSite=Strict` cookie—not `localStorage`.
+- Admin login POST requests are restricted to configured trusted origins.
 - `GROQ_API_KEY` exists only in the serverless runtime.
 - AI functions accept `POST`/`OPTIONS`, validate empty and oversized inputs, and enforce timeouts.
 - AI listing output is parsed, allow-listed and length-limited before reaching the form.
@@ -194,6 +195,7 @@ Never expose any of the following:
 - `GROQ_API_KEY`
 - Supabase `service_role` key
 - Admin passwords
+- Admin user IDs, hashes and session signing secrets
 - Personal access tokens
 - Database passwords
 
@@ -203,7 +205,7 @@ Chrome Developer Tools can display every frontend asset and browser request. The
 
 ### Authentication
 
-Supabase Auth stores vendor and admin identities. Vendor display metadata uses `user_metadata`; the privileged admin decision uses server-controlled `app_metadata`.
+Supabase Auth stores vendor identities. Vendor display metadata uses `user_metadata`. Admin authentication is handled separately by the Netlify Function.
 
 ### `tourism_feedback`
 
@@ -296,13 +298,14 @@ The server accepts briefs up to 1,000 characters, uses a strict JSON prompt, all
 ├── netlify.toml                       # Hosting, functions and response headers
 ├── netlify/
 │   └── functions/
+│       ├── admin-auth.js              # Server-verified admin session gateway
 │       ├── chat.js                    # Secure tourism concierge gateway
 │       └── listing-assistant.js       # Secure listing-draft gateway
 ├── supabase/
 │   └── tourism-feedback.sql           # Feedback schema, RLS and aggregate RPC
 ├── tests/
-│   └── feedback-roadmap-smoke.test.js # Regression smoke test
-├── SUPABASE-ADMIN-SETUP.sql           # Admin-role assignment helper
+│   ├── admin-auth-smoke.test.js       # Authentication/session regression checks
+│   └── feedback-roadmap-smoke.test.js # Feedback/roadmap regression checks
 ├── ADMIN-SECURITY-SETUP.md            # Admin setup and security boundary
 ├── DISTRICT-EXPANSION-ROADMAP.md       # Responsible 38-district rollout plan
 ├── .env.example                       # Environment variable template
@@ -316,6 +319,11 @@ Copy `.env.example` only for local Netlify development. Do not commit a real `.e
 | Variable | Required | Location | Purpose |
 | --- | --- | --- | --- |
 | `GROQ_API_KEY` | For live AI | Netlify environment or local `.env` | Authorizes server-to-server Groq requests |
+| `ADMIN_USER_ID_HASH` | Yes | Netlify environment | SHA-256 hash of the private admin user ID |
+| `ADMIN_PASSWORD_SALT` | Yes | Netlify environment | Random salt for scrypt password verification |
+| `ADMIN_PASSWORD_HASH` | Yes | Netlify environment | Salted scrypt password hash |
+| `ADMIN_SESSION_SECRET` | Yes | Netlify environment | Signs the expiring HttpOnly admin cookie |
+| `ADMIN_ALLOWED_ORIGINS` | Recommended | Netlify environment | Comma-separated trusted site origins |
 
 Do not prefix this variable with `PUBLIC_`, `VITE_` or `NEXT_PUBLIC_`; doing so could expose it to a frontend build.
 
@@ -356,7 +364,7 @@ There is no `npm install` or `npm run dev` step because this repository is a zer
 2. Keep the repository root as the base directory.
 3. No build command is required.
 4. The publish directory is `.` and functions directory is `netlify/functions` via `netlify.toml`.
-5. Add `GROQ_API_KEY` under **Site configuration → Environment variables**.
+5. Add `GROQ_API_KEY` and the five admin authentication variables under **Site configuration → Environment variables**.
 6. Deploy the current `main` branch.
 
 After deployment, verify:
@@ -366,7 +374,7 @@ After deployment, verify:
 - The AI concierge returns a live answer.
 - The listing assistant produces a structured draft.
 - Vendor registration sends a confirmation email.
-- A non-admin account cannot open the admin panel.
+- Invalid admin credentials cannot open the admin panel.
 - Feedback submits to Supabase or clearly reports its local fallback.
 
 ## Testing
@@ -375,6 +383,7 @@ Run the repository smoke test with Node.js:
 
 ```bash
 node tests/feedback-roadmap-smoke.test.js
+node tests/admin-auth-smoke.test.js
 ```
 
 The test checks the expansion roadmap, form controls, Supabase insert path, aggregate RPC, local fallback, Row Level Security SQL and removal of the old hardcoded-admin pattern.
@@ -385,7 +394,7 @@ Recommended manual checks:
 - Category filtering for every destination.
 - Missing-function fallback under a static local server.
 - Vendor sign-up, email verification and sign-in.
-- Admin rejection for ordinary authenticated users.
+- Admin rejection for invalid credentials, foreign origins and tampered cookies.
 - AI rejection of empty or oversized input.
 - No secret values in page source, browser network responses or Git history.
 
@@ -442,9 +451,9 @@ No server is running on that port. Start `python -m http.server 8080` and open p
 
 ### Admin credentials work but access is denied
 
-- Confirm the email is verified.
-- Run `SUPABASE-ADMIN-SETUP.sql` with the exact admin email.
-- Sign out and sign back in so the refreshed JWT contains `app_metadata.role = admin`.
+- Confirm all five admin environment variables exist in the Netlify site.
+- Confirm `ADMIN_ALLOWED_ORIGINS` exactly matches the live site origin without a trailing slash.
+- Redeploy after changing environment variables, then log out and sign in again.
 
 ### Feedback remains local
 
