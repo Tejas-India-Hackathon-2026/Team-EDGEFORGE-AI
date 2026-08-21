@@ -25,6 +25,7 @@
 - [Testing](#testing)
 - [Known limitations](#known-limitations)
 - [Roadmap](#roadmap)
+- [Judge and presentation guide](#judge-and-presentation-guide)
 - [Troubleshooting](#troubleshooting)
 
 ## Problem
@@ -344,6 +345,7 @@ The server accepts briefs up to 1,000 characters, uses a strict JSON prompt, all
 ├── ADMIN-SECURITY-SETUP.md            # Admin setup and security boundary
 ├── DATA-ARCHITECTURE.md                # Exact prototype storage map and ownership
 ├── DISTRICT-EXPANSION-ROADMAP.md       # Responsible 38-district rollout plan
+├── JUDGE-DEMO-GUIDE.md                # Timed demo, judge Q&A and fallback paths
 ├── .env.example                       # Environment variable template
 └── README.md                           # Project documentation
 ```
@@ -468,6 +470,10 @@ Each district must meet entry gates for verified providers, official-source revi
 Extend the reusable district model to all 38 Bihar districts with multilingual guidance, standardized verification, shared database records, safety escalation and district analytics.
 
 See [DISTRICT-EXPANSION-ROADMAP.md](DISTRICT-EXPANSION-ROADMAP.md) for metrics and gates.
+
+## Judge and presentation guide
+
+The presentation-day deployment snapshot, five-minute demo script, safe claims, likely judge questions and failure-safe demo paths are maintained in [JUDGE-DEMO-GUIDE.md](JUDGE-DEMO-GUIDE.md).
 
 ## Troubleshooting
 
