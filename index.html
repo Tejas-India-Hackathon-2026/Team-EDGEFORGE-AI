@@ -1591,6 +1591,18 @@
       transform: translateY(-1px);
     }
 
+    .quick-chip-yatra {
+      color: var(--color-terracotta-dark);
+      border-color: rgba(200, 90, 50, 0.35);
+      background: #FFF8F3;
+    }
+
+    .quick-chip-yatra:hover {
+      color: #FFFFFF;
+      background: var(--color-terracotta);
+      border-color: var(--color-terracotta);
+    }
+
     /* Messages Stream */
     .ai-messages-container {
       flex: 1;
@@ -1646,6 +1658,227 @@
 
     .ai-msg-assistant strong {
       color: var(--color-teal-dark);
+    }
+
+    /* Guided Bihar Yatra planner */
+    .yatra-progress {
+      color: var(--color-terracotta-dark);
+      font-size: 10.5px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+    }
+
+    .yatra-choice-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 10px;
+    }
+
+    .yatra-choice-chip {
+      appearance: none;
+      background: #FFF8F3;
+      border: 1px solid rgba(200, 90, 50, 0.32);
+      border-radius: var(--radius-full);
+      color: var(--color-terracotta-dark);
+      cursor: pointer;
+      font: inherit;
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.2;
+      padding: 7px 11px;
+      transition: var(--transition);
+    }
+
+    .yatra-choice-chip:hover,
+    .yatra-choice-chip:focus-visible {
+      background: var(--color-terracotta);
+      border-color: var(--color-terracotta);
+      color: #FFFFFF;
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .yatra-choice-chip:disabled {
+      cursor: default;
+      opacity: 0.48;
+      transform: none;
+    }
+
+    .yatra-choice-chip.selected {
+      background: var(--color-teal);
+      border-color: var(--color-teal);
+      color: #FFFFFF;
+      opacity: 1;
+    }
+
+    .yatra-tip {
+      background: var(--color-teal-light);
+      border-left: 3px solid var(--color-teal);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      color: var(--color-teal-dark);
+      font-size: 11.5px;
+      line-height: 1.45;
+      margin-top: 10px;
+      padding: 8px 9px;
+    }
+
+    .ai-itinerary-message {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      max-width: 100%;
+      padding: 0;
+      width: 100%;
+    }
+
+    .yatra-itinerary-card {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-dark);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .yatra-itinerary-header {
+      background: linear-gradient(135deg, var(--color-teal-dark), var(--color-teal));
+      color: #FFFFFF;
+      padding: 14px;
+    }
+
+    .yatra-itinerary-header h4 {
+      color: #FFFFFF;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      margin: 0 0 5px;
+    }
+
+    .yatra-summary-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .yatra-summary-tag {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: var(--radius-full);
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 4px 8px;
+    }
+
+    .yatra-budget-box {
+      background: #FFF8F3;
+      border-bottom: 1px solid var(--color-border);
+      color: var(--color-charcoal);
+      font-size: 11.5px;
+      line-height: 1.45;
+      padding: 10px 14px;
+    }
+
+    .yatra-days {
+      display: grid;
+      gap: 9px;
+      padding: 12px;
+    }
+
+    .yatra-day-card {
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    .yatra-day-title {
+      align-items: center;
+      background: var(--color-sand-dark);
+      color: var(--color-teal-dark);
+      display: flex;
+      font-size: 12.5px;
+      font-weight: 800;
+      justify-content: space-between;
+      padding: 8px 10px;
+    }
+
+    .yatra-travel-time {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      color: var(--color-muted);
+      font-size: 9.5px;
+      font-weight: 700;
+      padding: 3px 6px;
+    }
+
+    .yatra-day-body {
+      color: var(--color-charcoal);
+      display: grid;
+      font-size: 11.5px;
+      gap: 5px;
+      line-height: 1.4;
+      padding: 9px 10px;
+    }
+
+    .yatra-local-listing {
+      align-items: center;
+      background: var(--color-teal-light);
+      border-radius: var(--radius-sm);
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      margin-top: 4px;
+      padding: 8px;
+    }
+
+    .yatra-local-listing strong {
+      color: var(--color-teal-dark);
+      display: block;
+      font-size: 11px;
+    }
+
+    .yatra-local-listing small {
+      color: var(--color-muted);
+      display: block;
+      font-size: 9.5px;
+      margin-top: 2px;
+    }
+
+    .yatra-itinerary-actions {
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      gap: 8px;
+      padding: 0 12px 12px;
+    }
+
+    .yatra-share-btn,
+    .yatra-restart-btn {
+      align-items: center;
+      border-radius: var(--radius-sm);
+      display: inline-flex;
+      flex: 1;
+      font-size: 11px;
+      font-weight: 800;
+      justify-content: center;
+      padding: 8px;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    .yatra-share-btn {
+      background: var(--color-whatsapp);
+      color: #FFFFFF;
+    }
+
+    .yatra-restart-btn {
+      background: #FFFFFF;
+      border: 1px solid var(--color-border-dark);
+      color: var(--color-teal-dark);
+      cursor: pointer;
+      font-family: inherit;
     }
 
     /* Recommendation card inside chat bubble */
@@ -2664,6 +2897,7 @@
     <div class="ai-quick-prompts-bar">
       <span class="quick-prompt-label">Quick:</span>
       <div class="quick-prompts-scroll">
+        <button class="quick-chip quick-chip-yatra" onclick="startBiharYatraPlanner()">✨ Plan My Bihar Yatra</button>
         <button class="quick-chip" onclick="handleQuickAsk('Top things to do in Jamui?')">🌲 Jamui Tours</button>
         <button class="quick-chip" onclick="handleQuickAsk('How to reach Simultala from Patna?')">🚂 Reach Simultala</button>
         <button class="quick-chip" onclick="handleQuickAsk('Best time to visit Bodh Gaya?')">🪷 Bodh Gaya</button>
@@ -4733,14 +4967,189 @@
     // ==========================================================================
     let aiChatHistory = [];
     let isAITyping = false;
+    let yatraPlannerState = null;
+
+    const YATRA_OPTIONS = {
+      days: [
+        { value: "1", label: "1 day" },
+        { value: "2", label: "2 days" },
+        { value: "3", label: "3 days" },
+        { value: "4plus", label: "4+ days" }
+      ],
+      budget: [
+        { value: "under-2000", label: "Under ₹2,000" },
+        { value: "2000-5000", label: "₹2–5k" },
+        { value: "5000-10000", label: "₹5–10k" },
+        { value: "flexible", label: "Flexible" }
+      ],
+      experience: [
+        { value: "buddhist", label: "Buddhist heritage" },
+        { value: "history", label: "History & culture" },
+        { value: "food", label: "Food" },
+        { value: "nature", label: "Nature" },
+        { value: "family", label: "Family" },
+        { value: "mix", label: "Mix" }
+      ],
+      start: [
+        { value: "patna", label: "Patna" },
+        { value: "jamui", label: "Jamui" },
+        { value: "bodh-gaya", label: "Bodh Gaya" },
+        { value: "other", label: "Other" }
+      ]
+    };
+
+    const YATRA_QUESTIONS = {
+      days: "Perfect! Main aapke liye personal Bihar travel plan banaunga. Aap kitne din ka trip plan kar rahe hain?",
+      budget: "Aapka approximate budget kya hai?",
+      experience: "Aapko kis type ka experience pasand hai?",
+      start: "Aap trip kahan se start karna chahenge?"
+    };
+
+    const YATRA_START_RECOMMENDATION = "Agar aap first-time visitor hain, Patna se start karna easiest rahega—best transport connections milte hain. Heritage-focused trip ke liye Bodh Gaya se start karna better hoga.";
+
+    const YATRA_DESTINATION_PRIORITY = {
+      buddhist: ["bodh-gaya", "nalanda", "chhath-ghat", "jamui", "sonepur"],
+      history: ["nalanda", "jamui", "bodh-gaya", "sonepur", "chhath-ghat"],
+      food: ["nalanda", "bodh-gaya", "chhath-ghat", "sonepur", "jamui"],
+      nature: ["jamui", "bodh-gaya", "nalanda", "chhath-ghat", "sonepur"],
+      family: ["chhath-ghat", "nalanda", "bodh-gaya", "sonepur", "jamui"],
+      mix: ["chhath-ghat", "nalanda", "bodh-gaya", "jamui", "sonepur"]
+    };
+
+    const YATRA_DAY_CONTENT = {
+      "jamui": {
+        morning: "Gidhaur Minto Tower heritage walk with local royal-history stories.",
+        afternoon: "Patneshwar craft stop or Nagi–Nakti wetland circuit, based on season.",
+        evening: "Gidhaur chhena sweets and a relaxed Simultala sunset trail."
+      },
+      "bodh-gaya": {
+        morning: "Mahabodhi Temple, Sacred Bodhi Tree and the seven-week enlightenment circuit.",
+        afternoon: "Sujata Village, Niranjana riverbank and international monasteries.",
+        evening: "Meditation or chanting followed by authentic litti chokha."
+      },
+      "nalanda": {
+        morning: "Scholar-led Nalanda Mahavihara ruins and monastic archaeology walk.",
+        afternoon: "Xuanzang Memorial and a Silao stop for GI-tagged Khaja.",
+        evening: "Meet Bawan Buti handloom artisans or continue to nearby Rajgir."
+      },
+      "sonepur": {
+        morning: "Harihar Kshetra and the Ganga–Gandak confluence heritage walk.",
+        afternoon: "Seasonal mela culture, brass-bell artisans and folk traditions.",
+        evening: "Fresh jalebi with kulhad chai by the riverfront."
+      },
+      "chhath-ghat": {
+        morning: "Patna Ganga sunrise boat circuit and historic riverfront ghats.",
+        afternoon: "Bihar Museum or old Patna heritage, with a local food stop.",
+        evening: "Ganga arati, thekua tasting and Madhubani-painted bamboo crafts."
+      }
+    };
+
+    const YATRA_TRAVEL_TIMES = {
+      "chhath-ghat:patna": "15–20 min local transfer",
+      "patna:sonepur": "45–60 min",
+      "nalanda:patna": "about 2 hr",
+      "bodh-gaya:patna": "about 2.5 hr",
+      "jamui:patna": "about 3.5 hr",
+      "bodh-gaya:nalanda": "about 2 hr",
+      "bodh-gaya:jamui": "about 3.5 hr",
+      "bodh-gaya:chhath-ghat": "about 2.5 hr",
+      "bodh-gaya:sonepur": "about 3 hr",
+      "jamui:nalanda": "about 3 hr",
+      "chhath-ghat:jamui": "about 3.5 hr",
+      "jamui:sonepur": "about 4 hr",
+      "chhath-ghat:nalanda": "about 2 hr",
+      "nalanda:sonepur": "about 2.5 hr",
+      "chhath-ghat:sonepur": "45–60 min"
+    };
+
+    const YATRA_BUDGET_LEVELS = {
+      "under-2000": { min: 1300, max: 1900, mode: "public transport, local meals and value stays" },
+      "2000-5000": { min: 2500, max: 4500, mode: "comfortable local travel and standard homestays" },
+      "5000-10000": { min: 5500, max: 8500, mode: "private transfers, premium stays and guided experiences" },
+      "flexible": { min: 2500, max: 7000, mode: "a flexible mix of comfort, guides and local experiences" }
+    };
+
+    const YATRA_CATEGORY_PRIORITY = {
+      buddhist: ["guide", "homestay", "craft", "food"],
+      history: ["guide", "craft", "food", "homestay"],
+      food: ["food", "craft", "guide", "homestay"],
+      nature: ["guide", "homestay", "food", "craft"],
+      family: ["homestay", "guide", "food", "craft"],
+      mix: ["guide", "food", "craft", "homestay"]
+    };
+
+    function getYatraOptionLabel(group, value) {
+      const option = (YATRA_OPTIONS[group] || []).find(item => item.value === value);
+      return option ? option.label : value;
+    }
+
+    function formatIndianRupees(amount) {
+      return `₹${Number(amount).toLocaleString("en-IN")}`;
+    }
+
+    function getYatraDayCount(daysValue) {
+      return daysValue === "4plus" ? 4 : Math.max(1, Math.min(3, Number(daysValue) || 1));
+    }
+
+    function buildYatraRoute(state) {
+      const dayCount = getYatraDayCount(state.days);
+      const route = [...(YATRA_DESTINATION_PRIORITY[state.experience] || YATRA_DESTINATION_PRIORITY.mix)];
+      const startSite = state.start === "patna" ? "chhath-ghat" : state.start;
+      const shouldStartLocally = state.start === "bodh-gaya"
+        || state.start === "jamui"
+        || (state.start === "patna" && ["food", "family", "mix"].includes(state.experience));
+
+      if (shouldStartLocally && route.includes(startSite)) {
+        route.splice(route.indexOf(startSite), 1);
+        route.unshift(startSite);
+      }
+
+      return route.slice(0, dayCount);
+    }
+
+    function getYatraTravelTime(from, to) {
+      if (!from || from === to) return "local travel only";
+      if (from === "other") return `reach Patna hub, then ${getYatraTravelTime("patna", to)}`;
+      const normalizedFrom = from === "patna" ? "patna" : from;
+      const normalizedTo = to === "patna" ? "patna" : to;
+      const key = [normalizedFrom, normalizedTo].sort().join(":");
+      return YATRA_TRAVEL_TIMES[key] || "about 2–3 hr";
+    }
+
+    function getYatraBudgetSummary(state) {
+      const dayCount = getYatraDayCount(state.days);
+      const level = YATRA_BUDGET_LEVELS[state.budget] || YATRA_BUDGET_LEVELS.flexible;
+      return {
+        range: `${formatIndianRupees(level.min * dayCount)}–${formatIndianRupees(level.max * dayCount)}`,
+        mode: level.mode,
+        note: "Indicative per-person on-ground estimate; arrival into Bihar and festival surge pricing are excluded."
+      };
+    }
+
+    function findYatraListing(site, experience, dayIndex) {
+      const approved = listings.filter(item => item.site === site && item.status === "approved");
+      const fallback = DEFAULT_LISTINGS.filter(item => item.site === site && item.status === "approved");
+      const available = approved.length ? approved : fallback;
+      const priorities = YATRA_CATEGORY_PRIORITY[experience] || YATRA_CATEGORY_PRIORITY.mix;
+      const orderedCategories = priorities.slice(dayIndex).concat(priorities.slice(0, dayIndex));
+
+      for (const category of orderedCategories) {
+        const match = available.find(item => item.category === category);
+        if (match) return match;
+      }
+      return available[0] || null;
+    }
+
+    function showShartakWelcome() {
+      addAIMessageToUI("assistant", "Namaste! 🙏 I am **Shartak**, your GhoomoBihar guide. Where would you like to visit?", null, true);
+    }
 
     function toggleAIChatDrawer() {
       const drawer = document.getElementById("ai-chat-drawer");
       drawer.classList.toggle("active");
       if (drawer.classList.contains("active")) {
-        if (aiChatHistory.length === 0) {
-          // Welcome greeting with clickable destination options
-          addAIMessageToUI("assistant", "Namaste! 🙏 I am **Shartak**, your GhoomoBihar guide. Where would you like to visit?", null, true);
+        if (document.getElementById("ai-messages-list").children.length === 0) {
+          showShartakWelcome();
         }
         setTimeout(() => {
           const input = document.getElementById("ai-chat-input");
@@ -4751,11 +5160,13 @@
 
     function clearAIChatHistory() {
       aiChatHistory = [];
+      yatraPlannerState = null;
       document.getElementById("ai-messages-list").innerHTML = "";
-      addAIMessageToUI("assistant", "Namaste! 🙏 I am **Shartak**, your GhoomoBihar guide. Where would you like to visit?", null, true);
+      showShartakWelcome();
     }
 
     function handleQuickAsk(promptText) {
+      yatraPlannerState = null;
       document.getElementById("ai-chat-input").value = promptText;
       handleAIChatSubmit(new Event("submit"));
     }
@@ -4766,6 +5177,7 @@
       const userText = input.value.trim();
       if (!userText || isAITyping) return;
 
+      yatraPlannerState = null;
       input.value = "";
       addAIMessageToUI("user", userText);
       aiChatHistory.push({ sender: "user", text: userText });
@@ -4827,6 +5239,222 @@
       document.getElementById("ai-send-btn").disabled = false;
     }
 
+    function startBiharYatraPlanner() {
+      if (isAITyping) {
+        showToast("Shartak is finishing the current answer. Please try again in a moment.");
+        return;
+      }
+
+      document.getElementById("ai-chat-drawer").classList.add("active");
+      yatraPlannerState = { step: "days" };
+      addAIMessageToUI("user", "✨ Plan My Bihar Yatra");
+      aiChatHistory.push({ sender: "user", text: "Plan My Bihar Yatra" });
+      addYatraChoiceMessage("days");
+    }
+
+    function addYatraChoiceMessage(step) {
+      const list = document.getElementById("ai-messages-list");
+      const stepOrder = ["days", "budget", "experience", "start"];
+      const message = document.createElement("div");
+      message.className = "ai-message ai-msg-assistant";
+
+      const progress = document.createElement("div");
+      progress.className = "yatra-progress";
+      progress.textContent = `Step ${stepOrder.indexOf(step) + 1} of 4`;
+      message.appendChild(progress);
+
+      const question = document.createElement("p");
+      question.textContent = YATRA_QUESTIONS[step];
+      message.appendChild(question);
+
+      if (step === "start") {
+        const recommendation = document.createElement("div");
+        recommendation.className = "yatra-tip";
+        recommendation.innerHTML = `<strong>Shartak recommendation:</strong> ${sanitizeHTML(YATRA_START_RECOMMENDATION)}`;
+        message.appendChild(recommendation);
+      }
+
+      if (step === "budget") {
+        const budgetHint = document.createElement("div");
+        budgetHint.className = "yatra-tip";
+        budgetHint.innerHTML = "<strong>Planning basis:</strong> Per person, per day. Travel into Bihar is not included.";
+        message.appendChild(budgetHint);
+      }
+
+      const choices = document.createElement("div");
+      choices.className = "yatra-choice-group";
+      choices.dataset.yatraStep = step;
+
+      YATRA_OPTIONS[step].forEach((option) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "yatra-choice-chip";
+        button.textContent = option.label;
+        button.setAttribute("aria-label", `${YATRA_QUESTIONS[step]} ${option.label}`);
+        button.addEventListener("click", () => handleYatraChoice(step, option.value, option.label, button));
+        choices.appendChild(button);
+      });
+
+      message.appendChild(choices);
+      list.appendChild(message);
+      list.scrollTop = list.scrollHeight;
+      aiChatHistory.push({ sender: "assistant", text: YATRA_QUESTIONS[step] });
+    }
+
+    function handleYatraChoice(step, value, label, selectedButton) {
+      if (!yatraPlannerState || yatraPlannerState.step !== step) return;
+
+      const choiceGroup = selectedButton.closest(".yatra-choice-group");
+      choiceGroup.querySelectorAll("button").forEach((button) => {
+        button.disabled = true;
+        button.classList.toggle("selected", button === selectedButton);
+      });
+
+      yatraPlannerState[step] = value;
+      addAIMessageToUI("user", label);
+      aiChatHistory.push({ sender: "user", text: label });
+
+      const nextStep = {
+        days: "budget",
+        budget: "experience",
+        experience: "start"
+      }[step];
+
+      if (nextStep) {
+        yatraPlannerState.step = nextStep;
+        addYatraChoiceMessage(nextStep);
+        return;
+      }
+
+      yatraPlannerState.step = "complete";
+      renderYatraItinerary(yatraPlannerState);
+    }
+
+    function renderYatraItinerary(state) {
+      const list = document.getElementById("ai-messages-list");
+      const route = buildYatraRoute(state);
+      const budget = getYatraBudgetSummary(state);
+      const durationLabel = getYatraOptionLabel("days", state.days);
+      const budgetLabel = getYatraOptionLabel("budget", state.budget);
+      const experienceLabel = getYatraOptionLabel("experience", state.experience);
+      const startLabel = getYatraOptionLabel("start", state.start);
+      const itineraryDays = route.map((site, index) => {
+        const previousStop = index === 0 ? state.start : route[index - 1];
+        return {
+          day: index + 1,
+          site,
+          meta: SITE_METADATA[site],
+          content: YATRA_DAY_CONTENT[site],
+          travel: getYatraTravelTime(previousStop, site),
+          listing: findYatraListing(site, state.experience, index)
+        };
+      });
+
+      const message = document.createElement("div");
+      message.className = "ai-message ai-msg-assistant ai-itinerary-message";
+      const card = document.createElement("article");
+      card.className = "yatra-itinerary-card";
+      card.setAttribute("aria-label", "Personalized Bihar Yatra itinerary");
+
+      const header = document.createElement("div");
+      header.className = "yatra-itinerary-header";
+      header.innerHTML = `
+        <h4>✨ Your Personal Bihar Yatra</h4>
+        <div style="font-size: 11.5px; opacity: 0.9;">A practical ${sanitizeHTML(durationLabel)} route from ${sanitizeHTML(startLabel)}</div>
+        <div class="yatra-summary-tags">
+          <span class="yatra-summary-tag">🗓️ ${sanitizeHTML(durationLabel)}</span>
+          <span class="yatra-summary-tag">💰 ${sanitizeHTML(budgetLabel)}/day</span>
+          <span class="yatra-summary-tag">🧭 ${sanitizeHTML(experienceLabel)}</span>
+        </div>
+      `;
+      card.appendChild(header);
+
+      const budgetBox = document.createElement("div");
+      budgetBox.className = "yatra-budget-box";
+      budgetBox.innerHTML = `
+        <strong>Estimated trip spend: ${sanitizeHTML(budget.range)}</strong><br>
+        Planned with ${sanitizeHTML(budget.mode)}.<br>
+        <span style="color: var(--color-muted);">${sanitizeHTML(budget.note)}</span>
+        ${state.days === "4plus" ? '<br><span style="color: var(--color-terracotta-dark);"><strong>4+ days:</strong> This is a four-day core route; add one relaxed local day at your favourite stop.</span>' : ''}
+        ${route.includes("sonepur") ? '<br><span style="color: var(--color-terracotta-dark);"><strong>Season note:</strong> Sonepur Mela is primarily active around Kartik Purnima; verify dates before travel.</span>' : ''}
+      `;
+      card.appendChild(budgetBox);
+
+      const daysContainer = document.createElement("div");
+      daysContainer.className = "yatra-days";
+
+      itineraryDays.forEach((item) => {
+        const dayCard = document.createElement("section");
+        dayCard.className = "yatra-day-card";
+        dayCard.innerHTML = `
+          <div class="yatra-day-title">
+            <span>Day ${item.day} · ${sanitizeHTML(item.meta.name)}</span>
+            <span class="yatra-travel-time">🚗 ${sanitizeHTML(item.travel)}</span>
+          </div>
+          <div class="yatra-day-body">
+            <div><strong>Morning:</strong> ${sanitizeHTML(item.content.morning)}</div>
+            <div><strong>Afternoon:</strong> ${sanitizeHTML(item.content.afternoon)}</div>
+            <div><strong>Evening:</strong> ${sanitizeHTML(item.content.evening)}</div>
+          </div>
+        `;
+
+        if (item.listing) {
+          const listing = document.createElement("div");
+          listing.className = "yatra-local-listing";
+          const cleanWa = (item.listing.whatsapp || "").replace(/\D/g, "");
+          const inquiry = encodeURIComponent(`Namaste! Shartak planned Day ${item.day} of my Bihar Yatra in ${item.meta.name} and recommended "${item.listing.title}". Please share availability and booking details.`);
+          listing.innerHTML = `
+            <div>
+              <strong>📍 ${sanitizeHTML(item.listing.title)}</strong>
+              <small>${sanitizeHTML(item.listing.specialty)} · ${sanitizeHTML(item.listing.price)}</small>
+            </div>
+            <a href="https://wa.me/${cleanWa}?text=${inquiry}" target="_blank" rel="noopener noreferrer" class="ai-rec-btn" aria-label="WhatsApp ${sanitizeHTML(item.listing.title)}">💬 WhatsApp</a>
+          `;
+          dayCard.querySelector(".yatra-day-body").appendChild(listing);
+        }
+
+        daysContainer.appendChild(dayCard);
+      });
+
+      card.appendChild(daysContainer);
+
+      const shareText = [
+        "My GhoomoBihar Yatra",
+        `${durationLabel} | Start: ${startLabel} | ${experienceLabel}`,
+        `Estimated spend: ${budget.range}`,
+        ...itineraryDays.map(item => `Day ${item.day}: ${item.meta.name} (${item.travel})${item.listing ? ` — ${item.listing.title}` : ""}`),
+        "Planned with Shartak on GhoomoBihar"
+      ].join("\n");
+
+      const actions = document.createElement("div");
+      actions.className = "yatra-itinerary-actions";
+      const shareLink = document.createElement("a");
+      shareLink.className = "yatra-share-btn";
+      shareLink.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+      shareLink.target = "_blank";
+      shareLink.rel = "noopener noreferrer";
+      shareLink.textContent = "💬 Share Plan";
+      shareLink.setAttribute("aria-label", "Share this Bihar Yatra plan on WhatsApp");
+
+      const restartButton = document.createElement("button");
+      restartButton.type = "button";
+      restartButton.className = "yatra-restart-btn";
+      restartButton.textContent = "↻ Plan Again";
+      restartButton.addEventListener("click", startBiharYatraPlanner);
+
+      actions.appendChild(shareLink);
+      actions.appendChild(restartButton);
+      card.appendChild(actions);
+      message.appendChild(card);
+      list.appendChild(message);
+      list.scrollTop = list.scrollHeight;
+
+      aiChatHistory.push({
+        sender: "assistant",
+        text: `Your ${durationLabel} Bihar Yatra from ${startLabel} is ready. Route: ${itineraryDays.map(item => item.meta.name).join(" → ")}. Estimated spend: ${budget.range}.`
+      });
+    }
+
     function addAIMessageToUI(sender, text, recommendation = null, showDestinationChips = false) {
       const list = document.getElementById("ai-messages-list");
       const msgDiv = document.createElement("div");
@@ -4855,6 +5483,7 @@
           <button class="quick-chip" onclick="handleQuickAsk('Tell me about Nalanda tourism')">📜 Nalanda</button>
           <button class="quick-chip" onclick="handleQuickAsk('Tell me about Sonepur Mela')">🐘 Sonepur Mela</button>
           <button class="quick-chip" onclick="handleQuickAsk('Tell me about Chhath Ghat')">🌊 Chhath Ghat</button>
+          <button class="quick-chip quick-chip-yatra" onclick="startBiharYatraPlanner()">✨ Plan My Bihar Yatra</button>
         `;
         msgDiv.appendChild(chipsDiv);
       }

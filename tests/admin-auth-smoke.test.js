@@ -50,7 +50,11 @@ function event(httpMethod, body, headers = {}) {
   }, { origin: "https://example.com" }));
   assert.strictEqual(foreignOrigin.statusCode, 403, "untrusted origins must be rejected");
 
-  const tamperedCookie = cookie.replace(/.$/, cookie.endsWith("a") ? "b" : "a");
+  const cookieSeparator = cookie.indexOf("=");
+  const cookieName = cookie.slice(0, cookieSeparator);
+  const [sessionPayload, sessionSignature] = cookie.slice(cookieSeparator + 1).split(".");
+  const tamperedSignature = `${sessionSignature.startsWith("a") ? "b" : "a"}${sessionSignature.slice(1)}`;
+  const tamperedCookie = `${cookieName}=${sessionPayload}.${tamperedSignature}`;
   const tampered = await handler(event("GET", null, { cookie: tamperedCookie }));
   assert.deepStrictEqual(JSON.parse(tampered.body), { authenticated: false }, "tampered sessions must fail");
 
