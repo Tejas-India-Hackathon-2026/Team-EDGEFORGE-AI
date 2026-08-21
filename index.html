@@ -2376,14 +2376,10 @@
           <p style="font-size: 13px; color: var(--color-muted); margin-bottom: 14px;">
             Platform administration portal for managing listings, approvals, and platform metrics.
           </p>
-          <form id="admin-login-form" onsubmit="handleAdminAuthSubmit(event)">
+          <form id="admin-login-form" onsubmit="handleAdminMagicLink(event)">
             <div class="form-group">
-              <label for="admin-login-email">Admin Email *</label>
-              <input type="email" id="admin-login-email" placeholder="Enter admin email" required autocomplete="username">
-            </div>
-            <div class="form-group">
-              <label for="admin-login-password">Admin Password *</label>
-              <input type="password" id="admin-login-password" placeholder="Enter admin password" required minlength="6" autocomplete="current-password">
+              <label for="admin-login-email">Confirmed Admin Email</label>
+              <input type="email" id="admin-login-email" placeholder="Enter the exact Supabase admin email" required autocomplete="email" spellcheck="false">
             </div>
             <div class="form-group" style="background: var(--color-sand); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); margin-top: 8px;">
               <label for="admin-login-captcha" id="admin-login-captcha-label" style="font-weight: 700; color: var(--color-charcoal); margin-bottom: 4px; font-size: 12.5px;">
@@ -2394,11 +2390,10 @@
             <div id="admin-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
 
             <div class="form-actions" style="justify-content: flex-end; margin-top: 14px;">
-              <button type="button" id="admin-magic-link-btn" class="btn btn-secondary" onclick="handleAdminMagicLink()">Email Secure Login Link</button>
-              <button type="submit" id="admin-login-submit-btn" class="btn btn-primary">Unlock Admin Panel</button>
+              <button type="submit" id="admin-magic-link-btn" class="btn btn-primary">Send Secure Admin Link</button>
             </div>
             <p style="font-size: 11.5px; color: var(--color-muted); margin-top: 10px; text-align: right;">
-              Forgot the password? Use the secure email link; only an existing Supabase user can receive it and admin access still requires the server-controlled admin role.
+              Solve the security check once, send the link, then open the newest email. No password is required.
             </p>
           </form>
         </div>
@@ -3722,7 +3717,12 @@
         isAdminActive = true;
         localStorage.removeItem("ghoomobihar_current_vendor");
         updateAuthHeaderUI();
+        const authModal = document.getElementById("unified-auth-modal");
+        if (authModal) authModal.classList.remove("active");
+        const adminPanel = document.getElementById("admin-panel");
+        if (adminPanel) adminPanel.classList.add("active");
         renderAdminTables();
+        showToast("Admin session verified. Dashboard unlocked.");
         return;
       }
 
@@ -3924,94 +3924,11 @@
       }
     }
 
-    // Platform Admin Mode Authentication
-    async function handleAdminAuthSubmit(e) {
-      e.preventDefault();
-      const email = (document.getElementById("admin-login-email").value || "").trim();
-      const password = document.getElementById("admin-login-password").value || "";
-      const enteredCaptcha = parseInt((document.getElementById("admin-login-captcha").value || "").trim());
-      const msgDiv = document.getElementById("admin-login-msg");
-      const submitBtn = document.getElementById("admin-login-submit-btn");
-
-      if (enteredCaptcha !== currentLoginCaptchaAns) {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Please solve the simple math problem to continue.</span>`;
-        msgDiv.style.display = "block";
-        generateMathCaptcha();
-        return;
-      }
-
-      const sb = getSupabaseClient();
-      if (!sb) {
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Authentication service unavailable.</span>`;
-        msgDiv.style.display = "block";
-        return;
-      }
-
-      msgDiv.style.display = "none";
-      if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Checking access..."; }
-
-      try {
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
-        if (error || !data.user) {
-          const authCode = (error && error.code ? error.code : "").toLowerCase();
-          const authMessage = (error && error.message ? error.message : "").toLowerCase();
-
-          if (authCode === "email_not_confirmed" || authMessage.includes("email not confirmed") || authMessage.includes("not verified")) {
-            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">This email is not verified. Open the Supabase confirmation email, verify the account, then sign in again.</span>`;
-          } else if (authCode === "invalid_credentials" || authMessage.includes("invalid login credentials") || authMessage.includes("invalid grant")) {
-            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Supabase did not accept this email/password. Check the exact email spelling and password. If the account does not exist, create it in Supabase Authentication first.</span>`;
-          } else if (authCode.includes("rate_limit") || authMessage.includes("rate limit") || authMessage.includes("too many")) {
-            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Too many sign-in attempts. Wait briefly, then try once with the correct credentials.</span>`;
-          } else {
-            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Supabase authentication failed. Check the account in Authentication → Users and try again.</span>`;
-          }
-          msgDiv.style.display = "block";
-          generateMathCaptcha();
-          return;
-        }
-
-        if (!data.user.email_confirmed_at && !data.user.confirmed_at) {
-          await sb.auth.signOut();
-          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Verify the admin email before signing in.</span>`;
-          msgDiv.style.display = "block";
-          return;
-        }
-
-        if (!isSupabaseAdmin(data.user)) {
-          await sb.auth.signOut();
-          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">The account is valid but has no admin role. Run SUPABASE-ADMIN-SETUP.sql for this exact email, then sign in again.</span>`;
-          msgDiv.style.display = "block";
-          generateMathCaptcha();
-          return;
-        }
-
-        isAdminActive = true;
-        currentVendor = null;
-        localStorage.removeItem("ghoomobihar_current_vendor");
-
-        updateAuthHeaderUI();
-        closeUnifiedAuthModal();
-        showToast("⚙️ Admin Access Unlocked! Welcome to Admin Dashboard.");
-
-        document.getElementById("admin-panel").classList.add("active");
-        document.getElementById("vendor-dashboard").classList.remove("active");
-        renderAdminTables();
-        document.getElementById("admin-panel").scrollIntoView({ behavior: 'smooth' });
-      } catch (err) {
-        console.warn("Admin sign-in notice:", err.message);
-        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Unable to sign in. Please try again.</span>`;
-        msgDiv.style.display = "block";
-        generateMathCaptcha();
-      } finally {
-        document.getElementById("admin-login-password").value = "";
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Unlock Admin Panel"; }
-      }
-    }
-
     // Passwordless recovery path for an existing Supabase admin account.
     // The emailed link creates a real Supabase session; app_metadata.role is
     // still checked before the admin dashboard can be opened.
-    async function handleAdminMagicLink() {
+    async function handleAdminMagicLink(e) {
+      if (e) e.preventDefault();
       const email = (document.getElementById("admin-login-email").value || "").trim();
       const enteredCaptcha = parseInt((document.getElementById("admin-login-captcha").value || "").trim());
       const msgDiv = document.getElementById("admin-login-msg");
@@ -4073,7 +3990,7 @@
         generateMathCaptcha();
       } finally {
         magicLinkBtn.disabled = false;
-        magicLinkBtn.textContent = "Email Secure Login Link";
+        magicLinkBtn.textContent = "Send Secure Admin Link";
       }
     }
 
