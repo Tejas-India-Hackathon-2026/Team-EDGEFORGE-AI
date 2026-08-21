@@ -3011,7 +3011,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Sunil Kumar (Gidhaur Royal Guides)",
-        photo: "assets/jamui.jpeg"
+        photo: "assets/jamui_gidhaur_heritage_walk.jpeg"
       },
       {
         id: "jamui-h-01",
@@ -3027,7 +3027,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Simultala Eco Stays",
-        photo: "assets/jamui.jpeg"
+        photo: "assets/jamui_simultala_homestay.jpeg"
       },
       {
         id: "jamui-f-01",
@@ -3043,7 +3043,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Gidhaur Heritage Sweets",
-        photo: "assets/jamui.jpeg"
+        photo: "assets/jamui_chhena_sweets.jpeg"
       },
       {
         id: "jamui-c-01",
@@ -3059,7 +3059,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Patneshwar Artisan Guild",
-        photo: "assets/jamui.jpeg"
+        photo: "assets/jamui_patneshwar_crafts.jpeg"
       },
       {
         id: "jamui-g-02",
@@ -3075,7 +3075,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Jamui Wetland Conservation",
-        photo: "assets/jamui.jpeg"
+        photo: "assets/jamui_nagi_nakti_bird_guide.jpeg"
       },
 
       // === BODH GAYA ===
@@ -3093,7 +3093,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Bodh Gaya Scholar Collective",
-        photo: "assets/bodh_gaya.jpeg"
+        photo: "assets/bodhgaya_mahabodhi_scholar_walk.jpeg"
       },
       {
         id: "bg-h-01",
@@ -3109,7 +3109,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Sujata Village Stays",
-        photo: "assets/bodh_gaya.jpeg"
+        photo: "assets/bodhgaya_sujata_homestay.jpeg"
       },
       {
         id: "bg-f-01",
@@ -3125,7 +3125,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Nirvana Bihari Kitchen",
-        photo: "assets/bodh_gaya.jpeg"
+        photo: "assets/bodhgaya_litti_chokha.jpeg"
       },
       {
         id: "bg-c-01",
@@ -3141,7 +3141,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Bodhi Art Studio",
-        photo: "assets/bodh_gaya.jpeg"
+        photo: "assets/bodhgaya_bodhi_leaf_art.jpeg"
       },
 
       // === NALANDA ===
@@ -3209,7 +3209,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Sonepur Cultural Trust",
-        photo: "assets/sonepur_mela.jpeg"
+        photo: "assets/sonepur_fair_heritage_walk.jpeg"
       },
       {
         id: "sp-f-01",
@@ -3225,7 +3225,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Sonepur Mela Halwai",
-        photo: "assets/sonepur_mela.jpeg"
+        photo: "assets/sonepur_jalebi_chai.jpeg"
       },
       {
         id: "sp-c-01",
@@ -3241,7 +3241,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Harihar Brass Guild",
-        photo: "assets/sonepur_mela.jpeg"
+        photo: "assets/sonepur_brass_bells.jpeg"
       },
 
       // === CHHATH GHAT ===
@@ -3259,7 +3259,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Ganga Boatman Guild",
-        photo: "assets/chhath_ghat.jpeg"
+        photo: "assets/chhath_patliputra_boat_tour.jpeg"
       },
       {
         id: "cg-f-01",
@@ -3275,7 +3275,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Patliputra Thekua Artisans",
-        photo: "assets/chhath_ghat.jpeg"
+        photo: "assets/chhath_thekua_anarsa.jpeg"
       },
       {
         id: "cg-c-01",
@@ -3291,7 +3291,7 @@
         verified: true,
         status: "approved",
         submittedBy: "Mithila Folk Craft Studio",
-        photo: "assets/chhath_ghat.jpeg"
+        photo: "assets/chhath_madhubani_soop.jpeg"
       }
     ];
 
@@ -3321,9 +3321,24 @@
 
     function migrateBuiltInListingPhotos() {
       const photoByListingId = {
+        "jamui-g-01": "assets/jamui_gidhaur_heritage_walk.jpeg",
+        "jamui-h-01": "assets/jamui_simultala_homestay.jpeg",
+        "jamui-f-01": "assets/jamui_chhena_sweets.jpeg",
+        "jamui-c-01": "assets/jamui_patneshwar_crafts.jpeg",
+        "jamui-g-02": "assets/jamui_nagi_nakti_bird_guide.jpeg",
+        "bg-g-01": "assets/bodhgaya_mahabodhi_scholar_walk.jpeg",
+        "bg-h-01": "assets/bodhgaya_sujata_homestay.jpeg",
+        "bg-f-01": "assets/bodhgaya_litti_chokha.jpeg",
+        "bg-c-01": "assets/bodhgaya_bodhi_leaf_art.jpeg",
         "nl-g-01": "assets/nalanda_ruins.jpeg",
         "nl-f-01": "assets/silao_khaja.jpeg",
-        "nl-c-01": "assets/bawan_buti_weaving.jpeg"
+        "nl-c-01": "assets/bawan_buti_weaving.jpeg",
+        "sp-g-01": "assets/sonepur_fair_heritage_walk.jpeg",
+        "sp-f-01": "assets/sonepur_jalebi_chai.jpeg",
+        "sp-c-01": "assets/sonepur_brass_bells.jpeg",
+        "cg-g-01": "assets/chhath_patliputra_boat_tour.jpeg",
+        "cg-f-01": "assets/chhath_thekua_anarsa.jpeg",
+        "cg-c-01": "assets/chhath_madhubani_soop.jpeg"
       };
 
       if (!Array.isArray(listings)) return;
