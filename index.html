@@ -1162,6 +1162,103 @@
       text-align: right;
     }
 
+    /* Direct-to-Local Impact proof (prototype estimate, never measured data) */
+    .direct-impact-card {
+      background: linear-gradient(145deg, #F1FAF5, #FFF9ED);
+      border: 1px solid rgba(26, 83, 92, 0.22);
+      border-radius: var(--radius-md);
+      margin: 14px 0 18px;
+      overflow: hidden;
+    }
+
+    .direct-impact-header {
+      align-items: center;
+      background: rgba(26, 83, 92, 0.07);
+      border-bottom: 1px solid rgba(26, 83, 92, 0.12);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: space-between;
+      padding: 9px 11px;
+    }
+
+    .direct-impact-title {
+      color: var(--color-teal-dark);
+      font-size: 12.5px;
+      font-weight: 800;
+    }
+
+    .direct-impact-demo-label {
+      background: #FFF3CD;
+      border: 1px solid #F3D37A;
+      border-radius: var(--radius-full);
+      color: #694A06;
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      padding: 3px 7px;
+      text-transform: uppercase;
+    }
+
+    .direct-impact-body {
+      display: grid;
+      gap: 8px;
+      padding: 11px;
+    }
+
+    .direct-impact-contact {
+      color: var(--color-teal-dark);
+      font-size: 11.5px;
+      font-weight: 800;
+    }
+
+    .direct-impact-row {
+      align-items: flex-start;
+      display: flex;
+      font-size: 11.5px;
+      gap: 10px;
+      justify-content: space-between;
+      line-height: 1.4;
+    }
+
+    .direct-impact-label {
+      color: var(--color-muted);
+    }
+
+    .direct-impact-value {
+      color: var(--color-charcoal);
+      font-weight: 800;
+      max-width: 62%;
+      text-align: right;
+    }
+
+    .direct-impact-status {
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 7px;
+    }
+
+    .direct-impact-status.verified {
+      background: #DFF4E5;
+      color: #137333;
+    }
+
+    .direct-impact-status.pending {
+      background: #FFF3CD;
+      color: #8A5A00;
+    }
+
+    .direct-impact-footnote {
+      border-top: 1px dashed rgba(26, 83, 92, 0.18);
+      color: var(--color-muted);
+      font-size: 9.5px;
+      line-height: 1.45;
+      margin: 2px 0 0;
+      padding-top: 8px;
+    }
+
     /* Toast Notification */
     .toast-container {
       position: fixed;
@@ -2726,6 +2823,8 @@
           </div>
         </div>
 
+        <div id="confirmation-direct-impact-slot"></div>
+
         <p style="font-size: 12.5px; color: var(--color-muted); margin-bottom: 18px; text-align: center;">
           The local host will reach out to you shortly. You can also message them directly on WhatsApp now!
         </p>
@@ -3550,6 +3649,66 @@
       return (str || "").replace(/'/g, "\\'").replace(/"/g, "&quot;");
     }
 
+    const DIRECT_IMPACT_ROLE_LABELS = {
+      guide: "local guide",
+      homestay: "homestay host",
+      food: "food vendor",
+      craft: "artisan"
+    };
+
+    function parseIndicativePrice(priceText) {
+      const normalized = String(priceText || "").replace(/,/g, "");
+      const match = normalized.match(/₹\s*(\d+(?:\.\d+)?)/);
+      return match ? Math.round(Number(match[1])) : 0;
+    }
+
+    function formatImpactRupees(amount) {
+      return amount > 0 ? `₹${Number(amount).toLocaleString("en-IN")}` : "Not available";
+    }
+
+    function buildDirectLocalImpact(selectedListings) {
+      const included = (Array.isArray(selectedListings) ? selectedListings : [selectedListings]).filter(Boolean);
+      const roles = [...new Set(included.map(item => DIRECT_IMPACT_ROLE_LABELS[item.category] || "local provider"))];
+      const amount = included.reduce((total, item) => total + parseIndicativePrice(item.price), 0);
+      const verified = included.length > 0 && included.every(item => item.status === "approved" && item.verified === true);
+
+      return {
+        amount,
+        roles: roles.length ? roles : ["local provider"],
+        verified
+      };
+    }
+
+    function createDirectLocalImpactCard(impact, contextLabel = "booking") {
+      const safeImpact = impact || { amount: 0, roles: ["local provider"], verified: false };
+      const card = document.createElement("section");
+      card.className = "direct-impact-card";
+      card.setAttribute("aria-label", "Direct-to-Local Impact estimated demo metrics");
+      card.innerHTML = `
+        <div class="direct-impact-header">
+          <span class="direct-impact-title">🌱 Direct-to-Local Impact</span>
+          <span class="direct-impact-demo-label">Estimated demo metrics</span>
+        </div>
+        <div class="direct-impact-body">
+          <div class="direct-impact-contact">🤝 100% direct vendor contact — no middleman commission</div>
+          <div class="direct-impact-row">
+            <span class="direct-impact-label">This ${contextLabel === "plan" ? "plan" : "booking"} supports:</span>
+            <span class="direct-impact-value">${safeImpact.roles.map(role => sanitizeHTML(role)).join(" + ")}</span>
+          </div>
+          <div class="direct-impact-row">
+            <span class="direct-impact-label">Estimated local livelihood impact:</span>
+            <span class="direct-impact-value">${formatImpactRupees(safeImpact.amount)}</span>
+          </div>
+          <div class="direct-impact-row">
+            <span class="direct-impact-label">Provider verification:</span>
+            <span class="direct-impact-status ${safeImpact.verified ? "verified" : "pending"}">${safeImpact.verified ? "✓ Verified" : "⏳ Pending verification"}</span>
+          </div>
+          <p class="direct-impact-footnote"><strong>Demo methodology:</strong> Sum of one unit of each included listing's displayed indicative price. This is potential direct local spend—not a confirmed payment, vendor profit, or measured livelihood income. GhoomoBihar processes no payment in this prototype.</p>
+        </div>
+      `;
+      return card;
+    }
+
     function migrateBuiltInListingPhotos() {
       const photoByListingId = {
         "jamui-g-01": "assets/jamui_gidhaur_heritage_walk.jpeg",
@@ -3890,7 +4049,7 @@
                   <span class="status-badge ${statusObj.cssClass}">
                     <span class="status-dot"></span> ${statusObj.label}
                   </span>
-                  ${item.verified ? '<span class="verified-badge">✓ Verified</span>' : ''}
+                  ${item.verified ? '<span class="verified-badge">✓ Verified</span>' : '<span class="direct-impact-status pending">⏳ Pending verification</span>'}
                   <span class="rating-badge">★ ${rating}</span>
                 </div>
               </div>
@@ -4567,6 +4726,10 @@
       const touristName = sanitizeHTML(document.getElementById("tourist-name").value.trim());
       const touristPhone = sanitizeHTML(document.getElementById("tourist-phone").value.trim());
       const touristNote = sanitizeHTML(document.getElementById("tourist-note").value.trim());
+      const sourceListing = listings.find(item => item.id === listingId)
+        || DEFAULT_LISTINGS.find(item => item.id === listingId)
+        || null;
+      const impactSnapshot = buildDirectLocalImpact(sourceListing);
 
       const refId = "GB-" + (site.toUpperCase().replace(/\W/g, "")) + "-" + Math.floor(1000 + Math.random() * 9000);
 
@@ -4581,7 +4744,8 @@
         site,
         touristName,
         touristPhone,
-        touristNote
+        touristNote,
+        impactSnapshot
       };
 
       const existingReqs = JSON.parse(localStorage.getItem("ghoomobihar_requests") || "[]");
@@ -4604,6 +4768,14 @@
       document.getElementById("conf-traveler-name").textContent = req.touristName;
       document.getElementById("conf-traveler-phone").textContent = req.touristPhone;
       document.getElementById("conf-traveler-note").textContent = req.touristNote || "None";
+
+      const sourceListing = listings.find(item => item.id === req.listingId)
+        || DEFAULT_LISTINGS.find(item => item.id === req.listingId)
+        || null;
+      const impact = req.impactSnapshot || buildDirectLocalImpact(sourceListing);
+      const impactSlot = document.getElementById("confirmation-direct-impact-slot");
+      impactSlot.innerHTML = "";
+      impactSlot.appendChild(createDirectLocalImpactCard(impact, "booking"));
 
       const waMsg = encodeURIComponent(
         `Namaste! I just requested a booking for "${req.listingTitle}" on GhoomoBihar (Ref: ${req.refId}).\nName: ${req.touristName}\nPhone: ${req.touristPhone}\nRequest: ${req.touristNote || "Standard booking"}`
@@ -5417,6 +5589,11 @@
       });
 
       card.appendChild(daysContainer);
+
+      const planImpact = buildDirectLocalImpact(itineraryDays.map(item => item.listing));
+      const planImpactCard = createDirectLocalImpactCard(planImpact, "plan");
+      planImpactCard.style.margin = "0 12px 12px";
+      card.appendChild(planImpactCard);
 
       const shareText = [
         "My GhoomoBihar Yatra",
