@@ -57,6 +57,8 @@ The prototype is designed around three principles:
 - Booking/inquiry form without requiring a traveler account.
 - Optional local traveler profile for faster repeat inquiries.
 - AI tourism concierge with a local knowledge fallback when the serverless endpoint is unavailable.
+- Guided Bihar Yatra planner with one-tap duration, daily budget, interest and origin choices.
+- Direct-to-Local Impact proof on plans and booking confirmations, explicitly labelled as estimated demo metrics.
 - Tourism feedback form with district-demand signals.
 - QR standee experience for event or destination discovery.
 
@@ -89,6 +91,16 @@ The live pilot uses five destination clusters, representing five district footpr
 | Chhath Ghat | Patna | Ganga boat guidance, festival stay, thekua and anarsa, painted bamboo soop |
 
 The listing photographs are intentionally mapped by subject. A food listing does not reuse a monument image, and a craft listing does not reuse a homestay image.
+
+## Direct-to-Local Impact demo metric
+
+The prototype does not claim measured income or completed transactions. Its impact card uses a transparent demonstration calculation:
+
+```text
+Estimated local livelihood impact = sum of one unit of each included listing's displayed indicative price
+```
+
+For one booking inquiry, the card uses the selected listing price. For a Shartak itinerary, it sums the displayed prices of the local listings included in that plan. The result represents potential direct local spend only; it is not confirmed payment, vendor profit or audited livelihood impact. Verification status comes from each listing's actual prototype `verified` and `status` fields. The platform processes no payment and charges no middleman commission in this prototype.
 
 ## Architecture
 
@@ -405,6 +417,7 @@ This is a hackathon prototype, not a production booking platform.
 - Listings, moderation changes and booking inquiries are currently saved in each browser's `localStorage`; they are not shared across devices.
 - Provider verification badges are prototype presentation data, not a government certification claim.
 - Booking is an inquiry and direct-contact workflow; the platform does not process payments.
+- Direct-to-Local Impact amounts are estimated demo metrics derived from indicative listing prices, not real transaction or income data.
 - A client-side arithmetic CAPTCHA is friction against simple automated attempts, not a replacement for server-side bot protection or rate limiting.
 - AI output can be incomplete or incorrect and must be verified against official sources.
 - The two AI functions currently return permissive CORS headers; production deployment should restrict origins where appropriate.
