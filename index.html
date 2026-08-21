@@ -3949,7 +3949,18 @@
       try {
         const { data, error } = await sb.auth.signInWithPassword({ email, password });
         if (error || !data.user) {
-          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Invalid admin credentials.</span>`;
+          const authCode = (error && error.code ? error.code : "").toLowerCase();
+          const authMessage = (error && error.message ? error.message : "").toLowerCase();
+
+          if (authCode === "email_not_confirmed" || authMessage.includes("email not confirmed") || authMessage.includes("not verified")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">This email is not verified. Open the Supabase confirmation email, verify the account, then sign in again.</span>`;
+          } else if (authCode === "invalid_credentials" || authMessage.includes("invalid login credentials") || authMessage.includes("invalid grant")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Supabase did not accept this email/password. Check the exact email spelling and password. If the account does not exist, create it in Supabase Authentication first.</span>`;
+          } else if (authCode.includes("rate_limit") || authMessage.includes("rate limit") || authMessage.includes("too many")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Too many sign-in attempts. Wait briefly, then try once with the correct credentials.</span>`;
+          } else {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Supabase authentication failed. Check the account in Authentication → Users and try again.</span>`;
+          }
           msgDiv.style.display = "block";
           generateMathCaptcha();
           return;
@@ -3964,7 +3975,7 @@
 
         if (!isSupabaseAdmin(data.user)) {
           await sb.auth.signOut();
-          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">This account does not have administrator access.</span>`;
+          msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">The account is valid but has no admin role. Run SUPABASE-ADMIN-SETUP.sql for this exact email, then sign in again.</span>`;
           msgDiv.style.display = "block";
           generateMathCaptcha();
           return;
