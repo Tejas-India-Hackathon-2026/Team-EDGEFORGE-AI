@@ -15,5 +15,8 @@ assert(sql.includes("enable row level security"), "RLS is not enabled");
 assert(sql.includes("app_metadata"), "admin role policy is missing");
 assert(sql.includes("get_tourism_feedback_signals"), "anonymous-safe aggregate function is missing");
 assert(!html.includes("9898989800"), "hardcoded former admin credential returned");
+assert(html.includes("handleAdminMagicLink()"), "secure admin email-link action is missing");
+assert(html.includes("sb.auth.signInWithOtp"), "Supabase magic-link authentication is missing");
+assert(html.includes("shouldCreateUser: false"), "admin email link must not create arbitrary users");
 
 console.log("Feedback and roadmap smoke checks passed.");

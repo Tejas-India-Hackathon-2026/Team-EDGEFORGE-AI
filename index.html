@@ -2394,8 +2394,12 @@
             <div id="admin-login-msg" style="display: none; font-size: 12.5px; margin-bottom: 12px;"></div>
 
             <div class="form-actions" style="justify-content: flex-end; margin-top: 14px;">
+              <button type="button" id="admin-magic-link-btn" class="btn btn-secondary" onclick="handleAdminMagicLink()">Email Secure Login Link</button>
               <button type="submit" id="admin-login-submit-btn" class="btn btn-primary">Unlock Admin Panel</button>
             </div>
+            <p style="font-size: 11.5px; color: var(--color-muted); margin-top: 10px; text-align: right;">
+              Forgot the password? Use the secure email link; only an existing Supabase user can receive it and admin access still requires the server-controlled admin role.
+            </p>
           </form>
         </div>
 
@@ -4001,6 +4005,75 @@
       } finally {
         document.getElementById("admin-login-password").value = "";
         if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = "Unlock Admin Panel"; }
+      }
+    }
+
+    // Passwordless recovery path for an existing Supabase admin account.
+    // The emailed link creates a real Supabase session; app_metadata.role is
+    // still checked before the admin dashboard can be opened.
+    async function handleAdminMagicLink() {
+      const email = (document.getElementById("admin-login-email").value || "").trim();
+      const enteredCaptcha = parseInt((document.getElementById("admin-login-captcha").value || "").trim());
+      const msgDiv = document.getElementById("admin-login-msg");
+      const magicLinkBtn = document.getElementById("admin-magic-link-btn");
+
+      if (!email) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Enter the confirmed admin email first.</span>`;
+        msgDiv.style.display = "block";
+        return;
+      }
+
+      if (enteredCaptcha !== currentLoginCaptchaAns) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Incorrect security check answer. Solve the new question and try again.</span>`;
+        msgDiv.style.display = "block";
+        generateMathCaptcha();
+        return;
+      }
+
+      const sb = getSupabaseClient();
+      if (!sb) {
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Authentication service unavailable.</span>`;
+        msgDiv.style.display = "block";
+        return;
+      }
+
+      msgDiv.style.display = "none";
+      magicLinkBtn.disabled = true;
+      magicLinkBtn.textContent = "Sending secure link...";
+
+      try {
+        const redirectUrl = `${window.location.origin}${window.location.pathname}`;
+        const { error } = await sb.auth.signInWithOtp({
+          email,
+          options: {
+            shouldCreateUser: false,
+            emailRedirectTo: redirectUrl
+          }
+        });
+
+        if (error) {
+          const authMessage = (error.message || "").toLowerCase();
+          if (authMessage.includes("rate") || authMessage.includes("too many")) {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">A login email was requested recently. Check the inbox or wait briefly before trying again.</span>`;
+          } else {
+            msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Unable to send the secure link. Confirm that this exact email exists in Supabase Authentication.</span>`;
+          }
+          msgDiv.style.display = "block";
+          generateMathCaptcha();
+          return;
+        }
+
+        msgDiv.innerHTML = `<span style="color: var(--color-teal); font-weight: 700;">Secure login link sent. Open the newest GhoomoBihar email and click its link; no password is required.</span>`;
+        msgDiv.style.display = "block";
+        generateMathCaptcha();
+      } catch (err) {
+        console.warn("Admin magic-link notice:", err.message);
+        msgDiv.innerHTML = `<span style="color: var(--color-terracotta);">Network error while sending the secure link. Please try once more.</span>`;
+        msgDiv.style.display = "block";
+        generateMathCaptcha();
+      } finally {
+        magicLinkBtn.disabled = false;
+        magicLinkBtn.textContent = "Email Secure Login Link";
       }
     }
 
