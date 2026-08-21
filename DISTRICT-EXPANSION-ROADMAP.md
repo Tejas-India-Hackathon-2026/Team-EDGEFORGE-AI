@@ -24,6 +24,19 @@ Entry gate for each district:
 
 Roll out the reusable district template to the remaining 29 districts with multilingual AI guidance, standardized verification, safety escalation and district-level analytics.
 
+## Platform-readiness gate
+
+Geographic expansion must not outpace platform trust. Before moving beyond the five pilot footprints, GhoomoBihar should have:
+
+- centralized vendor, listing and inquiry records instead of browser-only marketplace persistence;
+- ownership-based Supabase Row Level Security;
+- auditable listing verification and moderation history;
+- stable live-AI health monitoring with a tested local fallback;
+- privacy-safe inquiry and provider-response analytics;
+- sustainable production deployment, monitoring and backup capacity.
+
+The implementation sequence and definitions of done are documented in [FUTURE-SCOPE.md](FUTURE-SCOPE.md).
+
 ## Feedback-driven prioritization
 
 The website feedback form asks which district visitors want next. The public roadmap displays only aggregate demand. Names and comments are not published automatically; any public excerpt requires explicit consent and moderation.
